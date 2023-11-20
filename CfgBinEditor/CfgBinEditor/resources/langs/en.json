@@ -1,0 +1,39 @@
+{
+  "Name": "English",
+
+  // Application
+  "Application.Title": "CfgBin Editor",
+
+  // File Menu
+  "Menu.File.Caption": "File",
+  "Menu.File.Open.Caption": "Open",
+
+  // Settings
+  "Menu.Settings.Caption": "Settings",
+  "Menu.Settings.Languages.Caption": "Languages",
+
+  // Info
+  "Menu.Info.Caption": "?",
+
+  // Open File Dialog
+  "File.Open.Caption": "Select file to open...",
+  "File.Open.CfgBinFilter.Caption": "Configuration file",
+  "File.Open.Cancel": "No file selected.",
+
+  // Close File
+  "File.Close.UnsavedChanges.Caption": "Unsaved changes",
+  "File.Close.UnsavedChanges.Text": "The file was modified. You may lose progress, if you close the file now. Proceed?",
+
+  // Cfg Entry
+  "CfgBin.Entry.Name.Caption": "Name",
+  "CfgBin.Entry.Type.Caption": "Type",
+  "CfgBin.Entry.Value.Caption": "Value",
+
+  // Cfg Value Types
+  "CfgBin.Entry.Type.String.Caption": "String",
+  "CfgBin.Entry.Type.UInt.Caption": "UInt",
+  "CfgBin.Entry.Type.Float.Caption": "Float",
+
+  // Value Tags
+  "CfgBin.Tags.Load.Error.Caption": "Error loading the tags: {0}"
+}

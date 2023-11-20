@@ -1,0 +1,39 @@
+[
+  {
+    "Name": "CrossCutting.Core.Logging.NLogAdapter",
+    "Entries": [
+      {
+        "Key": "FileLayout",
+        "Value": "${longdate} ${level} ${callsite:cleanNamesOfAsyncContinuations=true:cleanNamesOfAnonymousDelegates=true} ${message}${exception:format=tostring,data:maxInnerExceptionLevel=10:separator=\r\n}"
+      },
+      {
+        "Key": "FileName",
+        "Value": "logs/ACP-TaskSyncService.log"
+      },
+      {
+        "Key": "ArchiveFileName",
+        "Value": "logs/ACP-TaskSyncService.{#}.log"
+      },
+      {
+        "Key": "ArchiveAboveSize",
+        "Value": "1048883200"
+      },
+      {
+        "Key": "MaxArchiveFiles",
+        "Value": "3"
+      },
+      {
+        "Key": "ConsoleLayout",
+        "Value": "${time} ${level} ${callsite:includeNamespace=false:cleanNamesOfAsyncContinuations=true:cleanNamesOfAnonymousDelegates=true} ${message}${exception:format=tostring,data:maxInnerExceptionLevel=10:separator=\r\n}"
+      },
+      {
+        "Key": "FileLogLevel",
+        "Value": "Debug"
+      },
+      {
+        "Key": "ConsoleLogLevel",
+        "Value": "Info"
+      }
+    ]
+  }
+]

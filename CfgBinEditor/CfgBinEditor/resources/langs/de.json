@@ -1,0 +1,39 @@
+{
+	"Name": "Deutsch",
+
+	// Application
+	"Application.Title": "CfgBin Editor",
+
+	// File Menu
+	"Menu.File.Caption": "Datei",
+	"Menu.File.Open.Caption": "Öffnen",
+
+	// Settings
+	"Menu.Settings.Caption": "Einstellungen",
+	"Menu.Settings.Languages.Caption": "Sprachen",
+
+	// Info
+	"Menu.Info.Caption": "?",
+
+	// Open File Dialog
+	"File.Open.Caption": "Wähle Datei zum Öffnen aus...",
+	"File.Open.CfgBinFilter.Caption": "Konfigurationsdatei",
+	"File.Open.Cancel": "Keine Datei ausgewählt.",
+
+	// Close File
+	"File.Close.UnsavedChanges.Caption": "Ungespeicherte Änderungen",
+	"File.Close.UnsavedChanges.Text": "Die Datei wurde verändert. Du verlierst deine Änderungen, wenn du die Datei jetzt schließt. Fortfahren?",
+
+	// Cfg Entry
+	"CfgBin.Entry.Name.Caption": "Name",
+	"CfgBin.Entry.Type.Caption": "Typ",
+	"CfgBin.Entry.Value.Caption": "Wert",
+
+	// Cfg Value Types
+	"CfgBin.Entry.Type.String.Caption": "Zeichenfolge",
+	"CfgBin.Entry.Type.UInt.Caption": "Unsignierte Zahl",
+	"CfgBin.Entry.Type.Float.Caption": "Fließkommazahl",
+
+	// Value Tags
+	"CfgBin.Tags.Load.Error.Caption": "Fehler beim LAden der Tags: {0}"
+}
