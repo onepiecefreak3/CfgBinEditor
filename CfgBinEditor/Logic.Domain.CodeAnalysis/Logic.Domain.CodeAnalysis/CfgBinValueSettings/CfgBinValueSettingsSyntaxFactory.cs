@@ -26,6 +26,8 @@ namespace Logic.Domain.CodeAnalysis.CfgBinValueSettings
                 case SyntaxTokenKind.ParenOpen: return new("(", (int)kind);
                 case SyntaxTokenKind.ParenClose: return new(")", (int)kind);
                 case SyntaxTokenKind.Pipe: return new("|", (int)kind);
+                case SyntaxTokenKind.TrueKeyword: return new("True", (int)kind);
+                case SyntaxTokenKind.FalseKeyword: return new("False", (int)kind);
                 default: throw new InvalidOperationException($"Cannot create simple token from kind {kind}. Use other methods instead.");
             }
         }

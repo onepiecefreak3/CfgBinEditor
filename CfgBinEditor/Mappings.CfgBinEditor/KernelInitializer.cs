@@ -16,6 +16,7 @@ using CrossCutting.Core.EventBrokerage;
 using CrossCutting.Core.Logging.NLogAdapter;
 using CrossCutting.Core.Scheduling.QuartzAdapter;
 using CrossCutting.Core.Serialization.JsonAdapter;
+using Logic.Business.CfgBinValueSettingsManagement;
 using Logic.Domain.CodeAnalysis;
 using Logic.Domain.Kuriimu2.KomponentAdapter;
 using Logic.Domain.Level5;
@@ -60,6 +61,7 @@ namespace Mappings.CfgBinEditor
             kernel.RegisterComponent<Level5Activator>();
             kernel.RegisterComponent<Kuriimu2KomponentActivator>();
             kernel.RegisterComponent<CodeAnalysisActivator>();
+            kernel.RegisterComponent<CfgBinValueSettingsManagementActivator>();
         }
     }
 }

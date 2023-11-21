@@ -39,8 +39,7 @@ namespace CfgBinEditor
 
             kernel.RegisterToSelf<MainForm>();
             kernel.RegisterToSelf<ConfigurationForm>();
-
-            kernel.Register<IValueSettings, ValueSettings>(ActivationScope.Unique);
+            
             kernel.Register<ILocalizer, Localizer>(ActivationScope.Unique);
 
             kernel.RegisterConfiguration<CfgBinEditorConfiguration>();

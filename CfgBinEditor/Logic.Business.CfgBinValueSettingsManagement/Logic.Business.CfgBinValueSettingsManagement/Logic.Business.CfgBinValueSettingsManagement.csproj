@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+	<RootNamespace>Logic.Business.CfgBinValueSettingsManagement</RootNamespace>
+	<AssemblyName>Logic.Business.CfgBinValueSettingsManagement</AssemblyName>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Logic.Domain.CodeAnalysis\Logic.Domain.CodeAnalysis.Contract\Logic.Domain.CodeAnalysis.Contract.csproj" />
+    <ProjectReference Include="..\Logic.Business.CfgBinValueSettingsManagement.Contract\Logic.Business.CfgBinValueSettingsManagement.Contract.csproj" />
+  </ItemGroup>
+
+</Project>

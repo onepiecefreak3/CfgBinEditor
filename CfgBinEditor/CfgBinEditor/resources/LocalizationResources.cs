@@ -29,6 +29,7 @@ namespace CfgBinEditor.resources
         public static LocalizedString CfgBinEntryNameCaption => new("CfgBin.Entry.Name.Caption");
         public static LocalizedString CfgBinEntryTypeCaption => new("CfgBin.Entry.Type.Caption");
         public static LocalizedString CfgBinEntryValueCaption => new("CfgBin.Entry.Value.Caption");
+        public static LocalizedString CfgBinEntryIsHexCaption => new("CfgBin.Entry.IsHex.Caption");
 
         public static LocalizedString CfgBinEntryTypeStringCaption => new("CfgBin.Entry.Type.String.Caption");
         public static LocalizedString CfgBinEntryTypeUIntCaption => new("CfgBin.Entry.Type.UInt.Caption");

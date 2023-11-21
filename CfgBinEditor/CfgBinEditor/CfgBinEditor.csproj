@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CrossCutting.Core.Contract\CrossCutting.Core.Contract.csproj" />
+    <ProjectReference Include="..\Logic.Business.CfgBinValueSettingsManagement\Logic.Business.CfgBinValueSettingsManagement.Contract\Logic.Business.CfgBinValueSettingsManagement.Contract.csproj" />
     <ProjectReference Include="..\Mappings.CfgBinEditor\Mappings.CfgBinEditor.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -27,7 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Update="MyTags.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Update="resources\images\logo.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

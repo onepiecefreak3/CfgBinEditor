@@ -28,6 +28,7 @@
   "CfgBin.Entry.Name.Caption": "Name",
   "CfgBin.Entry.Type.Caption": "Type",
   "CfgBin.Entry.Value.Caption": "Value",
+  "CfgBin.Entry.IsHex.Caption": "Show hexadecimal",
 
   // Cfg Value Types
   "CfgBin.Entry.Type.String.Caption": "String",

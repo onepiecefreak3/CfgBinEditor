@@ -15,6 +15,7 @@ using ImGui.Forms.Localization;
 using ImGui.Forms.Modals;
 using ImGui.Forms.Modals.IO;
 using ImGuiNET;
+using Logic.Business.CfgBinValueSettingsManagement.Contract;
 using Logic.Domain.Level5.Contract;
 using Logic.Domain.Level5.Contract.DataClasses;
 
@@ -32,7 +33,7 @@ namespace CfgBinEditor.Forms
         private readonly IDictionary<string, TabPage> _pathPageLookup;
         private readonly IDictionary<TabPage, string> _pagePathLookup;
 
-        public MainForm(IEventBroker eventBroker, ILocalizer localizer, IFormFactory formFactory, IConfigurationReader configReader, IValueSettings settings)
+        public MainForm(IEventBroker eventBroker, ILocalizer localizer, IFormFactory formFactory, IConfigurationReader configReader, IValueSettingsProvider settingsProvider)
         {
             InitializeComponent(localizer);
 
@@ -59,8 +60,8 @@ namespace CfgBinEditor.Forms
 
             eventBroker.Subscribe<FileChangedMessage>(msg => MarkChangedFile(msg.ConfigForm));
 
-            if (settings.HasError)
-                SetStatus(LocalizationResources.CfgBinTagsLoadErrorCaption(settings.ReadError.Message), LabelStatus.Error);
+            if (settingsProvider.TryGetError(out Exception error))
+                SetStatus(LocalizationResources.CfgBinTagsLoadErrorCaption(error!.Message), LabelStatus.Error);
         }
 
         private void ChangeLocale(string language)
