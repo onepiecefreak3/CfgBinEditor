@@ -28,13 +28,13 @@
 	"CfgBin.Entry.Name.Caption": "Name",
 	"CfgBin.Entry.Type.Caption": "Typ",
 	"CfgBin.Entry.Value.Caption": "Wert",
-	"CfgBin.Entry.IsHex.Caption": "Zeige hexadezimal",
+	"CfgBin.Entry.IsHex.Caption": "Als hex",
 
 	// Cfg Value Types
 	"CfgBin.Entry.Type.String.Caption": "Zeichenfolge",
-	"CfgBin.Entry.Type.UInt.Caption": "Unsignierte Zahl",
+	"CfgBin.Entry.Type.UInt.Caption": "Ganzzahl",
 	"CfgBin.Entry.Type.Float.Caption": "Fließkommazahl",
 
 	// Value Tags
-	"CfgBin.Tags.Load.Error.Caption": "Fehler beim LAden der Tags: {0}"
+	"CfgBin.Tags.Load.Error.Caption": "Fehler beim Laden der Tags: {0}"
 }

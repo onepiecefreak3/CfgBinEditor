@@ -20,6 +20,7 @@
     <ProjectReference Include="..\Logic.Business.CfgBinValueSettingsManagement\Logic.Business.CfgBinValueSettingsManagement\Logic.Business.CfgBinValueSettingsManagement.csproj" />
     <ProjectReference Include="..\Logic.Domain.CodeAnalysis\Logic.Domain.CodeAnalysis\Logic.Domain.CodeAnalysis.csproj" />
     <ProjectReference Include="..\Logic.Domain.Kuriimu2.KomponentAdapter\Logic.Domain.Kuriimu2.KomponentAdapter\Logic.Domain.Kuriimu2.KomponentAdapter.csproj" />
+    <ProjectReference Include="..\Logic.Domain.Kuriimu2.KryptographyAdapter\Logic.Domain.Kuriimu2.KryptographyAdapter\Logic.Domain.Kuriimu2.KryptographyAdapter.csproj" />
     <ProjectReference Include="..\Logic.Domain.Level5\Logic.Domain.Level5\Logic.Domain.Level5.csproj" />
   </ItemGroup>
 

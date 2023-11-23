@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Logic.Domain.Level5.Contract.DataClasses
 {
-    public class Configuration
+    public enum StringEncoding
     {
-        public ConfigurationEntry[] Entries { get; set; }
-        public StringEncoding Encoding { get; set; }
+        Sjis,
+        Utf8
     }
 }

@@ -59,9 +59,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic.Domain.CodeAnalysis",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic.Domain.CodeAnalysis.Contract", "CfgBinEditor\Logic.Domain.CodeAnalysis\Logic.Domain.CodeAnalysis.Contract\Logic.Domain.CodeAnalysis.Contract.csproj", "{C465EB42-E2FC-4F17-9E79-CE5AC1E19698}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic.Business.CfgBinValueSettingsManagement", "CfgBinEditor\Logic.Business.CfgBinValueSettingsManagement\Logic.Business.CfgBinValueSettingsManagement\Logic.Business.CfgBinValueSettingsManagement.csproj", "{6C263CD9-204F-4CF8-9293-E99AC531A84F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic.Business.CfgBinValueSettingsManagement", "CfgBinEditor\Logic.Business.CfgBinValueSettingsManagement\Logic.Business.CfgBinValueSettingsManagement\Logic.Business.CfgBinValueSettingsManagement.csproj", "{6C263CD9-204F-4CF8-9293-E99AC531A84F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic.Business.CfgBinValueSettingsManagement.Contract", "CfgBinEditor\Logic.Business.CfgBinValueSettingsManagement\Logic.Business.CfgBinValueSettingsManagement.Contract\Logic.Business.CfgBinValueSettingsManagement.Contract.csproj", "{41635CAE-DF0F-4BF7-8705-FB7396A6684F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic.Business.CfgBinValueSettingsManagement.Contract", "CfgBinEditor\Logic.Business.CfgBinValueSettingsManagement\Logic.Business.CfgBinValueSettingsManagement.Contract\Logic.Business.CfgBinValueSettingsManagement.Contract.csproj", "{41635CAE-DF0F-4BF7-8705-FB7396A6684F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic.Domain.Kuriimu2.KryptographyAdapter", "CfgBinEditor\Logic.Domain.Kuriimu2.KryptographyAdapter\Logic.Domain.Kuriimu2.KryptographyAdapter\Logic.Domain.Kuriimu2.KryptographyAdapter.csproj", "{6772CE7E-BDAC-458E-ADD7-C22309EE18A2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic.Domain.Kuriimu2.KryptographyAdapter.Contract", "CfgBinEditor\Logic.Domain.Kuriimu2.KryptographyAdapter\Logic.Domain.Kuriimu2.KryptographyAdapter.Contract\Logic.Domain.Kuriimu2.KryptographyAdapter.Contract.csproj", "{FDD1BED6-205F-452C-B774-E4AB911303A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -149,6 +153,14 @@ Global
 		{41635CAE-DF0F-4BF7-8705-FB7396A6684F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41635CAE-DF0F-4BF7-8705-FB7396A6684F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41635CAE-DF0F-4BF7-8705-FB7396A6684F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6772CE7E-BDAC-458E-ADD7-C22309EE18A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6772CE7E-BDAC-458E-ADD7-C22309EE18A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6772CE7E-BDAC-458E-ADD7-C22309EE18A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6772CE7E-BDAC-458E-ADD7-C22309EE18A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDD1BED6-205F-452C-B774-E4AB911303A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDD1BED6-205F-452C-B774-E4AB911303A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDD1BED6-205F-452C-B774-E4AB911303A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDD1BED6-205F-452C-B774-E4AB911303A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -179,6 +191,8 @@ Global
 		{C465EB42-E2FC-4F17-9E79-CE5AC1E19698} = {85393D63-0C6D-462F-B5F5-D9BE832AB011}
 		{6C263CD9-204F-4CF8-9293-E99AC531A84F} = {4AAAA59F-70A2-40DB-A12F-67A9C54A40EB}
 		{41635CAE-DF0F-4BF7-8705-FB7396A6684F} = {4AAAA59F-70A2-40DB-A12F-67A9C54A40EB}
+		{6772CE7E-BDAC-458E-ADD7-C22309EE18A2} = {85393D63-0C6D-462F-B5F5-D9BE832AB011}
+		{FDD1BED6-205F-452C-B774-E4AB911303A8} = {85393D63-0C6D-462F-B5F5-D9BE832AB011}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3B8F2F29-D3C5-49D2-8087-6541A395CFE7}

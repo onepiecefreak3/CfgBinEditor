@@ -28,11 +28,11 @@
   "CfgBin.Entry.Name.Caption": "Name",
   "CfgBin.Entry.Type.Caption": "Type",
   "CfgBin.Entry.Value.Caption": "Value",
-  "CfgBin.Entry.IsHex.Caption": "Show hexadecimal",
+  "CfgBin.Entry.IsHex.Caption": "Show hex",
 
   // Cfg Value Types
   "CfgBin.Entry.Type.String.Caption": "String",
-  "CfgBin.Entry.Type.UInt.Caption": "UInt",
+  "CfgBin.Entry.Type.UInt.Caption": "Int",
   "CfgBin.Entry.Type.Float.Caption": "Float",
 
   // Value Tags

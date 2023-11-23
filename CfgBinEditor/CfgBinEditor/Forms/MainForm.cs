@@ -23,6 +23,7 @@ namespace CfgBinEditor.Forms
 {
     public partial class MainForm : Form
     {
+        private readonly IEventBroker _events;
         private readonly ILocalizer _localizer;
         private readonly IFormFactory _formFactory;
         private readonly IConfigurationReader _configReader;
@@ -37,6 +38,7 @@ namespace CfgBinEditor.Forms
         {
             InitializeComponent(localizer);
 
+            _events = eventBroker;
             _localizer = localizer;
             _formFactory = formFactory;
             _configReader = configReader;
@@ -53,12 +55,18 @@ namespace CfgBinEditor.Forms
             _tabControl.PageRemoving += async (s, e) => e.Cancel = !(await ShouldCloseTabPage(e.Page));
             _tabControl.PageRemoved += (s, e) => CloseTabPage(e.Page);
 
+            _tabControl.SelectedPageChanged += (s, e) => UpdateSaveButtons();
+
             _fileOpenMenuItem.Clicked += (s, e) => OpenFile();
+
+            _saveBtn.Clicked += (s, e) => SaveCurrentTabPage();
+            _saveAllBtn.Clicked += (s, e) => SaveAllTabPages();
 
             AllowDragDrop = true;
             DragDrop += (s, e) => OpenFile(e.File);
 
-            eventBroker.Subscribe<FileChangedMessage>(msg => MarkChangedFile(msg.ConfigForm));
+            _events.Subscribe<FileChangedMessage>(msg => MarkChangedFile(msg.ConfigForm, true));
+            _events.Subscribe<FileSavedMessage>(msg => MarkChangedFile(msg.ConfigForm, false));
 
             if (settingsProvider.TryGetError(out Exception error))
                 SetStatus(LocalizationResources.CfgBinTagsLoadErrorCaption(error!.Message), LabelStatus.Error);
@@ -93,10 +101,50 @@ namespace CfgBinEditor.Forms
             _pagePathLookup.Remove(page);
         }
 
-        private void MarkChangedFile(ConfigurationForm configForm)
+
+        private void SaveCurrentTabPage()
+        {
+            if (!_pageConfigLookup.TryGetValue(_tabControl.SelectedPage, out ConfigurationForm configForm))
+                return;
+
+            if (!_pagePathLookup.TryGetValue(_tabControl.SelectedPage, out string configPath))
+                return;
+
+            RaiseFileSaveRequest(new Dictionary<ConfigurationForm, string>
+            {
+                [configForm] = configPath
+            });
+        }
+
+        private void SaveAllTabPages()
+        {
+            var configForms = new Dictionary<ConfigurationForm, string>();
+            foreach (TabPage tabPage in _tabControl.Pages.Where(p => p.HasChanges))
+            {
+                if (!_pageConfigLookup.TryGetValue(tabPage, out ConfigurationForm configForm))
+                    continue;
+
+                if (!_pagePathLookup.TryGetValue(tabPage, out string configPath))
+                    continue;
+
+                configForms[configForm] = configPath;
+            }
+
+            RaiseFileSaveRequest(configForms);
+        }
+
+        private void MarkChangedFile(ConfigurationForm configForm, bool hasChanges)
         {
             if (_configPageLookup.TryGetValue(configForm, out TabPage page))
-                page.HasChanges = true;
+                page.HasChanges = hasChanges;
+
+            UpdateSaveButtons();
+        }
+
+        private void UpdateSaveButtons()
+        {
+            _saveBtn.Enabled = _tabControl.SelectedPage.HasChanges;
+            _saveAllBtn.Enabled = _tabControl.Pages.Any(p => p.HasChanges);
         }
 
         private async void OpenFile()
@@ -163,6 +211,11 @@ namespace CfgBinEditor.Forms
                     _statusLabel.TextColor = ColorResources.TextError;
                     break;
             }
+        }
+
+        private void RaiseFileSaveRequest(IDictionary<ConfigurationForm, string> configs)
+        {
+            _events.Raise(new FileSaveRequestMessage(configs));
         }
     }
 }

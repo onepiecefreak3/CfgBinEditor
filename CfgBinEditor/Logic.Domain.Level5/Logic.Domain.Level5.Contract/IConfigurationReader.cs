@@ -12,6 +12,6 @@ namespace Logic.Domain.Level5.Contract
     [MapException(typeof(ConfigurationReaderException))]
     public interface IConfigurationReader
     {
-        public Configuration Read(Stream input);
+        Configuration Read(Stream input);
     }
 }

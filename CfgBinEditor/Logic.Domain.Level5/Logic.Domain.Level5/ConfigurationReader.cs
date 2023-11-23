@@ -27,7 +27,7 @@ namespace Logic.Domain.Level5
             CfgBinHeader header = ReadHeader(br);
             CfgBinEntry[] entries = ReadEntries(br, header.entryCount);
 
-            long checksumLookupOffset = (header.dataOffset + header.dataLength + 0xF) & ~0xF;
+            long checksumLookupOffset = (header.stringDataOffset + header.stringDataLength + 0xF) & ~0xF;
             br.BaseStream.Position = checksumLookupOffset;
 
             CfgBinChecksumHeader checksumHeader = ReadChecksumHeader(br);
@@ -39,7 +39,7 @@ namespace Logic.Domain.Level5
             CfgBinFooter footer = ReadFooter(br);
             var encoding = (CfgBinStringEncoding)footer.encoding;
 
-            return CreateConfiguration(br, entries, checksumEntries, header.dataOffset, checksumLookupOffset + checksumHeader.stringOffset, encoding);
+            return CreateConfiguration(br, entries, checksumEntries, header.stringDataOffset, checksumLookupOffset + checksumHeader.stringOffset, encoding);
         }
 
         private CfgBinHeader ReadHeader(IBinaryReaderX br)
@@ -47,9 +47,9 @@ namespace Logic.Domain.Level5
             return new CfgBinHeader
             {
                 entryCount = br.ReadUInt32(),
-                dataOffset = br.ReadUInt32(),
-                dataLength = br.ReadUInt32(),
-                dataCount = br.ReadUInt32()
+                stringDataOffset = br.ReadUInt32(),
+                stringDataLength = br.ReadUInt32(),
+                stringDataCount = br.ReadUInt32()
             };
         }
 
@@ -96,13 +96,13 @@ namespace Logic.Domain.Level5
             return new CfgBinChecksumHeader
             {
                 size = br.ReadUInt32(),
-                count = br.ReadInt32(),
+                count = br.ReadUInt32(),
                 stringOffset = br.ReadUInt32(),
-                stringSize = br.ReadInt32()
+                stringSize = br.ReadUInt32()
             };
         }
 
-        private CfgBinChecksumEntry[] ReadChecksumEntries(IBinaryReaderX br, int count)
+        private CfgBinChecksumEntry[] ReadChecksumEntries(IBinaryReaderX br, uint count)
         {
             var result = new CfgBinChecksumEntry[count];
 
@@ -190,7 +190,8 @@ namespace Logic.Domain.Level5
 
             return new Configuration
             {
-                Entries = configEntries
+                Entries = configEntries,
+                Encoding = (StringEncoding)encoding
             };
         }
 

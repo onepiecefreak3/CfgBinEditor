@@ -3,8 +3,8 @@
     public struct CfgBinHeader
     {
         public uint entryCount;
-        public uint dataOffset;
-        public uint dataLength;
-        public uint dataCount;
+        public uint stringDataOffset;
+        public uint stringDataLength;
+        public uint stringDataCount;
     }
 }

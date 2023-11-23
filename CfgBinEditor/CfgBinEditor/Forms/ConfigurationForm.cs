@@ -1,24 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using Castle.Components.DictionaryAdapter.Xml;
-using CfgBinEditor.InternalContract;
-using CfgBinEditor.InternalContract.DataClasses;
 using CfgBinEditor.Messages;
 using CfgBinEditor.resources;
-using CrossCutting.Core.Contract.Configuration.DataClasses;
 using CrossCutting.Core.Contract.EventBrokerage;
-using CrossCutting.Core.EventBrokerage;
 using ImGui.Forms.Controls;
 using ImGui.Forms.Controls.Base;
 using ImGui.Forms.Controls.Layouts;
 using ImGui.Forms.Models;
 using Logic.Business.CfgBinValueSettingsManagement.Contract;
 using Logic.Business.CfgBinValueSettingsManagement.Contract.DataClasses;
+using Logic.Domain.Level5.Contract;
 using Logic.Domain.Level5.Contract.DataClasses;
 using ValueType = Logic.Domain.Level5.Contract.DataClasses.ValueType;
 
@@ -30,14 +24,16 @@ namespace CfgBinEditor.Forms
 
         private readonly Configuration _config;
         private readonly IEventBroker _events;
+        private readonly IConfigurationWriter _writer;
         private readonly IValueSettingsProvider _settingsProvider;
 
-        public ConfigurationForm(Configuration config, IEventBroker events, IValueSettingsProvider settingsProvider)
+        public ConfigurationForm(Configuration config, IEventBroker events, IConfigurationWriter writer, IValueSettingsProvider settingsProvider)
         {
             InitializeComponent(config);
 
             _config = config;
             _events = events;
+            _writer = writer;
             _settingsProvider = settingsProvider;
 
             _flatEntryTree.SelectedNodeChanged += (s, e) => ChangeSelectedEntry(_flatEntryTree.SelectedNode.Data);
@@ -49,6 +45,7 @@ namespace CfgBinEditor.Forms
                 _nestedTreeView.SelectedNode = _nestedTreeView.Nodes[0];
 
             events.Subscribe<ValueSettingsChangedMessage>(ChangeValueSettings);
+            events.Subscribe<FileSaveRequestMessage>(SaveFile);
         }
 
         private void ChangeSelectedEntry(ConfigurationEntry entry)
@@ -90,6 +87,7 @@ namespace CfgBinEditor.Forms
 
                 var valueTextBox = new TextBox();
                 SetValueText(valueTextBox, entryValue.Type, entryValue.Value, settingEntry.IsHex);
+                valueTextBox.TextChanged += ValueTextBox_TextChanged;
 
                 var valueIsHexCheckbox = new CheckBox { Checked = settingEntry.IsHex };
 
@@ -134,6 +132,19 @@ namespace CfgBinEditor.Forms
 
                 SetValueNameText(nameTextBox, entrySettings.Name);
             }
+        }
+
+        private void SaveFile(FileSaveRequestMessage msg)
+        {
+            if (!msg.ConfigForms.TryGetValue(this, out string savePath))
+                return;
+
+            using Stream fileStream = _writer.Write(_config);
+            using Stream targetFileStream = File.Create(savePath);
+            
+            fileStream.CopyTo(targetFileStream);
+
+            RaiseFileSaved();
         }
 
         private void ValueNameTextBox_TextChanged(object sender, EventArgs e)
@@ -194,11 +205,56 @@ namespace CfgBinEditor.Forms
             var newValueType = comboBox.SelectedItem.Content;
             object newValue = newValueType == ValueType.String ? string.Empty : 0;
 
-            configEntry.Values[rowIndex - 1].Type = newValueType;
-            configEntry.Values[rowIndex - 1].Value = newValue;
+            SetEntryType(configEntry, rowIndex - 1, newValueType);
+            SetEntryValue(configEntry, rowIndex - 1, newValue);
 
             var valueTextBox = row!.Cells[2].Content as TextBox;
             SetValueText(valueTextBox, newValueType, newValue, settingsEntry.IsHex);
+        }
+
+        private void ValueTextBox_TextChanged(object sender, EventArgs e)
+        {
+            var textBox = sender as TextBox;
+            if (textBox == null)
+                return;
+
+            var layout = _configContent.Content as TableLayout;
+            if (layout == null)
+                return;
+
+            var row = layout.Rows.FirstOrDefault(r => r.Cells[2].Content == textBox);
+            var rowIndex = layout.Rows.IndexOf(row);
+            if (rowIndex < 0)
+                return;
+
+            var configEntry = _nestedTreeView.SelectedNode.Data;
+            var settingsEntry = _settingsProvider.GetEntrySettings(GameName_, configEntry.Name, rowIndex - 1);
+
+            var valueType = configEntry.Values[rowIndex - 1].Type;
+            switch (valueType)
+            {
+                case ValueType.String:
+                    SetEntryValue(configEntry, rowIndex - 1, textBox.Text);
+                    break;
+
+                case ValueType.UInt:
+                    if (settingsEntry.IsHex && textBox.Text.StartsWith("0x"))
+                    {
+                        if (uint.TryParse(textBox.Text[2..], NumberStyles.HexNumber, CultureInfo.CurrentCulture, out var uValue))
+                            SetEntryValue(configEntry, rowIndex - 1, uValue);
+                    }
+                    else
+                    {
+                        if (uint.TryParse(textBox.Text, out var uValue))
+                            SetEntryValue(configEntry, rowIndex - 1, uValue);
+                    }
+                    break;
+
+                case ValueType.Float:
+                    if (float.TryParse(textBox.Text, out var fValue))
+                        SetEntryValue(configEntry, rowIndex - 1, fValue);
+                    break;
+            }
         }
 
         private void SetValueNameText(TextBox nameTextBox, string text)
@@ -226,9 +282,31 @@ namespace CfgBinEditor.Forms
             }
         }
 
+        private void SetEntryType(ConfigurationEntry entry, int index, ValueType type)
+        {
+            entry.Values[index].Type = type;
+            RaiseFileChanged();
+        }
+
+        private void SetEntryValue(ConfigurationEntry entry, int index, object value)
+        {
+            entry.Values[index].Value = value;
+            RaiseFileChanged();
+        }
+
         private void RaiseValueSettingsChanged(string gameName, string entryName)
         {
             _events.Raise(new ValueSettingsChangedMessage(this, gameName, entryName));
+        }
+
+        private void RaiseFileChanged()
+        {
+            _events.Raise(new FileChangedMessage(this));
+        }
+
+        private void RaiseFileSaved()
+        {
+            _events.Raise(new FileSavedMessage(this));
         }
     }
 }

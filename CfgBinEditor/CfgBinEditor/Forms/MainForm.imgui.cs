@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using CfgBinEditor.resources;
@@ -15,6 +16,8 @@ namespace CfgBinEditor.Forms
     {
         private MainMenuBar _mainMenuBar;
         private StackLayout _contentLayout;
+
+        private StackLayout _operationBarLayout;
         private TabControl _tabControl;
         private Label _statusLabel;
 
@@ -25,12 +28,17 @@ namespace CfgBinEditor.Forms
         private MenuBarButton _fileOpenMenuItem;
         private MenuBarRadio _settingsLanguageMenuItem;
 
+        private ImageButton _saveBtn;
+        private ImageButton _saveAllBtn;
+
         private IDictionary<string, MenuBarCheckBox> _localeItems;
 
         private void InitializeComponent(ILocalizer localizer)
         {
             _mainMenuBar = new MainMenuBar();
             _contentLayout = new StackLayout { Alignment = Alignment.Vertical, ItemSpacing = 5 };
+
+            _operationBarLayout = new StackLayout { Size = ImGui.Forms.Models.Size.Content, Alignment = Alignment.Horizontal, ItemSpacing = 3 };
 
             _tabControl = new TabControl();
             _statusLabel = new Label();
@@ -42,6 +50,9 @@ namespace CfgBinEditor.Forms
             _fileOpenMenuItem = new MenuBarButton { Text = LocalizationResources.MenuFileOpenCaption };
             _settingsLanguageMenuItem = new MenuBarRadio { Text = LocalizationResources.MenuSettingsLanguagesCaption };
 
+            _saveBtn = new ImageButton { Image = ImageResources.Save, ImageSize = new Vector2(16, 16), Padding = new Vector2(3, 3), Enabled = false };
+            _saveAllBtn = new ImageButton { Image = ImageResources.SaveAll, ImageSize = new Vector2(16, 16), Padding = new Vector2(3, 3), Enabled = false };
+
             _fileMenuItem.Items.Add(_fileOpenMenuItem);
             _settingsMenuItem.Items.Add(_settingsLanguageMenuItem);
 
@@ -49,6 +60,10 @@ namespace CfgBinEditor.Forms
             _mainMenuBar.Items.Add(_settingsMenuItem);
             _mainMenuBar.Items.Add(_infoMenuButton);
 
+            _operationBarLayout.Items.Add(_saveBtn);
+            _operationBarLayout.Items.Add(_saveAllBtn);
+
+            _contentLayout.Items.Add(_operationBarLayout);
             _contentLayout.Items.Add(_tabControl);
             _contentLayout.Items.Add(_statusLabel);
 

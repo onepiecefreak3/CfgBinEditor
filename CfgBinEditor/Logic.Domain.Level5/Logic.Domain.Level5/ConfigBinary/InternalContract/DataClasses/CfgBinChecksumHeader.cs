@@ -9,8 +9,8 @@ namespace Logic.Domain.Level5.ConfigBinary.InternalContract.DataClasses
     internal struct CfgBinChecksumHeader
     {
         public uint size;
-        public int count;
+        public uint count;
         public uint stringOffset;
-        public int stringSize;
+        public uint stringSize;
     }
 }
