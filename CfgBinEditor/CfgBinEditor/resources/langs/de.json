@@ -3,10 +3,12 @@
 
 	// Application
 	"Application.Title": "CfgBin Editor",
+	"Application.Close.UnsavedChanges.Caption": "Ungespeicherte Änderungen",
+	"Application.Close.UnsavedChanges.Text": "Dateien wurden verändert. Du verlierst deine Änderungen, wenn du die Applikation jetzt schließt. Fortfahren?",
 
 	// File Menu
 	"Menu.File.Caption": "Datei",
-	"Menu.File.Open.Caption": "Öffnen",
+	"Menu.File.Open.Caption": "Öffnen (STRG + O)",
 
 	// Settings
 	"Menu.Settings.Caption": "Einstellungen",
@@ -19,10 +21,22 @@
 	"File.Open.Caption": "Wähle Datei zum Öffnen aus...",
 	"File.Open.CfgBinFilter.Caption": "Konfigurationsdatei",
 	"File.Open.Cancel": "Keine Datei ausgewählt.",
+	"File.Open.Error.Caption": "Fehler beim Laden von {0}: {1}",
+
+	// Save File
+	"File.Save.Tooltip.Single.Caption": "{0} speichern (STRG + S)",
+	"File.Save.Tooltip.All.Caption": "Alle speichern (STRG + UMSCHALT + S)",
+	"File.Save.Error.Caption": "Fehler beim Speichern von {0}: {1}",
 
 	// Close File
 	"File.Close.UnsavedChanges.Caption": "Ungespeicherte Änderungen",
 	"File.Close.UnsavedChanges.Text": "Die Datei wurde verändert. Du verlierst deine Änderungen, wenn du die Datei jetzt schließt. Fortfahren?",
+
+	// Game settings
+	"Game.Button.Add.Caption": "+",
+	"Game.Add.Dialog.Caption": "Neues Spiel",
+	"Game.Add.Dialog.Text": "Gib neuen Spielnamen ein:",
+	"Game.Add.Dialog.Placeholder": "Spielname",
 
 	// Cfg Entry
 	"CfgBin.Entry.Name.Caption": "Name",
@@ -32,7 +46,7 @@
 
 	// Cfg Value Types
 	"CfgBin.Entry.Type.String.Caption": "Zeichenfolge",
-	"CfgBin.Entry.Type.UInt.Caption": "Ganzzahl",
+	"CfgBin.Entry.Type.Int.Caption": "Ganzzahl",
 	"CfgBin.Entry.Type.Float.Caption": "Fließkommazahl",
 
 	// Value Tags

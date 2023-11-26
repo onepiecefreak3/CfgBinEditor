@@ -9,6 +9,8 @@ using ImGui.Forms.Controls;
 using ImGui.Forms.Controls.Layouts;
 using ImGui.Forms.Controls.Menu;
 using ImGui.Forms.Localization;
+using ImGui.Forms.Models.IO;
+using Veldrid;
 
 namespace CfgBinEditor.Forms
 {
@@ -47,11 +49,27 @@ namespace CfgBinEditor.Forms
             _settingsMenuItem = new MenuBarMenu { Text = LocalizationResources.MenuSettingsCaption };
             _infoMenuButton = new MenuBarButton { Text = LocalizationResources.MenuInfoCaption };
 
-            _fileOpenMenuItem = new MenuBarButton { Text = LocalizationResources.MenuFileOpenCaption };
+            _fileOpenMenuItem = new MenuBarButton { Text = LocalizationResources.MenuFileOpenCaption, KeyAction = new KeyCommand(ModifierKeys.Control, Key.O) };
             _settingsLanguageMenuItem = new MenuBarRadio { Text = LocalizationResources.MenuSettingsLanguagesCaption };
 
-            _saveBtn = new ImageButton { Image = ImageResources.Save, ImageSize = new Vector2(16, 16), Padding = new Vector2(3, 3), Enabled = false };
-            _saveAllBtn = new ImageButton { Image = ImageResources.SaveAll, ImageSize = new Vector2(16, 16), Padding = new Vector2(3, 3), Enabled = false };
+            _saveBtn = new ImageButton
+            {
+                Image = ImageResources.Save,
+                ImageSize = new Vector2(16, 16),
+                Padding = new Vector2(3, 3),
+                KeyAction = new KeyCommand(ModifierKeys.Control, Key.S),
+                Tooltip = LocalizationResources.FileSaveTooltipSingleCaption(() => _tabControl?.SelectedPage?.Title),
+                Enabled = false
+            };
+            _saveAllBtn = new ImageButton
+            {
+                Image = ImageResources.SaveAll,
+                ImageSize = new Vector2(16, 16),
+                Padding = new Vector2(3, 3),
+                KeyAction = new KeyCommand(ModifierKeys.Control | ModifierKeys.Shift, Key.S),
+                Tooltip = LocalizationResources.FileSaveTooltipAllCaption,
+                Enabled = false
+            };
 
             _fileMenuItem.Items.Add(_fileOpenMenuItem);
             _settingsMenuItem.Items.Add(_settingsLanguageMenuItem);
@@ -69,6 +87,7 @@ namespace CfgBinEditor.Forms
 
             InitializeLanguages(localizer);
 
+            Size = new Vector2(1100, 700);
             Title = LocalizationResources.ApplicationTitle;
             Icon = ImageResources.Icon;
 

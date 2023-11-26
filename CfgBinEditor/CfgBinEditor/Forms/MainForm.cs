@@ -59,17 +59,35 @@ namespace CfgBinEditor.Forms
 
             _fileOpenMenuItem.Clicked += (s, e) => OpenFile();
 
-            _saveBtn.Clicked += (s, e) => SaveCurrentTabPage();
+            _saveBtn.Clicked += (s, e) => SaveTabPage(_tabControl.SelectedPage);
             _saveAllBtn.Clicked += (s, e) => SaveAllTabPages();
+
+            Closing += (s, e) => CloseApplication(e);
 
             AllowDragDrop = true;
             DragDrop += (s, e) => OpenFile(e.File);
 
             _events.Subscribe<FileChangedMessage>(msg => MarkChangedFile(msg.ConfigForm, true));
-            _events.Subscribe<FileSavedMessage>(msg => MarkChangedFile(msg.ConfigForm, false));
+            _events.Subscribe<FileSavedMessage>(FileSaved);
 
             if (settingsProvider.TryGetError(out Exception error))
-                SetStatus(LocalizationResources.CfgBinTagsLoadErrorCaption(error!.Message), LabelStatus.Error);
+            {
+                error = GetInnermostException(error);
+                if (error is not FileNotFoundException)
+                    SetStatus(LocalizationResources.CfgBinTagsLoadErrorCaption(error.Message), LabelStatus.Error);
+            }
+        }
+
+        private async Task CloseApplication(ClosingEventArgs e)
+        {
+            if (_tabControl.Pages.All(p => !p.HasChanges))
+                return;
+
+            DialogResult result = await MessageBox.ShowYesNoAsync(LocalizationResources.ApplicationCloseUnsavedChangesCaption, LocalizationResources.ApplicationCloseUnsavedChangesText);
+            if(result == DialogResult.Yes)
+                return;
+
+            e.Cancel = true;
         }
 
         private void ChangeLocale(string language)
@@ -86,6 +104,7 @@ namespace CfgBinEditor.Forms
                 return true;
 
             DialogResult result = await MessageBox.ShowYesNoAsync(LocalizationResources.FileCloseUnsavedChangesCaption, LocalizationResources.FileCloseUnsavedChangesText);
+
             return result == DialogResult.Yes;
         }
 
@@ -102,12 +121,12 @@ namespace CfgBinEditor.Forms
         }
 
 
-        private void SaveCurrentTabPage()
+        private void SaveTabPage(TabPage page)
         {
-            if (!_pageConfigLookup.TryGetValue(_tabControl.SelectedPage, out ConfigurationForm configForm))
+            if (!_pageConfigLookup.TryGetValue(page, out ConfigurationForm configForm))
                 return;
 
-            if (!_pagePathLookup.TryGetValue(_tabControl.SelectedPage, out string configPath))
+            if (!_pagePathLookup.TryGetValue(page, out string configPath))
                 return;
 
             RaiseFileSaveRequest(new Dictionary<ConfigurationForm, string>
@@ -131,6 +150,23 @@ namespace CfgBinEditor.Forms
             }
 
             RaiseFileSaveRequest(configForms);
+        }
+
+        private void FileSaved(FileSavedMessage msg)
+        {
+            MarkChangedFile(msg.ConfigForm, msg.Error != null);
+            SetStatus(string.Empty, LabelStatus.None);
+
+            if (msg.Error == null)
+                return;
+
+            if (!_configPageLookup.TryGetValue(msg.ConfigForm, out TabPage configPage))
+                return;
+
+            if (!_pagePathLookup.TryGetValue(configPage, out string configPath))
+                return;
+
+            SetStatus(LocalizationResources.FileSaveErrorCaption(Path.GetFileName(configPath), GetInnermostException(msg.Error).Message), LabelStatus.Error);
         }
 
         private void MarkChangedFile(ConfigurationForm configForm, bool hasChanges)
@@ -178,8 +214,8 @@ namespace CfgBinEditor.Forms
                 return true;
             }
 
-            using Stream fileStream = File.OpenRead(filePath);
-            Configuration config = _configReader.Read(fileStream);
+            if (!TryLoadFile(filePath, out Configuration config))
+                return false;
 
             ConfigurationForm configForm = _formFactory.CreateConfigurationForm(config);
             TabPage page = new(configForm) { Title = Path.GetFileName(filePath) };
@@ -193,6 +229,26 @@ namespace CfgBinEditor.Forms
             _pagePathLookup[page] = filePath;
 
             _tabControl.SelectedPage = page;
+
+            SetStatus(string.Empty, LabelStatus.None);
+
+            return true;
+        }
+
+        private bool TryLoadFile(string filePath, out Configuration config)
+        {
+            config = null;
+
+            try
+            {
+                using Stream fileStream = File.OpenRead(filePath);
+                config = _configReader.Read(fileStream);
+            }
+            catch (Exception e)
+            {
+                SetStatus(LocalizationResources.FileOpenErrorCaption(Path.GetFileName(filePath), GetInnermostException(e).Message), LabelStatus.Error);
+                return false;
+            }
 
             return true;
         }
@@ -211,6 +267,14 @@ namespace CfgBinEditor.Forms
                     _statusLabel.TextColor = ColorResources.TextError;
                     break;
             }
+        }
+
+        private Exception GetInnermostException(Exception e)
+        {
+            while (e.InnerException != null)
+                e = e.InnerException;
+
+            return e;
         }
 
         private void RaiseFileSaveRequest(IDictionary<ConfigurationForm, string> configs)

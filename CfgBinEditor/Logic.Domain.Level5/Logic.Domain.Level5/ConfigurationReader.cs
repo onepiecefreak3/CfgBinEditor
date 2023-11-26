@@ -80,9 +80,9 @@ namespace Logic.Domain.Level5
 
                 br.SeekAlignment(4);
 
-                var values = new uint[result[i].entryCount];
+                var values = new int[result[i].entryCount];
                 for (var j = 0; j < types.Length; j++)
-                    values[j] = br.ReadUInt32();
+                    values[j] = br.ReadInt32();
 
                 result[i].entryTypes = types;
                 result[i].entryValues = values;
@@ -143,8 +143,8 @@ namespace Logic.Domain.Level5
                 for (var j = 0; j < entries[i].entryCount; j++)
                 {
                     var type = (ValueType)entries[i].entryTypes[j];
+                    int intValue = entries[i].entryValues[j];
 
-                    var intValue = unchecked((int)entries[i].entryValues[j]);
                     object value;
                     switch (type)
                     {
@@ -159,8 +159,8 @@ namespace Logic.Domain.Level5
                             value = ReadString(br, encoding);
                             break;
 
-                        case ValueType.UInt:
-                            value = unchecked((uint)intValue);
+                        case ValueType.Int:
+                            value = intValue;
                             break;
 
                         case ValueType.Float:

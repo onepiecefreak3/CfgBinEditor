@@ -67,9 +67,10 @@ namespace Logic.Domain.Level5
 
             uint stringOffset = (uint)bw.BaseStream.Position + header.stringDataOffset - 0x10;
             uint stringOffsetBase = stringOffset;
+            var writtenStrings = new Dictionary<string, uint>();
             var stringCount = 0u;
             foreach (ConfigurationEntry configEntry in configEntries)
-                WriteEntry(bw, configEntry, encoding, stringOffsetBase, ref stringOffset, ref stringCount);
+                WriteEntry(bw, configEntry, encoding, stringOffsetBase, writtenStrings, ref stringOffset, ref stringCount);
 
             bw.WriteAlignment(0x10, 0xFF);
 
@@ -82,24 +83,29 @@ namespace Logic.Domain.Level5
             return header;
         }
 
-        private void WriteEntry(IBinaryWriterX bw, ConfigurationEntry configEntry, Encoding encoding, uint stringOffsetBase, ref uint stringOffset, ref uint stringCount)
+        private void WriteEntry(IBinaryWriterX bw, ConfigurationEntry configEntry, Encoding encoding, uint stringOffsetBase, IDictionary<string, uint> writtenStrings,
+            ref uint stringOffset, ref uint stringCount)
         {
             bw.Write(_checksum.ComputeValue(configEntry.Name, encoding));
             bw.Write((byte)configEntry.Values.Length);
 
+            var typesWritten = 0;
             byte typeBuffer = 0;
             for (var i = 0; i < configEntry.Values.Length; i++)
             {
-                if (i != 0 && i % 4 == 0)
+                if (typesWritten >= 4)
                 {
                     bw.Write(typeBuffer);
+
                     typeBuffer = 0;
+                    typesWritten = 0;
                 }
 
                 typeBuffer |= (byte)((int)configEntry.Values[i].Type << (i % 4 * 2));
+                typesWritten++;
             }
 
-            if (configEntry.Values.Length != 0 && configEntry.Values.Length == 1 || (configEntry.Values.Length - 1) % 4 != 0)
+            if (typesWritten > 0)
                 bw.Write(typeBuffer);
 
             bw.WriteAlignment(4, 0xFF);
@@ -109,11 +115,11 @@ namespace Logic.Domain.Level5
                 switch (value.Type)
                 {
                     case ValueType.String:
-                        WriteString(bw, (string)value.Value, encoding, stringOffsetBase, ref stringOffset, ref stringCount);
+                        WriteString(bw, (string)value.Value, encoding, stringOffsetBase, writtenStrings, ref stringOffset, ref stringCount);
                         break;
 
-                    case ValueType.UInt:
-                        bw.Write((uint)value.Value);
+                    case ValueType.Int:
+                        bw.Write((int)value.Value);
                         break;
 
                     case ValueType.Float:
@@ -121,20 +127,6 @@ namespace Logic.Domain.Level5
                         break;
                 }
             }
-        }
-
-        private void WriteString(IBinaryWriterX bw, string value, Encoding encoding, uint stringOffsetBase, ref uint stringOffset, ref uint stringCount)
-        {
-            stringCount++;
-
-            bw.Write(stringOffset - stringOffsetBase);
-            long entryOffset = bw.BaseStream.Position;
-
-            bw.BaseStream.Position = stringOffset;
-            bw.WriteString(value, encoding, false);
-            stringOffset = (uint)bw.BaseStream.Position;
-
-            bw.BaseStream.Position = entryOffset;
         }
 
         private void WriteHeader(IBinaryWriterX bw, CfgBinHeader header)
@@ -156,13 +148,14 @@ namespace Logic.Domain.Level5
 
             uint stringOffset = (uint)bw.BaseStream.Position + header.stringOffset - 0x10;
             uint stringOffsetBase = stringOffset;
+            var writtenStrings = new Dictionary<string, uint>();
             var stringCount = 0u;
             foreach (string name in names)
             {
                 uint checksum = _checksum.ComputeValue(name, encoding);
 
                 bw.Write(checksum);
-                WriteString(bw, name, encoding, stringOffsetBase, ref stringOffset, ref stringCount);
+                WriteString(bw, name, encoding, stringOffsetBase, writtenStrings, ref stringOffset, ref stringCount);
             }
 
             bw.WriteAlignment(0x10, 0xFF);
@@ -208,6 +201,45 @@ namespace Logic.Domain.Level5
                 default:
                     throw new InvalidOperationException($"Unknown encoding {encoding}.");
             }
+        }
+
+        private void WriteString(IBinaryWriterX bw, string value, Encoding encoding, uint stringOffsetBase, IDictionary<string, uint> writtenNames,
+            ref uint stringOffset, ref uint stringCount)
+        {
+            if (writtenNames.TryGetValue(value, out uint nameOffset))
+            {
+                bw.Write(nameOffset - stringOffsetBase);
+                return;
+            }
+
+            stringCount++;
+
+            bw.Write(stringOffset - stringOffsetBase);
+            long entryOffset = bw.BaseStream.Position;
+
+            bw.BaseStream.Position = stringOffset;
+            CacheStrings(bw, value, encoding, writtenNames);
+            bw.WriteString(value, encoding, false);
+            stringOffset = (uint)bw.BaseStream.Position;
+
+            bw.BaseStream.Position = entryOffset;
+        }
+
+        private void CacheStrings(IBinaryWriterX stringWriter, string value, Encoding encoding, IDictionary<string, uint> writtenNames)
+        {
+            long nameOffset = stringWriter.BaseStream.Position;
+
+            do
+            {
+                if (!writtenNames.ContainsKey(value))
+                    writtenNames[value] = (uint)nameOffset;
+
+                nameOffset += encoding.GetByteCount(value[..1]);
+                value = value.Length > 1 ? value[1..] : string.Empty;
+            } while (value.Length > 0);
+
+            if (!writtenNames.ContainsKey(value))
+                writtenNames[value] = (uint)nameOffset;
         }
     }
 }

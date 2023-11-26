@@ -9,7 +9,7 @@ namespace Logic.Domain.Level5.Contract.DataClasses
     public enum ValueType
     {
         String,
-        UInt,
+        Int,
         Float
     }
 }

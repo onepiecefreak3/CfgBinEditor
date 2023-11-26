@@ -3,10 +3,12 @@
 
   // Application
   "Application.Title": "CfgBin Editor",
+  "Application.Close.UnsavedChanges.Caption": "Unsaved changes",
+  "Application.Close.UnsavedChanges.Text": "Files were modified. You may lose progress, if you close the application now. Proceed?",
 
   // File Menu
   "Menu.File.Caption": "File",
-  "Menu.File.Open.Caption": "Open",
+  "Menu.File.Open.Caption": "Open (CTRL + O)",
 
   // Settings
   "Menu.Settings.Caption": "Settings",
@@ -15,14 +17,26 @@
   // Info
   "Menu.Info.Caption": "?",
 
-  // Open File Dialog
+  // Open File
   "File.Open.Caption": "Select file to open...",
   "File.Open.CfgBinFilter.Caption": "Configuration file",
   "File.Open.Cancel": "No file selected.",
+  "File.Open.Error.Caption": "Error loading {0}: {1}",
+
+  // Save File
+  "File.Save.Tooltip.Single.Caption": "Save {0} (CTRL + S)",
+  "File.Save.Tooltip.All.Caption": "Save all (CTRL + SHIFT + S)",
+  "File.Save.Error.Caption": "Error saving {0}: {1}",
 
   // Close File
   "File.Close.UnsavedChanges.Caption": "Unsaved changes",
   "File.Close.UnsavedChanges.Text": "The file was modified. You may lose progress, if you close the file now. Proceed?",
+
+  // Game settings
+  "Game.Add.Button.Caption": "+",
+  "Game.Add.Dialog.Caption": "Add new game",
+  "Game.Add.Dialog.Text": "Enter new game name:",
+  "Game.Add.Dialog.Placeholder": "Game name",
 
   // Cfg Entry
   "CfgBin.Entry.Name.Caption": "Name",
@@ -32,7 +46,7 @@
 
   // Cfg Value Types
   "CfgBin.Entry.Type.String.Caption": "String",
-  "CfgBin.Entry.Type.UInt.Caption": "Int",
+  "CfgBin.Entry.Type.Int.Caption": "Int",
   "CfgBin.Entry.Type.Float.Caption": "Float",
 
   // Value Tags

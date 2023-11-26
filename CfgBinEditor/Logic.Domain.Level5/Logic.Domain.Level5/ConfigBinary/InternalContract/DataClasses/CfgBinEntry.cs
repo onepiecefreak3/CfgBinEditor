@@ -11,6 +11,6 @@ namespace Logic.Domain.Level5.ConfigBinary.InternalContract.DataClasses
         public uint crc32;
         public byte entryCount;
         public byte[] entryTypes;
-        public uint[] entryValues;
+        public int[] entryValues;
     }
 }

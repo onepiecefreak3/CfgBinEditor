@@ -1,4 +1,6 @@
+using System.Numerics;
 using CfgBinEditor;
+using CfgBinEditor.Forms;
 using CfgBinEditor.InternalContract;
 using CrossCutting.Core.Contract.DependencyInjection;
 using CrossCutting.Core.Contract.EventBrokerage;
@@ -6,6 +8,7 @@ using CrossCutting.Core.Contract.Messages;
 using ImGui.Forms;
 using ImGui.Forms.Localization;
 using ImGui.Forms.Resources;
+using Veldrid;
 
 KernelLoader loader = new();
 ICoCoKernel kernel = loader.Initialize();
@@ -14,7 +17,7 @@ var eventBroker = kernel.Get<IEventBroker>();
 eventBroker.Raise(new InitializeApplicationMessage());
 
 var localizer = kernel.Get<ILocalizer>();
-var app = new Application(localizer);
+var app = new Application(localizer, GraphicsBackend.OpenGL);
 
 FontResources.RegisterArial(15);
 

@@ -10,10 +10,12 @@ namespace CfgBinEditor.Messages
     internal class FileSavedMessage
     {
         public ConfigurationForm ConfigForm { get; }
+        public Exception Error { get; }
 
-        public FileSavedMessage(ConfigurationForm configForm)
+        public FileSavedMessage(ConfigurationForm configForm, Exception e)
         {
             ConfigForm = configForm;
+            Error = e;
         }
     }
 }

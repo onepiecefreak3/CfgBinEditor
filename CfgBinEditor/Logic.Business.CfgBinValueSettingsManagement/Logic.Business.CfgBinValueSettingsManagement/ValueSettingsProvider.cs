@@ -1,5 +1,6 @@
 ﻿using Logic.Business.CfgBinValueSettingsManagement.Contract;
 using Logic.Business.CfgBinValueSettingsManagement.Contract.DataClasses;
+using System.Runtime;
 
 namespace Logic.Business.CfgBinValueSettingsManagement
 {
@@ -7,7 +8,7 @@ namespace Logic.Business.CfgBinValueSettingsManagement
     {
         private readonly IValueSettingsReader _reader;
         private readonly IValueSettingsWriter _writer;
-        
+
         private IDictionary<string, IDictionary<string, IList<ValueSettingEntry>>> _settings;
         private Exception? _readError;
 
@@ -16,6 +17,8 @@ namespace Logic.Business.CfgBinValueSettingsManagement
             _reader = reader;
             _writer = writer;
 
+            _settings = new Dictionary<string, IDictionary<string, IList<ValueSettingEntry>>>();
+
             TryReadSettings();
         }
 
@@ -23,6 +26,19 @@ namespace Logic.Business.CfgBinValueSettingsManagement
         {
             error = _readError;
             return _readError != null;
+        }
+
+        public string[] GetGames()
+        {
+            return _settings.Keys.ToArray();
+        }
+
+        public void AddGame(string game)
+        {
+            if (_settings.ContainsKey(game))
+                return;
+
+            _settings[game] = new Dictionary<string, IList<ValueSettingEntry>>();
         }
 
         public ValueSettingEntry GetEntrySettings(string game, string entryName, int index)
