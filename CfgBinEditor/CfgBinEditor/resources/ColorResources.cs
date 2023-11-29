@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ImGuiNET;
 
 namespace CfgBinEditor.resources
 {
@@ -26,6 +27,8 @@ namespace CfgBinEditor.resources
                 [ImGuiColMax_ + 2] = Color.DarkRed,
             }
         };
+
+        public static Color TextDefault => Style.GetColor(ImGuiCol.Text);
 
         public static Color TextSuccessful => Store[Style.Theme][ImGuiColMax_ + 1];
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -9,12 +10,14 @@ using CrossCutting.Core.Contract.EventBrokerage;
 using ImGui.Forms.Controls;
 using ImGui.Forms.Controls.Base;
 using ImGui.Forms.Controls.Layouts;
+using ImGui.Forms.Controls.Tree;
 using ImGui.Forms.Modals.IO;
 using ImGui.Forms.Models;
 using Logic.Business.CfgBinValueSettingsManagement.Contract;
 using Logic.Business.CfgBinValueSettingsManagement.Contract.DataClasses;
 using Logic.Domain.Level5.Contract;
 using Logic.Domain.Level5.Contract.DataClasses;
+using Veldrid.MetalBindings;
 using ValueType = Logic.Domain.Level5.Contract.DataClasses.ValueType;
 
 namespace CfgBinEditor.Forms
@@ -35,14 +38,13 @@ namespace CfgBinEditor.Forms
             _writer = writer;
             _settingsProvider = settingsProvider;
 
-            _flatEntryTree.SelectedNodeChanged += (s, e) => ChangeSelectedEntry(_flatEntryTree.SelectedNode.Data);
-            _nestedTreeView.SelectedNodeChanged += (s, e) => ChangeSelectedEntry(_nestedTreeView.SelectedNode.Data);
+            _nestedTreeView.SelectedNodeChanged += (s, e) => ChangeEntry(_nestedTreeView.SelectedNode.Data);
 
-            _gameComboBox.SelectedItemChanged += (s, e) => ChangeSelectedGame(_gameComboBox.SelectedItem.Content);
+            _gameComboBox.SelectedItemChanged += (s, e) => ChangeGame(_gameComboBox.SelectedItem.Content);
             _gameAddButton.Clicked += (s, e) => AddNewGame();
 
-            if (_flatEntryTree.Nodes.Count > 0)
-                _flatEntryTree.SelectedNode = _flatEntryTree.Nodes[0];
+            _duplicateButton.Clicked += (s, e) => DuplicateNode(_nestedTreeView.SelectedNode);
+
             if (_nestedTreeView.Nodes.Count > 0)
                 _nestedTreeView.SelectedNode = _nestedTreeView.Nodes[0];
 
@@ -51,7 +53,7 @@ namespace CfgBinEditor.Forms
             events.Subscribe<GameAddedMessage>(AddGame);
         }
 
-        private void ChangeSelectedEntry(ConfigurationEntry entry)
+        private void ChangeEntry(ConfigurationEntry entry)
         {
             var layout = new TableLayout { Size = new Size(SizeValue.Parent, SizeValue.Content), Spacing = new Vector2(5, 5) };
 
@@ -114,7 +116,7 @@ namespace CfgBinEditor.Forms
             _configContent.Content = layout;
         }
 
-        private void ChangeSelectedGame(string gameName)
+        private void ChangeGame(string gameName)
         {
             ChangeValueSettings(gameName, _nestedTreeView.SelectedNode.Data.Name);
         }
@@ -158,6 +160,50 @@ namespace CfgBinEditor.Forms
             }
         }
 
+        private void DuplicateNode(TreeNode<ConfigurationEntry> node)
+        {
+            TreeNode<ConfigurationEntry> lastNode = GetLastNode(node);
+
+            int entryIndex = Array.IndexOf(_config.Entries, node.Data);
+            int entryCount = CountEntries(node);
+
+            int lastEntryIndex = lastNode == node ? entryIndex : Array.IndexOf(_config.Entries, lastNode.Data);
+            int lastEntryCount = lastNode == node ? entryCount : CountEntries(lastNode);
+
+            int newEntryIndex = lastEntryIndex + lastEntryCount;
+
+            var newEntries = new ConfigurationEntry[_config.Entries.Length + entryCount];
+            Array.Copy(_config.Entries, newEntries, newEntryIndex);
+            Array.Copy(_config.Entries, newEntryIndex, newEntries, newEntryIndex + entryCount, _config.Entries.Length - newEntryIndex);
+
+            for (var i = 0; i < entryCount; i++)
+            {
+                newEntries[newEntryIndex + i] = new ConfigurationEntry
+                {
+                    Name = _config.Entries[entryIndex + i].Name,
+                    Values = new ConfigurationEntryValue[_config.Entries[entryIndex + i].Values.Length]
+                };
+
+                for (var j = 0; j < newEntries[newEntryIndex + i].Values.Length; j++)
+                {
+                    newEntries[newEntryIndex + i].Values[j] = new ConfigurationEntryValue
+                    {
+                        Type = _config.Entries[entryIndex + i].Values[j].Type,
+                        Value = _config.Entries[entryIndex + i].Values[j].Value
+                    };
+                }
+            }
+
+            _config.Entries = newEntries;
+
+            TreeNode<ConfigurationEntry> newNode = CreateNode(_config, ref newEntryIndex, ColorResources.TextSuccessful);
+
+            IList<TreeNode<ConfigurationEntry>> nodes = GetNeighbourNodes(node);
+            nodes.Add(newNode);
+
+            RaiseFileChanged();
+        }
+
         private async void AddNewGame()
         {
             string input = await InputBox.ShowAsync(LocalizationResources.GameAddDialogCaption,
@@ -179,7 +225,8 @@ namespace CfgBinEditor.Forms
                 return;
 
             _gameComboBox.SelectedItem = _gameComboBox.Items[^1];
-            ChangeSelectedGame(msg.Game);
+
+            ChangeGame(msg.Game);
         }
 
         private void SaveFile(FileSaveRequestMessage msg)
@@ -192,6 +239,8 @@ namespace CfgBinEditor.Forms
                 RaiseFileSaved(e);
                 return;
             }
+
+            ResetNodesChangeState(_nestedTreeView.Nodes);
 
             RaiseFileSaved();
         }

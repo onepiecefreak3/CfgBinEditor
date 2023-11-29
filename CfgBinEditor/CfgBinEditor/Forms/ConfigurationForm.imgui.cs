@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Autofac.Features.Indexed;
 using CfgBinEditor.resources;
 using ImGui.Forms.Controls;
 using ImGui.Forms.Controls.Layouts;
+using ImGui.Forms.Controls.Menu;
 using ImGui.Forms.Controls.Tree;
 using ImGui.Forms.Models;
 using Logic.Business.CfgBinValueSettingsManagement.Contract;
 using Logic.Domain.Level5.Contract.DataClasses;
-using Veldrid;
+using Rectangle = Veldrid.Rectangle;
+using Size = ImGui.Forms.Models.Size;
 
 namespace CfgBinEditor.Forms
 {
@@ -23,8 +28,10 @@ namespace CfgBinEditor.Forms
         private StackLayout _gameLayout;
         private StackLayout _valuesLayout;
 
-        private TreeView<ConfigurationEntry> _flatEntryTree;
         private TreeView<ConfigurationEntry> _nestedTreeView;
+        private ContextMenu _treeViewContextMenu;
+
+        private MenuBarButton _duplicateButton;
 
         private ComboBox<string> _gameComboBox;
         private Button _gameAddButton;
@@ -38,8 +45,21 @@ namespace CfgBinEditor.Forms
             _gameLayout = new StackLayout { Alignment = Alignment.Horizontal, ItemSpacing = 5, Size = new Size(SizeValue.Parent, SizeValue.Content) };
             _valuesLayout = new StackLayout { Alignment = Alignment.Vertical, ItemSpacing = 5 };
 
-            _flatEntryTree = new TreeView<ConfigurationEntry> { Size = new Size(SizeValue.Relative(.4f), SizeValue.Parent) };
-            _nestedTreeView = new TreeView<ConfigurationEntry> { Size = new Size(SizeValue.Relative(.4f), SizeValue.Parent) };
+            _duplicateButton = new MenuBarButton { Text = LocalizationResources.CfgBinEntryDuplicateCaption };
+
+            _treeViewContextMenu = new ContextMenu
+            {
+                Items =
+                {
+                    _duplicateButton
+                }
+            };
+
+            _nestedTreeView = new TreeView<ConfigurationEntry>
+            {
+                Size = new Size(SizeValue.Relative(.4f), SizeValue.Parent),
+                ContextMenu = _treeViewContextMenu
+            };
 
             _gameComboBox = new ComboBox<string>();
             _gameAddButton = new Button { Text = LocalizationResources.GameAddButtonCaption };
@@ -57,7 +77,6 @@ namespace CfgBinEditor.Forms
 
             InitializeGames(settingsProvider);
 
-            InitializeFlatEntryNodes(config);
             InitializeNestedEntryNodes(config);
         }
 
@@ -80,40 +99,105 @@ namespace CfgBinEditor.Forms
                 _gameComboBox.Items.Add(game);
         }
 
-        private void InitializeFlatEntryNodes(Configuration config)
+        private void InitializeNestedEntryNodes(Configuration config)
         {
-            foreach (ConfigurationEntry entry in config.Entries)
-                _flatEntryTree.Nodes.Add(new TreeNode<ConfigurationEntry> { Data = entry, Text = entry.Name });
+            IList<TreeNode<ConfigurationEntry>> nodeTree = CreateNodeTree(config);
+
+            foreach (TreeNode<ConfigurationEntry> node in nodeTree)
+                _nestedTreeView.Nodes.Add(node);
         }
 
-        private int InitializeNestedEntryNodes(Configuration config, int index = 0, string? endNodeName = null, TreeNode<ConfigurationEntry>? parentNode = null)
+        private void ResetNodesChangeState(IList<TreeNode<ConfigurationEntry>> nodes)
+        {
+            foreach (TreeNode<ConfigurationEntry> node in nodes)
+            {
+                node.TextColor = ColorResources.TextDefault;
+
+                if (node.Nodes.Count > 0)
+                    ResetNodesChangeState(node.Nodes);
+            }
+        }
+
+        private IList<TreeNode<ConfigurationEntry>> CreateNodeTree(Configuration config)
+        {
+            var result = new List<TreeNode<ConfigurationEntry>>();
+
+            for (var index = 0; index < config.Entries.Length; index++)
+            {
+                TreeNode<ConfigurationEntry> entryNode = CreateNode(config, ref index, ColorResources.TextDefault);
+
+                result.Add(entryNode);
+            }
+
+            return result;
+        }
+
+        private int CreateNodeTree(Configuration config, int index, string endNodeName, TreeNode<ConfigurationEntry> parentNode, Color textColor)
         {
             for (; index < config.Entries.Length; index++)
             {
-                ConfigurationEntry entry = config.Entries[index];
-                if (entry.Name == endNodeName)
+                if (config.Entries[index].Name == endNodeName)
                     break;
 
-                var entryNode = new TreeNode<ConfigurationEntry> { Data = entry, Text = entry.Name };
+                TreeNode<ConfigurationEntry> entryNode = CreateNode(config, ref index, textColor);
 
-                int beginIndex = entry.Name.LastIndexOf("_BEGIN", StringComparison.Ordinal);
-                int begIndex = entry.Name.LastIndexOf("_BEG", StringComparison.Ordinal);
-                int bgnIndex = entry.Name.LastIndexOf("_BGN", StringComparison.Ordinal);
-                if (beginIndex >= 0 || begIndex >= 0 || bgnIndex >= 0)
-                {
-                    int bIndex = beginIndex < 0 ? begIndex < 0 ? bgnIndex : begIndex : beginIndex;
-
-                    entryNode.Text = entry.Name[..bIndex];
-                    index = InitializeNestedEntryNodes(config, index + 1, entryNode.Text + "_END", entryNode);
-                }
-
-                if (parentNode == null)
-                    _nestedTreeView.Nodes.Add(entryNode);
-                else
-                    parentNode.Nodes.Add(entryNode);
+                parentNode.Nodes.Add(entryNode);
             }
 
             return index;
+        }
+
+        private TreeNode<ConfigurationEntry> CreateNode(Configuration config, ref int index, Color textColor)
+        {
+            ConfigurationEntry entry = config.Entries[index];
+
+            var entryNode = new TreeNode<ConfigurationEntry> { Data = entry, Text = entry.Name, TextColor = textColor };
+
+            int beginIndex = entry.Name.LastIndexOf("_BEGIN", StringComparison.Ordinal);
+            int begIndex = entry.Name.LastIndexOf("_BEG", StringComparison.Ordinal);
+            int bgnIndex = entry.Name.LastIndexOf("_BGN", StringComparison.Ordinal);
+            if (beginIndex < 0 && begIndex < 0 && bgnIndex < 0)
+                return entryNode;
+
+            int bIndex = beginIndex < 0 ? begIndex < 0 ? bgnIndex : begIndex : beginIndex;
+
+            entryNode.Text = entry.Name[..bIndex];
+            index = CreateNodeTree(config, index + 1, entryNode.Text + "_END", entryNode, textColor);
+
+            return entryNode;
+        }
+
+        private TreeNode<ConfigurationEntry> GetNextNode(TreeNode<ConfigurationEntry> node)
+        {
+            IList<TreeNode<ConfigurationEntry>> nodes = node.Parent?.Nodes ?? _nestedTreeView.Nodes;
+
+            int nodeIndex = nodes.IndexOf(node) + 1;
+            if (nodeIndex < nodes.Count)
+                return nodes[nodeIndex];
+
+            return null;
+        }
+
+        private TreeNode<ConfigurationEntry> GetLastNode(TreeNode<ConfigurationEntry> node)
+        {
+            return GetNeighbourNodes(node)[^1];
+        }
+
+        private IList<TreeNode<ConfigurationEntry>> GetNeighbourNodes(TreeNode<ConfigurationEntry> node)
+        {
+            return node.Parent?.Nodes ?? _nestedTreeView.Nodes;
+        }
+
+        private int CountEntries(TreeNode<ConfigurationEntry> node)
+        {
+            if (node.Nodes.Count <= 0)
+                return 1;
+
+            var count = 1;
+            foreach (TreeNode<ConfigurationEntry> child in node.Nodes)
+                count += CountEntries(child);
+
+            return count + 1;
         }
     }
 }

@@ -49,6 +49,9 @@
   "CfgBin.Entry.Type.Int.Caption": "Int",
   "CfgBin.Entry.Type.Float.Caption": "Float",
 
+  // Cfg Entry Duplication
+  "CfgBin.Entry.Duplicate.Caption": "Duplicate",
+
   // Value Tags
   "CfgBin.Tags.Load.Error.Caption": "Error loading the tags: {0}"
 }

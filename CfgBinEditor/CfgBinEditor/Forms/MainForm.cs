@@ -260,7 +260,7 @@ namespace CfgBinEditor.Forms
             switch (status)
             {
                 case LabelStatus.None:
-                    _statusLabel.TextColor = Style.GetColor(ImGuiCol.Text);
+                    _statusLabel.TextColor = ColorResources.TextDefault;
                     break;
 
                 case LabelStatus.Error:
