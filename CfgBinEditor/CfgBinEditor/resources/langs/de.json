@@ -49,6 +49,9 @@
 	"CfgBin.Entry.Type.Int.Caption": "Ganzzahl",
 	"CfgBin.Entry.Type.Float.Caption": "Fließkommazahl",
 
+	// Cfg Entry Search
+	"CfgBin.Entry.Search.Placeholder.Caption": "Suchen...",
+
 	// Cfg Entry Duplication
 	"CfgBin.Entry.Duplicate.Caption": "Duplizieren",
 

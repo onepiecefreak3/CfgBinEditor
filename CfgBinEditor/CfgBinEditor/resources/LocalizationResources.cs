@@ -50,6 +50,9 @@ namespace CfgBinEditor.resources
         public static LocalizedString CfgBinEntryTypeIntCaption => new("CfgBin.Entry.Type.Int.Caption");
         public static LocalizedString CfgBinEntryTypeFloatCaption => new("CfgBin.Entry.Type.Float.Caption");
 
+        public static LocalizedString CfgBinEntrySearchPlaceholderCaption =>
+            new("CfgBin.Entry.Search.Placeholder.Caption");
+
         public static LocalizedString CfgBinEntryDuplicateCaption => new("CfgBin.Entry.Duplicate.Caption");
 
         public static LocalizedString CfgBinTagsLoadErrorCaption(string error) =>

@@ -17,7 +17,6 @@ using Logic.Business.CfgBinValueSettingsManagement.Contract;
 using Logic.Business.CfgBinValueSettingsManagement.Contract.DataClasses;
 using Logic.Domain.Level5.Contract;
 using Logic.Domain.Level5.Contract.DataClasses;
-using Veldrid.MetalBindings;
 using ValueType = Logic.Domain.Level5.Contract.DataClasses.ValueType;
 
 namespace CfgBinEditor.Forms
@@ -38,15 +37,18 @@ namespace CfgBinEditor.Forms
             _writer = writer;
             _settingsProvider = settingsProvider;
 
-            _nestedTreeView.SelectedNodeChanged += (s, e) => ChangeEntry(_nestedTreeView.SelectedNode.Data);
+            _entryTreeView.SelectedNodeChanged += (s, e) => ChangeEntry(_entryTreeView.SelectedNode.Data);
 
             _gameComboBox.SelectedItemChanged += (s, e) => ChangeGame(_gameComboBox.SelectedItem.Content);
             _gameAddButton.Clicked += (s, e) => AddNewGame();
 
-            _duplicateButton.Clicked += (s, e) => DuplicateNode(_nestedTreeView.SelectedNode);
+            _duplicateButton.Clicked += (s, e) => DuplicateNode(_entryTreeView.SelectedNode);
 
-            if (_nestedTreeView.Nodes.Count > 0)
-                _nestedTreeView.SelectedNode = _nestedTreeView.Nodes[0];
+            _searchTextBox.TextChanged += (s, e) => ApplySearch(_searchTextBox.Text);
+            _clearSearchButton.Clicked += (s, e) => ClearSearch();
+
+            if (_entryTreeView.Nodes.Count > 0)
+                _entryTreeView.SelectedNode = _entryTreeView.Nodes[0];
 
             events.Subscribe<ValueSettingsChangedMessage>(ChangeValueSettings);
             events.Subscribe<FileSaveRequestMessage>(SaveFile);
@@ -118,7 +120,7 @@ namespace CfgBinEditor.Forms
 
         private void ChangeGame(string gameName)
         {
-            ChangeValueSettings(gameName, _nestedTreeView.SelectedNode.Data.Name);
+            ChangeValueSettings(gameName, _entryTreeView.SelectedNode.Data.Name);
         }
 
         private void ChangeValueSettings(ValueSettingsChangedMessage message)
@@ -129,7 +131,7 @@ namespace CfgBinEditor.Forms
             if (message.GameName != GetCurrentGame())
                 return;
 
-            if (message.EntryName != _nestedTreeView.SelectedNode.Data.Name)
+            if (message.EntryName != _entryTreeView.SelectedNode.Data.Name)
                 return;
 
             ChangeValueSettings(message.GameName, message.EntryName);
@@ -196,12 +198,34 @@ namespace CfgBinEditor.Forms
 
             _config.Entries = newEntries;
 
-            TreeNode<ConfigurationEntry> newNode = CreateNode(_config, ref newEntryIndex, ColorResources.TextSuccessful);
+            TreeNode<ConfigurationEntry> newNode = CreateNode(_config, ref newEntryIndex, ColorResources.TextSuccessful, string.Empty);
 
             IList<TreeNode<ConfigurationEntry>> nodes = GetNeighbourNodes(node);
             nodes.Add(newNode);
 
             RaiseFileChanged();
+        }
+
+        private void ApplySearch(string searchText)
+        {
+            if (string.IsNullOrEmpty(searchText))
+            {
+                _entryLayout.Items[1] = _entryTreeView;
+                return;
+            }
+
+            IList<TreeNode<ConfigurationEntry>> nodeTree = CreateNodeTree(_config, _searchTextBox.Text);
+
+            _filteredEntryTreeView.Nodes.Clear();
+            foreach (TreeNode<ConfigurationEntry> node in nodeTree)
+                _filteredEntryTreeView.Nodes.Add(node);
+
+            _entryLayout.Items[1] = _filteredEntryTreeView;
+        }
+
+        private void ClearSearch()
+        {
+            _searchTextBox.Text = string.Empty;
         }
 
         private async void AddNewGame()
@@ -240,7 +264,7 @@ namespace CfgBinEditor.Forms
                 return;
             }
 
-            ResetNodesChangeState(_nestedTreeView.Nodes);
+            ResetNodesChangeState(_entryTreeView.Nodes);
 
             RaiseFileSaved();
         }
@@ -280,7 +304,7 @@ namespace CfgBinEditor.Forms
             if (rowIndex < 0)
                 return;
 
-            var configEntry = _nestedTreeView.SelectedNode.Data;
+            var configEntry = _entryTreeView.SelectedNode.Data;
             var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Name, rowIndex - 1);
 
             settingsEntry.Name = textBox.Text.Replace(' ', '_');
@@ -317,7 +341,7 @@ namespace CfgBinEditor.Forms
             if (rowIndex < 0)
                 return;
 
-            var configEntry = _nestedTreeView.SelectedNode.Data;
+            var configEntry = _entryTreeView.SelectedNode.Data;
             var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Name, rowIndex - 1);
 
             var newValueType = comboBox.SelectedItem.Content;
@@ -345,7 +369,7 @@ namespace CfgBinEditor.Forms
             if (rowIndex < 0)
                 return;
 
-            var configEntry = _nestedTreeView.SelectedNode.Data;
+            var configEntry = _entryTreeView.SelectedNode.Data;
             var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Name, rowIndex - 1);
 
             var valueType = configEntry.Values[rowIndex - 1].Type;
@@ -390,7 +414,7 @@ namespace CfgBinEditor.Forms
             if (rowIndex < 0)
                 return;
 
-            var configEntry = _nestedTreeView.SelectedNode.Data;
+            var configEntry = _entryTreeView.SelectedNode.Data;
             var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Name, rowIndex - 1);
 
             settingsEntry.IsHex = checkBox.Checked;
@@ -416,22 +440,7 @@ namespace CfgBinEditor.Forms
         private void SetValueText(TextBox valueTextBox, ValueType type, object value, bool isHex)
         {
             valueTextBox.TextChanged -= ValueTextBox_TextChanged;
-
-            switch (type)
-            {
-                case ValueType.String:
-                    valueTextBox.Text = $"{value}";
-                    break;
-
-                case ValueType.Int:
-                    valueTextBox.Text = isHex ? $"0x{value:X8}" : $"{value}";
-                    break;
-
-                case ValueType.Float:
-                    valueTextBox.Text = $"{value}";
-                    break;
-            }
-
+            valueTextBox.Text = GetValueString(value, type, isHex);
             valueTextBox.TextChanged += ValueTextBox_TextChanged;
         }
 

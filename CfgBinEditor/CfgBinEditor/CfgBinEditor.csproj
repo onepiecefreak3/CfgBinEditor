@@ -28,6 +28,9 @@
     <None Update="MyTags.txt">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
+    <None Update="resources\images\close.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="resources\images\logo.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

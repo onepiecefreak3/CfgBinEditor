@@ -49,6 +49,9 @@
   "CfgBin.Entry.Type.Int.Caption": "Int",
   "CfgBin.Entry.Type.Float.Caption": "Float",
 
+  // Cfg Entry Search
+  "CfgBin.Entry.Search.Placeholder.Caption": "Search...",
+
   // Cfg Entry Duplication
   "CfgBin.Entry.Duplicate.Caption": "Duplicate",
 

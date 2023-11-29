@@ -17,10 +17,14 @@ namespace CfgBinEditor.resources
         private const string SavePath_ = "resources/images/save.png";
         private const string SaveAllPath_ = "resources/images/save_all_1.png";
 
+        private const string ClosePath_ = "resources/images/close.png";
+
         public static Image Icon => FromFile(IconPath_);
 
         public static ImageResource Save => ImageResource.FromFile(SavePath_);
         public static ImageResource SaveAll => ImageResource.FromFile(SaveAllPath_);
+
+        public static ImageResource Close => ImageResource.FromFile(ClosePath_);
 
         private static Image FromFile(string filePath)
         {
