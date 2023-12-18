@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <AssemblyName>CfgBinEditor</AssemblyName>
@@ -6,11 +6,16 @@
     <Version>1.0.0</Version>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Imgui.Forms" Version="1.0.45" />
+    <None Remove="resources\fonts\notojp.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resources\fonts\notojp.ttf">
+      <LogicalName>notojp.ttf</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CrossCutting.Core.Contract\CrossCutting.Core.Contract.csproj" />
-    <ProjectReference Include="..\Logic.Business.CfgBinValueSettingsManagement\Logic.Business.CfgBinValueSettingsManagement.Contract\Logic.Business.CfgBinValueSettingsManagement.Contract.csproj" />
+    <ProjectReference Include="..\Logic.Business.CfgBinValueSettingsManagement.Contract\Logic.Business.CfgBinValueSettingsManagement.Contract.csproj" />
     <ProjectReference Include="..\Mappings.CfgBinEditor\Mappings.CfgBinEditor.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -26,7 +31,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Update="MyTags.txt">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="resources\images\close.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -43,5 +48,11 @@
     <None Update="resources\images\save_all_1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controls\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Imgui.Forms" Version="1.0.50" />
   </ItemGroup>
 </Project>

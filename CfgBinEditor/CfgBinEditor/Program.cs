@@ -1,14 +1,12 @@
-using System.Numerics;
 using CfgBinEditor;
-using CfgBinEditor.Forms;
 using CfgBinEditor.InternalContract;
 using CrossCutting.Core.Contract.DependencyInjection;
 using CrossCutting.Core.Contract.EventBrokerage;
 using CrossCutting.Core.Contract.Messages;
 using ImGui.Forms;
 using ImGui.Forms.Localization;
-using ImGui.Forms.Resources;
-using Veldrid;
+using ImGui.Forms.Models;
+using System.Reflection;
 
 KernelLoader loader = new();
 ICoCoKernel kernel = loader.Initialize();
@@ -17,9 +15,9 @@ var eventBroker = kernel.Get<IEventBroker>();
 eventBroker.Raise(new InitializeApplicationMessage());
 
 var localizer = kernel.Get<ILocalizer>();
-var app = new Application(localizer, GraphicsBackend.OpenGL);
+var app = new Application(localizer);
 
-FontResources.RegisterArial(15);
+Application.FontFactory.RegisterFromResource(Assembly.GetExecutingAssembly(), "notojp.ttf", 15, FontGlyphRange.Japanese, "…");
 
 var formFactory = kernel.Get<IFormFactory>();
 app.Execute(formFactory.CreateMainForm());

@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using CfgBinEditor.InternalContract;
 using CfgBinEditor.Messages;
 using CfgBinEditor.resources;
 using CrossCutting.Core.Contract.EventBrokerage;
 using ImGui.Forms.Controls;
 using ImGui.Forms.Controls.Base;
 using ImGui.Forms.Controls.Layouts;
-using ImGui.Forms.Controls.Tree;
 using ImGui.Forms.Modals.IO;
 using ImGui.Forms.Models;
 using Logic.Business.CfgBinValueSettingsManagement.Contract;
@@ -24,35 +23,35 @@ namespace CfgBinEditor.Forms
     public partial class ConfigurationForm : Component
     {
         private readonly Configuration _config;
-        private readonly IEventBroker _events;
+        private readonly IEventBroker _eventBroker;
         private readonly IConfigurationWriter _writer;
         private readonly IValueSettingsProvider _settingsProvider;
 
-        public ConfigurationForm(Configuration config, IEventBroker events, IConfigurationWriter writer, IValueSettingsProvider settingsProvider)
+        public ConfigurationForm(Configuration config, IFormFactory formFactory, IEventBroker eventBroker, IConfigurationWriter writer, IValueSettingsProvider settingsProvider)
         {
-            InitializeComponent(config, settingsProvider);
+            InitializeComponent(config, formFactory, settingsProvider);
 
             _config = config;
-            _events = events;
+            _eventBroker = eventBroker;
             _writer = writer;
             _settingsProvider = settingsProvider;
-
-            _entryTreeView.SelectedNodeChanged += (s, e) => ChangeEntry(_entryTreeView.SelectedNode.Data);
 
             _gameComboBox.SelectedItemChanged += (s, e) => ChangeGame(_gameComboBox.SelectedItem.Content);
             _gameAddButton.Clicked += (s, e) => AddNewGame();
 
-            _duplicateButton.Clicked += (s, e) => DuplicateNode(_entryTreeView.SelectedNode);
+            _treeViewForm.EntryChanged += (s, e) => ChangeEntry(e.Entry);
 
-            _searchTextBox.TextChanged += (s, e) => ApplySearch(_searchTextBox.Text);
-            _clearSearchButton.Clicked += (s, e) => ClearSearch();
+            eventBroker.Subscribe<ValueSettingsChangedMessage>(ChangeValueSettings);
+            eventBroker.Subscribe<FileSaveRequestMessage>(SaveFile);
+            eventBroker.Subscribe<GameAddedMessage>(AddGame);
 
-            if (_entryTreeView.Nodes.Count > 0)
-                _entryTreeView.SelectedNode = _entryTreeView.Nodes[0];
+            ChangeEntry(_treeViewForm.SelectedEntry);
 
-            events.Subscribe<ValueSettingsChangedMessage>(ChangeValueSettings);
-            events.Subscribe<FileSaveRequestMessage>(SaveFile);
-            events.Subscribe<GameAddedMessage>(AddGame);
+            _eventBroker.Subscribe<ConfigurationTreeChangedMessage>(msg =>
+            {
+                if (msg.TreeViewForm == _treeViewForm)
+                    RaiseFileChanged();
+            });
         }
 
         private void ChangeEntry(ConfigurationEntry entry)
@@ -97,7 +96,7 @@ namespace CfgBinEditor.Forms
                 var valueTextBox = new TextBox();
                 valueTextBox.TextChanged += ValueTextBox_TextChanged;
 
-                SetValueText(valueTextBox, entryValue.Type, entryValue.Value, settingEntry.IsHex);
+                SetValueText(valueTextBox, entryValue, settingEntry.IsHex);
 
                 var valueIsHexCheckbox = new CheckBox { Checked = settingEntry.IsHex, Enabled = currentGame != NoGame_ };
                 valueIsHexCheckbox.CheckChanged += ValueIsHexCheckbox_CheckChanged;
@@ -120,7 +119,8 @@ namespace CfgBinEditor.Forms
 
         private void ChangeGame(string gameName)
         {
-            ChangeValueSettings(gameName, _entryTreeView.SelectedNode.Data.Name);
+            ChangeValueSettings(gameName, _treeViewForm.SelectedEntry.Name);
+            _treeViewForm.GameName = gameName;
         }
 
         private void ChangeValueSettings(ValueSettingsChangedMessage message)
@@ -131,7 +131,7 @@ namespace CfgBinEditor.Forms
             if (message.GameName != GetCurrentGame())
                 return;
 
-            if (message.EntryName != _entryTreeView.SelectedNode.Data.Name)
+            if (message.EntryName != _treeViewForm.SelectedEntry.Name)
                 return;
 
             ChangeValueSettings(message.GameName, message.EntryName);
@@ -154,78 +154,18 @@ namespace CfgBinEditor.Forms
                 nameTextBox.Enabled = gameName != NoGame_;
                 SetValueNameText(nameTextBox, entrySettings.Name);
 
+                var valueTextBox = layout.Rows[i].Cells[2].Content as TextBox;
+                if (valueTextBox == null)
+                    continue;
+
                 var isHexCheckbox = layout.Rows[i].Cells[3].Content as CheckBox;
                 if (isHexCheckbox == null)
                     continue;
 
                 isHexCheckbox.Enabled = gameName != NoGame_;
+                SetValueIsHex(isHexCheckbox, entrySettings.IsHex);
+                SetValueText(valueTextBox, _treeViewForm.SelectedEntry.Values[i - 1], entrySettings.IsHex);
             }
-        }
-
-        private void DuplicateNode(TreeNode<ConfigurationEntry> node)
-        {
-            TreeNode<ConfigurationEntry> lastNode = GetLastNode(node);
-
-            int entryIndex = Array.IndexOf(_config.Entries, node.Data);
-            int entryCount = CountEntries(node);
-
-            int lastEntryIndex = lastNode == node ? entryIndex : Array.IndexOf(_config.Entries, lastNode.Data);
-            int lastEntryCount = lastNode == node ? entryCount : CountEntries(lastNode);
-
-            int newEntryIndex = lastEntryIndex + lastEntryCount;
-
-            var newEntries = new ConfigurationEntry[_config.Entries.Length + entryCount];
-            Array.Copy(_config.Entries, newEntries, newEntryIndex);
-            Array.Copy(_config.Entries, newEntryIndex, newEntries, newEntryIndex + entryCount, _config.Entries.Length - newEntryIndex);
-
-            for (var i = 0; i < entryCount; i++)
-            {
-                newEntries[newEntryIndex + i] = new ConfigurationEntry
-                {
-                    Name = _config.Entries[entryIndex + i].Name,
-                    Values = new ConfigurationEntryValue[_config.Entries[entryIndex + i].Values.Length]
-                };
-
-                for (var j = 0; j < newEntries[newEntryIndex + i].Values.Length; j++)
-                {
-                    newEntries[newEntryIndex + i].Values[j] = new ConfigurationEntryValue
-                    {
-                        Type = _config.Entries[entryIndex + i].Values[j].Type,
-                        Value = _config.Entries[entryIndex + i].Values[j].Value
-                    };
-                }
-            }
-
-            _config.Entries = newEntries;
-
-            TreeNode<ConfigurationEntry> newNode = CreateNode(_config, ref newEntryIndex, ColorResources.TextSuccessful, string.Empty);
-
-            IList<TreeNode<ConfigurationEntry>> nodes = GetNeighbourNodes(node);
-            nodes.Add(newNode);
-
-            RaiseFileChanged();
-        }
-
-        private void ApplySearch(string searchText)
-        {
-            if (string.IsNullOrEmpty(searchText))
-            {
-                _entryLayout.Items[1] = _entryTreeView;
-                return;
-            }
-
-            IList<TreeNode<ConfigurationEntry>> nodeTree = CreateNodeTree(_config, _searchTextBox.Text);
-
-            _filteredEntryTreeView.Nodes.Clear();
-            foreach (TreeNode<ConfigurationEntry> node in nodeTree)
-                _filteredEntryTreeView.Nodes.Add(node);
-
-            _entryLayout.Items[1] = _filteredEntryTreeView;
-        }
-
-        private void ClearSearch()
-        {
-            _searchTextBox.Text = string.Empty;
         }
 
         private async void AddNewGame()
@@ -263,8 +203,8 @@ namespace CfgBinEditor.Forms
                 RaiseFileSaved(e);
                 return;
             }
-
-            ResetNodesChangeState(_entryTreeView.Nodes);
+            
+            _treeViewForm.ResetNodeState();
 
             RaiseFileSaved();
         }
@@ -304,7 +244,7 @@ namespace CfgBinEditor.Forms
             if (rowIndex < 0)
                 return;
 
-            var configEntry = _entryTreeView.SelectedNode.Data;
+            var configEntry = _treeViewForm.SelectedEntry;
             var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Name, rowIndex - 1);
 
             settingsEntry.Name = textBox.Text.Replace(' ', '_');
@@ -341,7 +281,7 @@ namespace CfgBinEditor.Forms
             if (rowIndex < 0)
                 return;
 
-            var configEntry = _entryTreeView.SelectedNode.Data;
+            var configEntry = _treeViewForm.SelectedEntry;
             var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Name, rowIndex - 1);
 
             var newValueType = comboBox.SelectedItem.Content;
@@ -369,7 +309,7 @@ namespace CfgBinEditor.Forms
             if (rowIndex < 0)
                 return;
 
-            var configEntry = _entryTreeView.SelectedNode.Data;
+            var configEntry = _treeViewForm.SelectedEntry;
             var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Name, rowIndex - 1);
 
             var valueType = configEntry.Values[rowIndex - 1].Type;
@@ -414,20 +354,17 @@ namespace CfgBinEditor.Forms
             if (rowIndex < 0)
                 return;
 
-            var configEntry = _entryTreeView.SelectedNode.Data;
+            var configEntry = _treeViewForm.SelectedEntry;
             var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Name, rowIndex - 1);
 
             settingsEntry.IsHex = checkBox.Checked;
 
             _settingsProvider.SetEntrySettings(GetCurrentGame(), configEntry.Name, rowIndex - 1, settingsEntry);
 
-            var valueType = configEntry.Values[rowIndex - 1].Type;
-            var value = configEntry.Values[rowIndex - 1].Value;
-
             var valueTextBox = layout.Rows[rowIndex].Cells[2].Content as TextBox;
 
-            if (valueType == ValueType.Int)
-                SetValueText(valueTextBox, valueType, value, checkBox.Checked);
+            if (configEntry.Values[rowIndex - 1].Type == ValueType.Int)
+                SetValueText(valueTextBox, configEntry.Values[rowIndex - 1], checkBox.Checked);
         }
 
         private void SetValueNameText(TextBox nameTextBox, string text)
@@ -437,11 +374,23 @@ namespace CfgBinEditor.Forms
             nameTextBox.TextChanged += ValueNameTextBox_TextChanged;
         }
 
+        private void SetValueText(TextBox valueTextBox, ConfigurationEntryValue value, bool isHex)
+        {
+            SetValueText(valueTextBox, value.Type, value.Value, isHex);
+        }
+
         private void SetValueText(TextBox valueTextBox, ValueType type, object value, bool isHex)
         {
             valueTextBox.TextChanged -= ValueTextBox_TextChanged;
             valueTextBox.Text = GetValueString(value, type, isHex);
             valueTextBox.TextChanged += ValueTextBox_TextChanged;
+        }
+
+        private void SetValueIsHex(CheckBox isHexCheckBox, bool isHex)
+        {
+            isHexCheckBox.CheckChanged -= ValueIsHexCheckbox_CheckChanged;
+            isHexCheckBox.Checked = isHex;
+            isHexCheckBox.CheckChanged += ValueIsHexCheckbox_CheckChanged;
         }
 
         private void SetEntryType(ConfigurationEntry entry, int index, ValueType type)
@@ -463,22 +412,22 @@ namespace CfgBinEditor.Forms
 
         private void RaiseValueSettingsChanged(string gameName, string entryName)
         {
-            _events.Raise(new ValueSettingsChangedMessage(this, gameName, entryName));
+            _eventBroker.Raise(new ValueSettingsChangedMessage(this, gameName, entryName));
         }
 
         private void RaiseFileChanged()
         {
-            _events.Raise(new FileChangedMessage(this));
+            _eventBroker.Raise(new FileChangedMessage(this));
         }
 
         private void RaiseFileSaved(Exception e = null)
         {
-            _events.Raise(new FileSavedMessage(this, e));
+            _eventBroker.Raise(new FileSavedMessage(this, e));
         }
 
         private void RaiseGameAdded(string game)
         {
-            _events.Raise(new GameAddedMessage(this, game));
+            _eventBroker.Raise(new GameAddedMessage(this, game));
         }
     }
 }

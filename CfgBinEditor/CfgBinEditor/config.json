@@ -8,11 +8,11 @@
       },
       {
         "Key": "FileName",
-        "Value": "logs/ACP-TaskSyncService.log"
+        "Value": "logs/cfgbin_editor.log"
       },
       {
         "Key": "ArchiveFileName",
-        "Value": "logs/ACP-TaskSyncService.{#}.log"
+        "Value": "logs/cfgbin_editor.{#}.log"
       },
       {
         "Key": "ArchiveAboveSize",

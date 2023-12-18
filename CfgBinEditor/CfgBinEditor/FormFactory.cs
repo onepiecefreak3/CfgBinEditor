@@ -31,5 +31,12 @@ namespace CfgBinEditor
             return _kernel.Get<ConfigurationForm>(
                 new ConstructorParameter("config", config));
         }
+
+        public ConfigurationTreeViewForm CreateConfigurationTreeViewForm(Configuration config, string gameName)
+        {
+            return _kernel.Get<ConfigurationTreeViewForm>(
+                new ConstructorParameter("config", config),
+                new ConstructorParameter("gameName", gameName));
+        }
     }
 }

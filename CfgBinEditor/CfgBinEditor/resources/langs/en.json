@@ -13,6 +13,10 @@
   // Settings
   "Menu.Settings.Caption": "Settings",
   "Menu.Settings.Languages.Caption": "Languages",
+  "Menu.Settings.Themes.Caption": "Themes",
+
+  "Menu.Settings.Theme.Dark.Caption": "Dark",
+  "Menu.Settings.Theme.Light.Caption": "Light",
 
   // Info
   "Menu.Info.Caption": "?",
@@ -22,6 +26,7 @@
   "File.Open.CfgBinFilter.Caption": "Configuration file",
   "File.Open.Cancel": "No file selected.",
   "File.Open.Error.Caption": "Error loading {0}: {1}",
+  "File.Open.Error.Type.Caption": "File is not a valid cfg.bin.",
 
   // Save File
   "File.Save.Tooltip.Single.Caption": "Save {0} (CTRL + S)",

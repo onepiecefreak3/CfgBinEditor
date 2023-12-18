@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CrossCutting.Core.Contract.Serialization;
+using CrossCutting.Core.Contract.Settings;
 using ImGui.Forms.Localization;
 
 namespace CfgBinEditor.resources
@@ -16,19 +17,24 @@ namespace CfgBinEditor.resources
         private const string Undefined_ = "<undefined>";
 
         private readonly ISerializer _serializer;
+        private readonly ISettingsProvider _settingsProvider;
         private readonly IDictionary<string, IDictionary<string, string>> _localizations;
 
         public string CurrentLocale { get; private set; } = DefaultLocale_;
 
-        public Localizer(ISerializer serializer)
+        public Localizer(ISerializer serializer, ISettingsProvider settingsProvider)
         {
             _serializer = serializer;
+            _settingsProvider = settingsProvider;
 
             // Load localizations
             _localizations = GetLocalizations();
 
-            // Set default locale
-            if (!_localizations.ContainsKey(DefaultLocale_))
+            // Set locale
+            string locale = GetLocaleSetting();
+            if (_localizations.ContainsKey(locale))
+                CurrentLocale = locale;
+            else if (!_localizations.ContainsKey(DefaultLocale_))
                 CurrentLocale = _localizations.FirstOrDefault().Key;
         }
 
@@ -61,6 +67,8 @@ namespace CfgBinEditor.resources
                 return;
 
             CurrentLocale = locale;
+
+            SetLocaleSetting(locale);
         }
 
         public string Localize(string name, params object[] args)
@@ -103,6 +111,16 @@ namespace CfgBinEditor.resources
         private string GetLocale(string localeFile)
         {
             return Path.GetFileNameWithoutExtension(localeFile);
+        }
+
+        private string GetLocaleSetting()
+        {
+            return _settingsProvider.Get("CfgBinEditor.Settings.Locale", string.Empty);
+        }
+
+        private void SetLocaleSetting(string locale)
+        {
+            _settingsProvider.Set("CfgBinEditor.Settings.Locale", locale);
         }
     }
 }

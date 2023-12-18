@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using CfgBinEditor.InternalContract;
 using CfgBinEditor.InternalContract.DataClasses;
 using CfgBinEditor.Messages;
 using CfgBinEditor.resources;
 using CrossCutting.Core.Contract.EventBrokerage;
+using CrossCutting.Core.Contract.Settings;
 using ImGui.Forms;
 using ImGui.Forms.Controls;
+using ImGui.Forms.Controls.Menu;
 using ImGui.Forms.Localization;
 using ImGui.Forms.Modals;
 using ImGui.Forms.Modals.IO;
-using ImGuiNET;
+using ImGui.Forms.Models;
 using Logic.Business.CfgBinValueSettingsManagement.Contract;
 using Logic.Domain.Level5.Contract;
 using Logic.Domain.Level5.Contract.DataClasses;
@@ -27,6 +28,7 @@ namespace CfgBinEditor.Forms
         private readonly ILocalizer _localizer;
         private readonly IFormFactory _formFactory;
         private readonly IConfigurationReader _configReader;
+        private readonly ISettingsProvider _settingsProvider;
 
         private readonly IDictionary<TabPage, ConfigurationForm> _pageConfigLookup;
         private readonly IDictionary<ConfigurationForm, TabPage> _configPageLookup;
@@ -34,14 +36,15 @@ namespace CfgBinEditor.Forms
         private readonly IDictionary<string, TabPage> _pathPageLookup;
         private readonly IDictionary<TabPage, string> _pagePathLookup;
 
-        public MainForm(IEventBroker eventBroker, ILocalizer localizer, IFormFactory formFactory, IConfigurationReader configReader, IValueSettingsProvider settingsProvider)
+        public MainForm(IEventBroker eventBroker, ILocalizer localizer, IFormFactory formFactory, ISettingsProvider settingsProvider, IConfigurationReader configReader, IValueSettingsProvider valueSettingsProvider)
         {
-            InitializeComponent(localizer);
+            InitializeComponent(localizer, settingsProvider);
 
             _events = eventBroker;
             _localizer = localizer;
             _formFactory = formFactory;
             _configReader = configReader;
+            _settingsProvider = settingsProvider;
 
             _pageConfigLookup = new Dictionary<TabPage, ConfigurationForm>();
             _configPageLookup = new Dictionary<ConfigurationForm, TabPage>();
@@ -50,7 +53,9 @@ namespace CfgBinEditor.Forms
             _pagePathLookup = new Dictionary<TabPage, string>();
 
             _settingsLanguageMenuItem.SelectedItemChanged +=
-                (s, e) => ChangeLocale(_settingsLanguageMenuItem.SelectedItem.Text);
+                (s, e) => ChangeLocale(_settingsLanguageMenuItem.SelectedItem);
+            _settingsThemeMenuItem.SelectedItemChanged +=
+                (s, e) => ChangeTheme(_settingsThemeMenuItem.SelectedItem);
 
             _tabControl.PageRemoving += async (s, e) => e.Cancel = !(await ShouldCloseTabPage(e.Page));
             _tabControl.PageRemoved += (s, e) => CloseTabPage(e.Page);
@@ -70,7 +75,7 @@ namespace CfgBinEditor.Forms
             _events.Subscribe<FileChangedMessage>(msg => MarkChangedFile(msg.ConfigForm, true));
             _events.Subscribe<FileSavedMessage>(FileSaved);
 
-            if (settingsProvider.TryGetError(out Exception error))
+            if (valueSettingsProvider.TryGetError(out Exception error))
             {
                 error = GetInnermostException(error);
                 if (error is not FileNotFoundException)
@@ -84,15 +89,28 @@ namespace CfgBinEditor.Forms
                 return;
 
             DialogResult result = await MessageBox.ShowYesNoAsync(LocalizationResources.ApplicationCloseUnsavedChangesCaption, LocalizationResources.ApplicationCloseUnsavedChangesText);
-            if(result == DialogResult.Yes)
+            if (result == DialogResult.Yes)
                 return;
 
             e.Cancel = true;
         }
 
-        private void ChangeLocale(string language)
+        private void ChangeLocale(MenuBarCheckBox checkbox)
         {
-            _localizer.ChangeLocale(_localizer.GetLocaleByName(language));
+            if (!_localeItems.TryGetValue(checkbox, out string locale))
+                return;
+
+            _localizer.ChangeLocale(locale);
+        }
+
+        private void ChangeTheme(MenuBarCheckBox checkbox)
+        {
+            if (!_themeItems.TryGetValue(checkbox, out Theme theme))
+                return;
+
+            Style.ChangeTheme(theme);
+
+            SetThemeSetting(theme, _settingsProvider);
         }
 
         private async Task<bool> ShouldCloseTabPage(TabPage page)
@@ -243,14 +261,16 @@ namespace CfgBinEditor.Forms
             {
                 using Stream fileStream = File.OpenRead(filePath);
                 config = _configReader.Read(fileStream);
+
+                if (config == null)
+                    SetStatus(LocalizationResources.FileOpenErrorCaption(Path.GetFileName(filePath), ()=>LocalizationResources.FileOpenUnsupportedFileType), LabelStatus.Error);
             }
             catch (Exception e)
             {
-                SetStatus(LocalizationResources.FileOpenErrorCaption(Path.GetFileName(filePath), GetInnermostException(e).Message), LabelStatus.Error);
-                return false;
+                SetStatus(LocalizationResources.FileOpenErrorCaption(Path.GetFileName(filePath), () => GetInnermostException(e).Message), LabelStatus.Error);
             }
 
-            return true;
+            return config != null;
         }
 
         private void SetStatus(LocalizedString text, LabelStatus status)

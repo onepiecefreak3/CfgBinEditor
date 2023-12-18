@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ImGui.Forms.Localization;
+using ImGui.Forms.Models;
 
 namespace CfgBinEditor.resources
 {
@@ -18,14 +19,19 @@ namespace CfgBinEditor.resources
 
         public static LocalizedString MenuSettingsCaption => new("Menu.Settings.Caption");
         public static LocalizedString MenuSettingsLanguagesCaption => new("Menu.Settings.Languages.Caption");
+        public static LocalizedString MenuSettingsThemesCaption => new("Menu.Settings.Themes.Caption");
+
+        public static LocalizedString MenuSettingsThemeCaption(Theme theme) =>
+            new($"Menu.Settings.Theme.{theme}.Caption");
 
         public static LocalizedString MenuInfoCaption => new("Menu.Info.Caption");
 
         public static LocalizedString FileOpenCaption => new("File.Open.Caption");
         public static LocalizedString FileOpenCfgBinFilterCaption => new("File.Open.CfgBinFilter.Caption");
         public static LocalizedString FileOpenCancel => new("File.Open.Cancel");
-        public static LocalizedString FileOpenErrorCaption(string fileName, string message) =>
-            new("File.Open.Error.Caption", () => fileName, () => message);
+        public static LocalizedString FileOpenErrorCaption(string fileName, Func<string> message) =>
+            new("File.Open.Error.Caption", () => fileName, message);
+        public static LocalizedString FileOpenUnsupportedFileType => new("File.Open.Error.Type.Caption");
 
         public static LocalizedString FileSaveTooltipSingleCaption(Func<object> fileNameRetriever) =>
             new("File.Save.Tooltip.Single.Caption", fileNameRetriever);

@@ -19,8 +19,8 @@ namespace CrossCutting.Core.Logging.NLogAdapter
             LoggingConfiguration config = new NLog.Config.LoggingConfiguration();
             FileTarget fileLogTarget = new NLog.Targets.FileTarget();
             fileLogTarget.Layout = GetValue<string>("CrossCutting.Core.Logging.NLogAdapter", "FileLayout", "${longdate}|${level:uppercase=true}|${logger}|${message}");
-            fileLogTarget.FileName = GetValue<string>("CrossCutting.Core.Logging.NLogAdapter", "FileName", "logs/iDxLog.log");
-            fileLogTarget.ArchiveFileName = GetValue<string>("CrossCutting.Core.Logging.NLogAdapter", "ArchiveFileName", "logs/iDxLog.{#}.log");
+            fileLogTarget.FileName = GetValue<string>("CrossCutting.Core.Logging.NLogAdapter", "FileName", "logs/app_log.log");
+            fileLogTarget.ArchiveFileName = GetValue<string>("CrossCutting.Core.Logging.NLogAdapter", "ArchiveFileName", "logs/app_log.{#}.log");
             fileLogTarget.ArchiveAboveSize = GetValue<long>("CrossCutting.Core.Logging.NLogAdapter", "ArchiveAboveSize", -1);
             fileLogTarget.MaxArchiveFiles = GetValue<int>("CrossCutting.Core.Logging.NLogAdapter", "MaxArchiveFiles", 0);
             fileLogTarget.KeepFileOpen = GetValue<bool>("CrossCutting.Core.Logging.NLogAdapter", "KeepFileOpen", true);

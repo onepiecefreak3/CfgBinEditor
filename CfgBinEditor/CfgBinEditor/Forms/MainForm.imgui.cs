@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 using CfgBinEditor.resources;
+using CrossCutting.Core.Contract.Settings;
+using ImGui.Forms;
 using ImGui.Forms.Controls;
 using ImGui.Forms.Controls.Layouts;
 using ImGui.Forms.Controls.Menu;
 using ImGui.Forms.Localization;
+using ImGui.Forms.Models;
 using ImGui.Forms.Models.IO;
+using ImGuiNET;
 using Veldrid;
 
 namespace CfgBinEditor.Forms
@@ -29,13 +30,15 @@ namespace CfgBinEditor.Forms
 
         private MenuBarButton _fileOpenMenuItem;
         private MenuBarRadio _settingsLanguageMenuItem;
+        private MenuBarRadio _settingsThemeMenuItem;
 
         private ImageButton _saveBtn;
         private ImageButton _saveAllBtn;
 
-        private IDictionary<string, MenuBarCheckBox> _localeItems;
+        private IDictionary<MenuBarCheckBox, string> _localeItems;
+        private IDictionary<MenuBarCheckBox, Theme> _themeItems;
 
-        private void InitializeComponent(ILocalizer localizer)
+        private void InitializeComponent(ILocalizer localizer, ISettingsProvider settingsProvider)
         {
             _mainMenuBar = new MainMenuBar();
             _contentLayout = new StackLayout { Alignment = Alignment.Vertical, ItemSpacing = 5 };
@@ -51,6 +54,7 @@ namespace CfgBinEditor.Forms
 
             _fileOpenMenuItem = new MenuBarButton { Text = LocalizationResources.MenuFileOpenCaption, KeyAction = new KeyCommand(ModifierKeys.Control, Key.O) };
             _settingsLanguageMenuItem = new MenuBarRadio { Text = LocalizationResources.MenuSettingsLanguagesCaption };
+            _settingsThemeMenuItem = new MenuBarRadio { Text = LocalizationResources.MenuSettingsThemesCaption };
 
             _saveBtn = new ImageButton
             {
@@ -73,6 +77,7 @@ namespace CfgBinEditor.Forms
 
             _fileMenuItem.Items.Add(_fileOpenMenuItem);
             _settingsMenuItem.Items.Add(_settingsLanguageMenuItem);
+            _settingsMenuItem.Items.Add(_settingsThemeMenuItem);
 
             _mainMenuBar.Items.Add(_fileMenuItem);
             _mainMenuBar.Items.Add(_settingsMenuItem);
@@ -85,7 +90,11 @@ namespace CfgBinEditor.Forms
             _contentLayout.Items.Add(_tabControl);
             _contentLayout.Items.Add(_statusLabel);
 
+            _localeItems = new Dictionary<MenuBarCheckBox, string>();
+            _themeItems = new Dictionary<MenuBarCheckBox, Theme>();
+
             InitializeLanguages(localizer);
+            InitializeThemes(settingsProvider);
 
             Size = new Vector2(1100, 700);
             Title = LocalizationResources.ApplicationTitle;
@@ -97,15 +106,45 @@ namespace CfgBinEditor.Forms
 
         private void InitializeLanguages(ILocalizer localizer)
         {
-            _localeItems = new Dictionary<string, MenuBarCheckBox>();
-
             foreach (string locale in localizer.GetLocales())
             {
-                var localeItem = new MenuBarCheckBox { Text = localizer.GetLanguageName(locale), Checked = localizer.CurrentLocale == locale };
+                var localeItem = new MenuBarCheckBox
+                {
+                    Text = localizer.GetLanguageName(locale),
+                    Checked = localizer.CurrentLocale == locale
+                };
 
                 _settingsLanguageMenuItem.CheckItems.Add(localeItem);
-                _localeItems[locale] = localeItem;
+                _localeItems[localeItem] = locale;
             }
+        }
+
+        private void InitializeThemes(ISettingsProvider settingsProvider)
+        {
+            Theme themeSetting = GetThemeSetting(settingsProvider);
+            Style.ChangeTheme(themeSetting);
+
+            foreach (Theme theme in Enum.GetValues(typeof(Theme)))
+            {
+                var themeItem = new MenuBarCheckBox
+                {
+                    Text = LocalizationResources.MenuSettingsThemeCaption(theme),
+                    Checked = themeSetting == theme
+                };
+
+                _settingsThemeMenuItem.CheckItems.Add(themeItem);
+                _themeItems[themeItem] = theme;
+            }
+        }
+
+        private Theme GetThemeSetting(ISettingsProvider settingsProvider)
+        {
+            return settingsProvider.Get("CfgBinEditor.Settings.Theme", Style.Theme);
+        }
+
+        private void SetThemeSetting(Theme theme, ISettingsProvider settingsProvider)
+        {
+            settingsProvider.Set("CfgBinEditor.Settings.Theme", theme);
         }
     }
 }
