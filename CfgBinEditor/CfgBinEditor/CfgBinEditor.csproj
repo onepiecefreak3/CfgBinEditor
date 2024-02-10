@@ -53,6 +53,6 @@
     <Folder Include="Controls\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Imgui.Forms" Version="1.0.50" />
+    <PackageReference Include="Imgui.Forms" Version="1.0.51" />
   </ItemGroup>
 </Project>

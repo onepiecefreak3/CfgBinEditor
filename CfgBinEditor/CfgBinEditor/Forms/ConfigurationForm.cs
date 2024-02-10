@@ -45,7 +45,8 @@ namespace CfgBinEditor.Forms
             eventBroker.Subscribe<FileSaveRequestMessage>(SaveFile);
             eventBroker.Subscribe<GameAddedMessage>(AddGame);
 
-            ChangeEntry(_treeViewForm.SelectedEntry);
+            if (_treeViewForm.SelectedEntry != null)
+                ChangeEntry(_treeViewForm.SelectedEntry);
 
             _eventBroker.Subscribe<ConfigurationTreeChangedMessage>(msg =>
             {
@@ -119,7 +120,9 @@ namespace CfgBinEditor.Forms
 
         private void ChangeGame(string gameName)
         {
-            ChangeValueSettings(gameName, _treeViewForm.SelectedEntry.Name);
+            if (_treeViewForm.SelectedEntry != null)
+                ChangeValueSettings(gameName, _treeViewForm.SelectedEntry.Name);
+
             _treeViewForm.GameName = gameName;
         }
 
@@ -203,7 +206,7 @@ namespace CfgBinEditor.Forms
                 RaiseFileSaved(e);
                 return;
             }
-            
+
             _treeViewForm.ResetNodeState();
 
             RaiseFileSaved();

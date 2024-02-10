@@ -30,7 +30,8 @@ namespace CfgBinEditor.Forms
                 UpdateTreeView();
             }
         }
-        public ConfigurationEntry SelectedEntry { get; private set; }
+
+        public ConfigurationEntry? SelectedEntry { get; private set; }
 
         public event EventHandler<ConfigurationEntryChangedEventArgs> EntryChanged;
 
