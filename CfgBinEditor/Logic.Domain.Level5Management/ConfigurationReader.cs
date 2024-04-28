@@ -204,10 +204,16 @@ namespace Logic.Domain.Level5
             CfgBinChecksumHeader checksumHeader = ReadChecksumHeader(br);
             long stringOffset = sectionPosition + checksumHeader.stringOffset;
 
-            if (!TryDetectHashType(br, stringOffset, encoding, out HashType hashType))
-                return null;
+            HashType hashType = default;
+            CfgBinChecksumEntry[] checksumEntries = Array.Empty<CfgBinChecksumEntry>();
 
-            CfgBinChecksumEntry[] checksumEntries = ReadChecksumEntries(br, checksumHeader.count);
+            if (checksumHeader.count > 0)
+            {
+                if (!TryDetectHashType(br, stringOffset, encoding, out hashType))
+                    return null;
+
+                checksumEntries = ReadChecksumEntries(br, checksumHeader.count);
+            }
 
             br.BaseStream.Position = (stringOffset + checksumHeader.stringSize + 15) & ~15;
 
