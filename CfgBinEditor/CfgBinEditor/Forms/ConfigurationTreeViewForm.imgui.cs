@@ -255,10 +255,10 @@ namespace CfgBinEditor.Forms
                 case ValueType.String:
                     return $"{value}";
 
-                case ValueType.Int:
+                case ValueType.Long:
                     return isHex ? $"0x{value:X8}" : $"{value}";
 
-                case ValueType.Float:
+                case ValueType.Double:
                     return $"{value}";
 
                 default:

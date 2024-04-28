@@ -1,6 +1,6 @@
 ﻿namespace Logic.Domain.Level5.ConfigBinary.InternalContract.DataClasses
 {
-    public struct CfgBinHeader
+    public struct CfgBinEntryHeader
     {
         public uint entryCount;
         public uint stringDataOffset;

@@ -87,8 +87,8 @@ namespace CfgBinEditor.Forms
                     Items =
                     {
                         new ComboBoxItem<ValueType>(ValueType.String, LocalizationResources.CfgBinEntryTypeStringCaption),
-                        new ComboBoxItem<ValueType>(ValueType.Int, LocalizationResources.CfgBinEntryTypeIntCaption),
-                        new ComboBoxItem<ValueType>(ValueType.Float, LocalizationResources.CfgBinEntryTypeFloatCaption)
+                        new ComboBoxItem<ValueType>(ValueType.Long, LocalizationResources.CfgBinEntryTypeIntCaption),
+                        new ComboBoxItem<ValueType>(ValueType.Double, LocalizationResources.CfgBinEntryTypeFloatCaption)
                     }
                 };
                 typeComboBox.SelectedItem = typeComboBox.Items.FirstOrDefault(x => x.Content == entryValue.Type);
@@ -322,22 +322,22 @@ namespace CfgBinEditor.Forms
                     SetEntryValue(configEntry, rowIndex - 1, textBox.Text);
                     break;
 
-                case ValueType.Int:
+                case ValueType.Long:
                     if (settingsEntry.IsHex && textBox.Text.StartsWith("0x"))
                     {
-                        if (int.TryParse(textBox.Text[2..], NumberStyles.HexNumber, CultureInfo.CurrentCulture, out int iValue))
-                            SetEntryValue(configEntry, rowIndex - 1, iValue);
+                        if (long.TryParse(textBox.Text[2..], NumberStyles.HexNumber, CultureInfo.CurrentCulture, out long lValue))
+                            SetEntryValue(configEntry, rowIndex - 1, lValue);
                     }
                     else
                     {
-                        if (int.TryParse(textBox.Text, out int iValue))
-                            SetEntryValue(configEntry, rowIndex - 1, iValue);
+                        if (long.TryParse(textBox.Text, out long lValue))
+                            SetEntryValue(configEntry, rowIndex - 1, lValue);
                     }
                     break;
 
-                case ValueType.Float:
-                    if (float.TryParse(textBox.Text, out var fValue))
-                        SetEntryValue(configEntry, rowIndex - 1, fValue);
+                case ValueType.Double:
+                    if (double.TryParse(textBox.Text, out var dValue))
+                        SetEntryValue(configEntry, rowIndex - 1, dValue);
                     break;
             }
         }
@@ -366,7 +366,7 @@ namespace CfgBinEditor.Forms
 
             var valueTextBox = layout.Rows[rowIndex].Cells[2].Content as TextBox;
 
-            if (configEntry.Values[rowIndex - 1].Type == ValueType.Int)
+            if (configEntry.Values[rowIndex - 1].Type == ValueType.Long)
                 SetValueText(valueTextBox, configEntry.Values[rowIndex - 1], checkBox.Checked);
         }
 

@@ -16,12 +16,12 @@ namespace Logic.Domain.Level5
     internal class ConfigurationWriter : IConfigurationWriter
     {
         private readonly IBinaryFactory _binaryFactory;
-        private readonly IChecksum<uint> _checksum;
+        private readonly IChecksumFactory _checksumFactory;
 
         public ConfigurationWriter(IBinaryFactory binaryFactory, IChecksumFactory checksumFactory)
         {
             _binaryFactory = binaryFactory;
-            _checksum = checksumFactory.CreateCrc32();
+            _checksumFactory = checksumFactory;
         }
 
         public Stream Write(Configuration config)
@@ -30,47 +30,48 @@ namespace Logic.Domain.Level5
             using IBinaryWriterX bw = _binaryFactory.CreateWriter(stream, true);
 
             Encoding encoding = GetEncoding(config.Encoding);
+            IChecksum<uint> checksum = GetChecksum(config.HashType);
 
             bw.BaseStream.Position = 0x10;
-            CfgBinHeader header = WriteEntries(bw, config.Entries, encoding);
+            CfgBinEntryHeader entryHeader = WriteEntries(bw, config.Entries, encoding, checksum, config.ValueLength);
 
             bw.BaseStream.Position = 0;
-            WriteHeader(bw, header);
+            WriteHeader(bw, entryHeader);
 
-            long checksumPartitionOffset = (header.stringDataOffset + header.stringDataLength + 0xF) & ~0xF;
+            long checksumPartitionOffset = (entryHeader.stringDataOffset + entryHeader.stringDataLength + 0xF) & ~0xF;
 
             bw.BaseStream.Position = checksumPartitionOffset + 0x10;
-            CfgBinChecksumHeader checksumHeader = WriteChecksumEntries(bw, config.Entries, encoding);
+            CfgBinChecksumHeader checksumHeader = WriteChecksumEntries(bw, config.Entries, encoding, checksum);
 
             bw.BaseStream.Position = checksumPartitionOffset;
             WriteChecksumHeader(bw, checksumHeader);
 
             bw.BaseStream.Position = checksumPartitionOffset + checksumHeader.size;
-            WriteFooter(bw, config.Encoding);
+            WriteFooter(bw, GetCfgBinEncoding(config.Encoding));
 
             stream.Position = 0;
             return stream;
         }
 
-        private CfgBinHeader WriteEntries(IBinaryWriterX bw, ConfigurationEntry[] configEntries, Encoding encoding)
+        private CfgBinEntryHeader WriteEntries(IBinaryWriterX bw, ConfigurationEntry[] configEntries, Encoding encoding, IChecksum<uint> checksum, ValueLength valueLength)
         {
-            var header = new CfgBinHeader
+            var header = new CfgBinEntryHeader
             {
                 entryCount = (uint)configEntries.Length
             };
 
             var entryLength = 0;
             foreach (ConfigurationEntry configEntry in configEntries)
-                entryLength += 4 + (((int)Math.Ceiling(configEntry.Values.Length / 4f) + 4) & ~3) + configEntry.Values.Length * 4;
+                entryLength += 4 + (((int)Math.Ceiling(configEntry.Values.Length / 4f) + 4) & ~3) + configEntry.Values.Length * (int)valueLength;
 
             header.stringDataOffset = (uint)((0x10 + entryLength + 0xF) & ~0xF);
 
             uint stringOffset = (uint)bw.BaseStream.Position + header.stringDataOffset - 0x10;
             uint stringOffsetBase = stringOffset;
-            var writtenStrings = new Dictionary<string, uint>();
+            var writtenStrings = new Dictionary<string, long>();
             var stringCount = 0u;
             foreach (ConfigurationEntry configEntry in configEntries)
-                WriteEntry(bw, configEntry, encoding, stringOffsetBase, writtenStrings, ref stringOffset, ref stringCount);
+                WriteEntry(bw, configEntry, encoding, checksum, valueLength, stringOffsetBase, writtenStrings, ref stringOffset, ref stringCount);
 
             bw.WriteAlignment(0x10, 0xFF);
 
@@ -83,10 +84,10 @@ namespace Logic.Domain.Level5
             return header;
         }
 
-        private void WriteEntry(IBinaryWriterX bw, ConfigurationEntry configEntry, Encoding encoding, uint stringOffsetBase, IDictionary<string, uint> writtenStrings,
-            ref uint stringOffset, ref uint stringCount)
+        private void WriteEntry(IBinaryWriterX bw, ConfigurationEntry configEntry, Encoding encoding, IChecksum<uint> checksum, ValueLength valueLength, uint stringOffsetBase, 
+            IDictionary<string, long> writtenStrings, ref uint stringOffset, ref uint stringCount)
         {
-            bw.Write(_checksum.ComputeValue(configEntry.Name, encoding));
+            bw.Write(checksum.ComputeValue(configEntry.Name, encoding));
             bw.Write((byte)configEntry.Values.Length);
 
             var typesWritten = 0;
@@ -115,29 +116,41 @@ namespace Logic.Domain.Level5
                 switch (value.Type)
                 {
                     case ValueType.String:
-                        WriteString(bw, (string)value.Value, encoding, stringOffsetBase, writtenStrings, ref stringOffset, ref stringCount);
+                        WriteString(bw, (string)value.Value, encoding, valueLength, stringOffsetBase, writtenStrings, ref stringOffset, ref stringCount);
                         break;
 
-                    case ValueType.Int:
-                        bw.Write((int)value.Value);
+                    case ValueType.Long:
+                        WriteValue(bw, (long)value.Value, valueLength);
                         break;
 
-                    case ValueType.Float:
-                        bw.Write((float)value.Value);
+                    case ValueType.Double:
+                        switch (valueLength)
+                        {
+                            case ValueLength.Int:
+                                bw.Write((float)(double)value.Value);
+                                break;
+
+                            case ValueLength.Long:
+                                bw.Write((double)value.Value);
+                                break;
+
+                            default:
+                                throw new InvalidOperationException($"Unknown value length {valueLength}.");
+                        }
                         break;
                 }
             }
         }
 
-        private void WriteHeader(IBinaryWriterX bw, CfgBinHeader header)
+        private void WriteHeader(IBinaryWriterX bw, CfgBinEntryHeader entryHeader)
         {
-            bw.Write(header.entryCount);
-            bw.Write(header.stringDataOffset);
-            bw.Write(header.stringDataLength);
-            bw.Write(header.stringDataCount);
+            bw.Write(entryHeader.entryCount);
+            bw.Write(entryHeader.stringDataOffset);
+            bw.Write(entryHeader.stringDataLength);
+            bw.Write(entryHeader.stringDataCount);
         }
 
-        private CfgBinChecksumHeader WriteChecksumEntries(IBinaryWriterX bw, ConfigurationEntry[] configEntries, Encoding encoding)
+        private CfgBinChecksumHeader WriteChecksumEntries(IBinaryWriterX bw, ConfigurationEntry[] configEntries, Encoding encoding, IChecksum<uint> checksum)
         {
             string[] names = configEntries.Select(e => e.Name).Distinct().ToArray();
 
@@ -148,14 +161,12 @@ namespace Logic.Domain.Level5
 
             uint stringOffset = (uint)bw.BaseStream.Position + header.stringOffset - 0x10;
             uint stringOffsetBase = stringOffset;
-            var writtenStrings = new Dictionary<string, uint>();
+            var writtenStrings = new Dictionary<string, long>();
             var stringCount = 0u;
             foreach (string name in names)
             {
-                uint checksum = _checksum.ComputeValue(name, encoding);
-
-                bw.Write(checksum);
-                WriteString(bw, name, encoding, stringOffsetBase, writtenStrings, ref stringOffset, ref stringCount);
+                bw.Write(checksum.ComputeValue(name, encoding));
+                WriteString(bw, name, encoding, ValueLength.Int, stringOffsetBase, writtenStrings, ref stringOffset, ref stringCount);
             }
 
             bw.WriteAlignment(0x10, 0xFF);
@@ -178,7 +189,7 @@ namespace Logic.Domain.Level5
             bw.Write(header.stringSize);
         }
 
-        private void WriteFooter(IBinaryWriterX bw, StringEncoding encoding)
+        private void WriteFooter(IBinaryWriterX bw, CfgBinStringEncoding encoding)
         {
             bw.WriteString("\x1t2b", Encoding.ASCII, false, false);
             bw.Write((short)0x1fe);
@@ -203,18 +214,35 @@ namespace Logic.Domain.Level5
             }
         }
 
-        private void WriteString(IBinaryWriterX bw, string value, Encoding encoding, uint stringOffsetBase, IDictionary<string, uint> writtenNames,
+        private CfgBinStringEncoding GetCfgBinEncoding(StringEncoding encoding)
+        {
+            switch (encoding)
+            {
+                case StringEncoding.Sjis:
+                    return CfgBinStringEncoding.Sjis;
+
+                case StringEncoding.Utf8:
+                    return CfgBinStringEncoding.Utf8;
+
+                // HINT: We don't convert into CfgBinStringEncoding.Utf8_2, as it should support the same character set as UTF8
+
+                default:
+                    throw new InvalidOperationException($"Unknown encoding {encoding}.");
+            }
+        }
+
+        private void WriteString(IBinaryWriterX bw, string value, Encoding encoding, ValueLength valueLength, uint stringOffsetBase, IDictionary<string, long> writtenNames,
             ref uint stringOffset, ref uint stringCount)
         {
-            if (writtenNames.TryGetValue(value, out uint nameOffset))
+            if (writtenNames.TryGetValue(value, out long nameOffset))
             {
-                bw.Write(nameOffset - stringOffsetBase);
+                WriteValue(bw, nameOffset - stringOffsetBase, valueLength);
                 return;
             }
 
             stringCount++;
 
-            bw.Write(stringOffset - stringOffsetBase);
+            WriteValue(bw, stringOffset - stringOffsetBase, valueLength);
             long entryOffset = bw.BaseStream.Position;
 
             bw.BaseStream.Position = stringOffset;
@@ -225,21 +253,50 @@ namespace Logic.Domain.Level5
             bw.BaseStream.Position = entryOffset;
         }
 
-        private void CacheStrings(IBinaryWriterX stringWriter, string value, Encoding encoding, IDictionary<string, uint> writtenNames)
+        private void WriteValue(IBinaryWriterX bw, long value, ValueLength valueLength)
+        {
+            switch (valueLength)
+            {
+                case ValueLength.Int:
+                    bw.Write((int)value);
+                    break;
+
+                case ValueLength.Long:
+                    bw.Write(value);
+                    break;
+            }
+        }
+
+        private void CacheStrings(IBinaryWriterX stringWriter, string value, Encoding encoding, IDictionary<string, long> writtenNames)
         {
             long nameOffset = stringWriter.BaseStream.Position;
 
             do
             {
                 if (!writtenNames.ContainsKey(value))
-                    writtenNames[value] = (uint)nameOffset;
+                    writtenNames[value] = nameOffset;
 
                 nameOffset += encoding.GetByteCount(value[..1]);
                 value = value.Length > 1 ? value[1..] : string.Empty;
             } while (value.Length > 0);
 
             if (!writtenNames.ContainsKey(value))
-                writtenNames[value] = (uint)nameOffset;
+                writtenNames[value] = nameOffset;
+        }
+
+        private IChecksum<uint> GetChecksum(HashType hashType)
+        {
+            switch (hashType)
+            {
+                case HashType.Crc32Standard:
+                    return _checksumFactory.CreateCrc32();
+
+                case HashType.Crc32Jam:
+                    return _checksumFactory.CreateCrc32Jam();
+
+                default:
+                    throw new InvalidOperationException($"Unknown hash type '{hashType}'.");
+            }
         }
     }
 }

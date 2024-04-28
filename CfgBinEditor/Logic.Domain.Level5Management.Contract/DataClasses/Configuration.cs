@@ -10,5 +10,7 @@ namespace Logic.Domain.Level5.Contract.DataClasses
     {
         public ConfigurationEntry[] Entries { get; set; }
         public StringEncoding Encoding { get; set; }
+        public ValueLength ValueLength { get; set; }
+        public HashType HashType { get; set; }
     }
 }

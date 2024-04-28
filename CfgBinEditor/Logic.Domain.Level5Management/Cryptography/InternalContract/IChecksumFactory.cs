@@ -13,6 +13,7 @@ namespace Logic.Domain.Level5.Cryptography.InternalContract
     public interface IChecksumFactory
     {
         IChecksum<uint> CreateCrc32();
+        IChecksum<uint> CreateCrc32Jam();
         IChecksum<ushort> CreateCrc16();
     }
 }

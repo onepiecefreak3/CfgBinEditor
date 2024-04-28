@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Logic.Domain.Level5.Contract.DataClasses
 {
-    public enum ValueType : byte
+    public enum HashType
     {
-        String,
-        Long,
-        Double
+        Crc32Standard,
+        Crc32Jam
     }
 }

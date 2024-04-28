@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Logic.Domain.Level5.Contract.DataClasses
 {
-    public enum ValueType : byte
+    public enum ValueLength
     {
-        String,
-        Long,
-        Double
+        Int = 4,
+        Long = 8
     }
 }
