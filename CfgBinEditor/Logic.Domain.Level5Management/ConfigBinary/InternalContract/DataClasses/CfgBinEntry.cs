@@ -10,7 +10,7 @@ namespace Logic.Domain.Level5.ConfigBinary.InternalContract.DataClasses
     internal struct CfgBinEntry
     {
         public uint crc32;
-        public sbyte entryCount;
+        public byte entryCount;
         public ValueType[] entryTypes;
         public long[] entryValues;
     }

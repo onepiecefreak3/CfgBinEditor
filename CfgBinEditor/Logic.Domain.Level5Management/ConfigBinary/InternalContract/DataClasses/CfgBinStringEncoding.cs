@@ -10,6 +10,7 @@ namespace Logic.Domain.Level5.ConfigBinary.InternalContract.DataClasses
     {
         Sjis,
         Utf8,
-        Utf8_2 = 256
+        Utf8_2 = 256,
+        Utf8_3 = 257
     }
 }

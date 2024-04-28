@@ -14,6 +14,8 @@ namespace Logic.Domain.Level5
         private readonly IBinaryFactory _binaryFactory;
         private readonly IChecksumFactory _checksumFactory;
 
+        private const int MinimumSize_ = 0x30;
+
         public ConfigurationReader(IBinaryFactory binaryFactory, IChecksumFactory checksumFactory)
         {
             _binaryFactory = binaryFactory;
@@ -25,6 +27,9 @@ namespace Logic.Domain.Level5
             using IBinaryReaderX br = _binaryFactory.CreateReader(input);
 
             // Read cfg.bin footer
+            if (br.BaseStream.Length < MinimumSize_)
+                return null;
+
             br.BaseStream.Position = input.Length - 0x10;
 
             CfgBinFooter footer = ReadFooter(br);
@@ -57,12 +62,18 @@ namespace Logic.Domain.Level5
             CfgBinEntryHeader entryHeader = ReadEntryHeader(br);
             long stringOffset = sectionPosition + entryHeader.stringDataOffset;
 
-            if (!TryDetectValueLength(br, entryHeader.entryCount, stringOffset, out ValueLength valueLength))
-                return null;
+            ValueLength valueLength = default;
+            CfgBinEntry[] entries = Array.Empty<CfgBinEntry>();
 
-            CfgBinEntry[] entries = ReadEntries(br, entryHeader.entryCount, valueLength);
+            if (entryHeader.entryCount > 0)
+            {
+                if (!TryDetectValueLength(br, entryHeader.entryCount, stringOffset, out valueLength))
+                    return null;
 
-            br.BaseStream.Position = (stringOffset + entryHeader.stringDataLength + 15) & ~15;
+                entries = ReadEntries(br, entryHeader.entryCount, valueLength);
+            }
+
+            br.BaseStream.Position = Math.Max(0x10, (stringOffset + entryHeader.stringDataLength + 15) & ~15);
 
             return new CfgBinEntrySection
             {
@@ -129,7 +140,7 @@ namespace Logic.Domain.Level5
                 br.BaseStream.Position += types.Sum(t => valueLengths[(int)t]);
             }
 
-            return br.BaseStream.Position <= dataEndOffset;
+            return br.BaseStream.Position <= dataEndOffset && dataEndOffset - br.BaseStream.Position < 0x10;
         }
 
         private CfgBinEntry[] ReadEntries(IBinaryReaderX br, uint entryCount, ValueLength valueLength)
@@ -141,7 +152,7 @@ namespace Logic.Domain.Level5
                 result[i] = new CfgBinEntry
                 {
                     crc32 = br.ReadUInt32(),
-                    entryCount = br.ReadSByte()
+                    entryCount = br.ReadByte()
                 };
 
                 result[i].entryTypes = ReadEntryTypes(br, result[i].entryCount);
@@ -215,7 +226,7 @@ namespace Logic.Domain.Level5
                 checksumEntries = ReadChecksumEntries(br, checksumHeader.count);
             }
 
-            br.BaseStream.Position = (stringOffset + checksumHeader.stringSize + 15) & ~15;
+            br.BaseStream.Position = Math.Max(0x10, (stringOffset + checksumHeader.stringSize + 15) & ~15);
 
             return new CfgBinChecksumSection
             {
@@ -402,6 +413,7 @@ namespace Logic.Domain.Level5
 
                 case CfgBinStringEncoding.Utf8:
                 case CfgBinStringEncoding.Utf8_2:
+                case CfgBinStringEncoding.Utf8_3:
                     return Encoding.UTF8.GetString(result.ToArray());
 
                 default:
@@ -418,6 +430,7 @@ namespace Logic.Domain.Level5
 
                 case CfgBinStringEncoding.Utf8:
                 case CfgBinStringEncoding.Utf8_2:
+                case CfgBinStringEncoding.Utf8_3:
                     return StringEncoding.Utf8;
 
                 default:
