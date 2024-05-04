@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using CrossCutting.Core.Contract.Aspects;
 using Logic.Domain.Kuriimu2.KryptographyAdapter.Contract;
 using Logic.Domain.Kuriimu2.KryptographyAdapter.Contract.DataClasses;
-using Logic.Domain.Level5.Cryptography.InternalContract;
+using Logic.Domain.Level5Management.Cryptography.InternalContract;
 
-namespace Logic.Domain.Level5.Cryptography
+namespace Logic.Domain.Level5Management.Cryptography
 {
     internal class ChecksumFactory : IChecksumFactory
     {

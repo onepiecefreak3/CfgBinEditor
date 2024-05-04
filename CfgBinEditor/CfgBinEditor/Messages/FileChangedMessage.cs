@@ -4,16 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CfgBinEditor.Forms;
+using ImGui.Forms.Controls.Base;
 
 namespace CfgBinEditor.Messages
 {
     public class FileChangedMessage
     {
-        public ConfigurationForm ConfigForm { get; }
+        public Component Source { get; }
 
-        public FileChangedMessage(ConfigurationForm configForm)
+        public FileChangedMessage(Component source)
         {
-            ConfigForm = configForm;
+            Source = source;
         }
     }
 }

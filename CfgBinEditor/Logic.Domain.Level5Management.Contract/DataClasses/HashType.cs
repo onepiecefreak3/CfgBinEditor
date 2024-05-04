@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Logic.Domain.Level5.Contract.DataClasses
+namespace Logic.Domain.Level5Management.Contract.DataClasses
 {
     public enum HashType
     {

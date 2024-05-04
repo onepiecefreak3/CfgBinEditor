@@ -25,6 +25,7 @@ namespace Logic.Domain.Kuriimu2.KomponentAdapter.Contract
         void SeekAlignment(int alignment = 0x10);
 
         bool ReadBoolean();
+        byte[] ReadBytes(int count);
         byte ReadByte();
         sbyte ReadSByte();
         char ReadChar();
@@ -38,6 +39,7 @@ namespace Logic.Domain.Kuriimu2.KomponentAdapter.Contract
         double ReadDouble();
         decimal ReadDecimal();
 
+        string ReadCStringASCII();
         string ReadCStringSJIS();
 
         string ReadString();

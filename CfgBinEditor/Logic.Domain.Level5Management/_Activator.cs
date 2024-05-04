@@ -3,8 +3,7 @@ using CrossCutting.Core.Contract.Configuration;
 using CrossCutting.Core.Contract.DependencyInjection;
 using CrossCutting.Core.Contract.EventBrokerage;
 using CrossCutting.Core.Contract.Messages;
-using Logic.Domain.Level5.Contract;
-using Logic.Domain.Level5.Contract.DataClasses;
+using Logic.Domain.Level5Management.Contract.DataClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +11,11 @@ using System.Text;
 using System.Threading.Tasks;
 using CrossCutting.Core.Contract.DependencyInjection.DataClasses;
 using Logic.Domain.Kuriimu2.KryptographyAdapter.Contract;
-using Logic.Domain.Level5.Cryptography;
-using Logic.Domain.Level5.Cryptography.InternalContract;
+using Logic.Domain.Level5Management.Contract;
+using Logic.Domain.Level5Management.Cryptography;
+using Logic.Domain.Level5Management.Cryptography.InternalContract;
 
-namespace Logic.Domain.Level5
+namespace Logic.Domain.Level5Management
 {
     public class Level5Activator : IComponentActivator
     {
@@ -37,8 +37,11 @@ namespace Logic.Domain.Level5
 
         public void Register(ICoCoKernel kernel)
         {
-            kernel.Register<IConfigurationReader, ConfigurationReader>(ActivationScope.Unique);
-            kernel.Register<IConfigurationWriter, ConfigurationWriter>(ActivationScope.Unique);
+            kernel.Register<IT2bReader, T2bReader>(ActivationScope.Unique);
+            kernel.Register<IT2bWriter, T2bWriter>(ActivationScope.Unique);
+
+            kernel.Register<IRdbnReader, RdbnReader>(ActivationScope.Unique);
+            kernel.Register<IRdbnWriter, RdbnWriter>(ActivationScope.Unique);
 
             kernel.Register<IChecksumFactory, ChecksumFactory>(ActivationScope.Unique);
 

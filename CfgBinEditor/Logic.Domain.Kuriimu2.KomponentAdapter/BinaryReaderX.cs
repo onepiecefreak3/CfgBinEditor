@@ -49,6 +49,11 @@ namespace Logic.Domain.Kuriimu2.KomponentAdapter
             return _reader.ReadBoolean();
         }
 
+        public byte[] ReadBytes(int count)
+        {
+            return _reader.ReadBytes(count);
+        }
+
         public byte ReadByte()
         {
             return _reader.ReadByte();
@@ -107,6 +112,11 @@ namespace Logic.Domain.Kuriimu2.KomponentAdapter
         public decimal ReadDecimal()
         {
             return _reader.ReadDecimal();
+        }
+
+        public string ReadCStringASCII()
+        {
+            return _reader.ReadCStringASCII();
         }
 
         public string ReadCStringSJIS()

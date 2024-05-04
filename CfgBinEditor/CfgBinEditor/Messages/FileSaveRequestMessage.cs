@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CfgBinEditor.Forms;
+using ImGui.Forms.Controls.Base;
 
 namespace CfgBinEditor.Messages
 {
     internal class FileSaveRequestMessage
     {
-        public IDictionary<ConfigurationForm, string> ConfigForms { get; }
+        public IDictionary<Component, string> ConfigForms { get; }
 
-        public FileSaveRequestMessage(IDictionary<ConfigurationForm, string> configForms)
+        public FileSaveRequestMessage(IDictionary<Component, string> configForms)
         {
             ConfigForms = configForms;
         }

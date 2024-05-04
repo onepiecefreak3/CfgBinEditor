@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Logic.Domain.Level5
+namespace Logic.Domain.Level5Management
 {
     public class Level5Configuration
     {

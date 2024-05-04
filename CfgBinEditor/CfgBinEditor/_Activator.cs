@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CfgBinEditor.Components;
 using CfgBinEditor.Forms;
 using CfgBinEditor.InternalContract;
 using CfgBinEditor.resources;
@@ -36,11 +37,17 @@ namespace CfgBinEditor
         public void Register(ICoCoKernel kernel)
         {
             kernel.Register<IFormFactory, FormFactory>(ActivationScope.Unique);
+            kernel.Register<IComponentFactory, ComponentFactory>(ActivationScope.Unique);
 
             kernel.RegisterToSelf<MainForm>();
-            kernel.RegisterToSelf<ConfigurationForm>();
-            kernel.RegisterToSelf<ConfigurationTreeViewForm>();
-            
+            kernel.RegisterToSelf<T2bForm>();
+            kernel.RegisterToSelf<RdbnForm>();
+
+            kernel.RegisterToSelf<T2bTreeViewForm>();
+            kernel.RegisterToSelf<RdbnTreeViewForm>();
+
+            kernel.RegisterToSelf<RdbnValueComponent>();
+
             kernel.Register<ILocalizer, Localizer>(ActivationScope.Unique);
 
             kernel.RegisterConfiguration<CfgBinEditorConfiguration>();

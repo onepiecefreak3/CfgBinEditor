@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Logic.Domain.Level5.Contract.Exceptions
+namespace Logic.Domain.Level5Management.Contract.Exceptions
 {
     [Serializable]
     public class ConfigurationReaderException : Exception

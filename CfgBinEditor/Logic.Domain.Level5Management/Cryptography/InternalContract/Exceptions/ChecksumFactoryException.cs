@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Logic.Domain.Level5.Cryptography.InternalContract.Exceptions
+namespace Logic.Domain.Level5Management.Cryptography.InternalContract.Exceptions
 {
     public class ChecksumFactoryException : Exception
     {

@@ -1,7 +1,7 @@
 ﻿using CfgBinEditor.Forms;
 using CfgBinEditor.InternalContract.Exceptions;
 using CrossCutting.Core.Contract.Aspects;
-using Logic.Domain.Level5.Contract.DataClasses;
+using Logic.Domain.Level5Management.Contract.DataClasses;
 
 namespace CfgBinEditor.InternalContract
 {
@@ -9,7 +9,9 @@ namespace CfgBinEditor.InternalContract
     public interface IFormFactory
     {
         MainForm CreateMainForm();
-        ConfigurationForm CreateConfigurationForm(Configuration config);
-        ConfigurationTreeViewForm CreateConfigurationTreeViewForm(Configuration config, string gameName);
+        T2bForm CreateT2bForm(T2b config);
+        RdbnForm CreateRdbnForm(Rdbn config);
+        T2bTreeViewForm CreateT2bTreeViewForm(T2b config, string gameName);
+        RdbnTreeViewForm CreateRdbnTreeViewForm(Rdbn config);
     }
 }

@@ -22,7 +22,7 @@ using Logic.Business.CfgBinValueSettingsManagement;
 using Logic.Domain.CodeAnalysis;
 using Logic.Domain.Kuriimu2.KomponentAdapter;
 using Logic.Domain.Kuriimu2.KryptographyAdapter;
-using Logic.Domain.Level5;
+using Logic.Domain.Level5Management;
 
 namespace Mappings.CfgBinEditor
 {

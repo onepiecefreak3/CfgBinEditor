@@ -9,10 +9,10 @@ namespace CfgBinEditor.Messages
 {
     internal class GameAddedMessage
     {
-        public ConfigurationForm Sender { get; }
+        public T2bForm Sender { get; }
         public string Game { get; }
 
-        public GameAddedMessage(ConfigurationForm sender, string game)
+        public GameAddedMessage(T2bForm sender, string game)
         {
             Sender = sender;
             Game = game;

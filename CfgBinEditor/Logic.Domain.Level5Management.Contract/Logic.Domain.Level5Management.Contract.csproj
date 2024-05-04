@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-	<RootNamespace>Logic.Domain.Level5.Contract</RootNamespace>
-	<AssemblyName>Logic.Domain.Level5.Contract</AssemblyName>
+	<RootNamespace>Logic.Domain.Level5Management.Contract</RootNamespace>
+	<AssemblyName>Logic.Domain.Level5Management.Contract</AssemblyName>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>

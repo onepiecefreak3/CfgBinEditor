@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using CrossCutting.Core.Contract.Aspects;
 using Logic.Domain.Kuriimu2.KryptographyAdapter.Contract;
-using Logic.Domain.Level5.Cryptography.InternalContract.Exceptions;
+using Logic.Domain.Level5Management.Cryptography.InternalContract.Exceptions;
 
-namespace Logic.Domain.Level5.Cryptography.InternalContract
+namespace Logic.Domain.Level5Management.Cryptography.InternalContract
 {
     [MapException(typeof(ChecksumFactoryException))]
     public interface IChecksumFactory

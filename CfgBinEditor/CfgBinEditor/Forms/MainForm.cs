@@ -11,14 +11,15 @@ using CrossCutting.Core.Contract.EventBrokerage;
 using CrossCutting.Core.Contract.Settings;
 using ImGui.Forms;
 using ImGui.Forms.Controls;
+using ImGui.Forms.Controls.Base;
 using ImGui.Forms.Controls.Menu;
 using ImGui.Forms.Localization;
 using ImGui.Forms.Modals;
 using ImGui.Forms.Modals.IO;
 using ImGui.Forms.Models;
 using Logic.Business.CfgBinValueSettingsManagement.Contract;
-using Logic.Domain.Level5.Contract;
-using Logic.Domain.Level5.Contract.DataClasses;
+using Logic.Domain.Level5Management.Contract;
+using Logic.Domain.Level5Management.Contract.DataClasses;
 
 namespace CfgBinEditor.Forms
 {
@@ -27,27 +28,29 @@ namespace CfgBinEditor.Forms
         private readonly IEventBroker _events;
         private readonly ILocalizer _localizer;
         private readonly IFormFactory _formFactory;
-        private readonly IConfigurationReader _configReader;
+        private readonly IT2bReader _t2bReader;
+        private readonly IRdbnReader _rdbnReader;
         private readonly ISettingsProvider _settingsProvider;
 
-        private readonly IDictionary<TabPage, ConfigurationForm> _pageConfigLookup;
-        private readonly IDictionary<ConfigurationForm, TabPage> _configPageLookup;
+        private readonly IDictionary<TabPage, Component> _pageConfigLookup;
+        private readonly IDictionary<Component, TabPage> _configPageLookup;
 
         private readonly IDictionary<string, TabPage> _pathPageLookup;
         private readonly IDictionary<TabPage, string> _pagePathLookup;
 
-        public MainForm(IEventBroker eventBroker, ILocalizer localizer, IFormFactory formFactory, ISettingsProvider settingsProvider, IConfigurationReader configReader, IValueSettingsProvider valueSettingsProvider)
+        public MainForm(IEventBroker eventBroker, ILocalizer localizer, IFormFactory formFactory, ISettingsProvider settingsProvider, IT2bReader t2BReader, IRdbnReader rdbnReader, IValueSettingsProvider valueSettingsProvider)
         {
             InitializeComponent(localizer, settingsProvider);
 
             _events = eventBroker;
             _localizer = localizer;
             _formFactory = formFactory;
-            _configReader = configReader;
+            _t2bReader = t2BReader;
+            _rdbnReader = rdbnReader;
             _settingsProvider = settingsProvider;
 
-            _pageConfigLookup = new Dictionary<TabPage, ConfigurationForm>();
-            _configPageLookup = new Dictionary<ConfigurationForm, TabPage>();
+            _pageConfigLookup = new Dictionary<TabPage, Component>();
+            _configPageLookup = new Dictionary<Component, TabPage>();
 
             _pathPageLookup = new Dictionary<string, TabPage>();
             _pagePathLookup = new Dictionary<TabPage, string>();
@@ -72,7 +75,7 @@ namespace CfgBinEditor.Forms
             AllowDragDrop = true;
             DragDrop += (s, e) => OpenFile(e.File);
 
-            _events.Subscribe<FileChangedMessage>(msg => MarkChangedFile(msg.ConfigForm, true));
+            _events.Subscribe<FileChangedMessage>(msg => MarkChangedFile(msg.Source, true));
             _events.Subscribe<FileSavedMessage>(FileSaved);
 
             if (valueSettingsProvider.TryGetError(out Exception error))
@@ -128,7 +131,7 @@ namespace CfgBinEditor.Forms
 
         private void CloseTabPage(TabPage page)
         {
-            if (_pageConfigLookup.TryGetValue(page, out ConfigurationForm configForm))
+            if (_pageConfigLookup.TryGetValue(page, out Component configForm))
                 _configPageLookup.Remove(configForm);
 
             if (_pagePathLookup.TryGetValue(page, out string filePath))
@@ -141,13 +144,13 @@ namespace CfgBinEditor.Forms
 
         private void SaveTabPage(TabPage page)
         {
-            if (!_pageConfigLookup.TryGetValue(page, out ConfigurationForm configForm))
+            if (!_pageConfigLookup.TryGetValue(page, out Component configForm))
                 return;
 
             if (!_pagePathLookup.TryGetValue(page, out string configPath))
                 return;
 
-            RaiseFileSaveRequest(new Dictionary<ConfigurationForm, string>
+            RaiseFileSaveRequest(new Dictionary<Component, string>
             {
                 [configForm] = configPath
             });
@@ -155,10 +158,10 @@ namespace CfgBinEditor.Forms
 
         private void SaveAllTabPages()
         {
-            var configForms = new Dictionary<ConfigurationForm, string>();
+            var configForms = new Dictionary<Component, string>();
             foreach (TabPage tabPage in _tabControl.Pages.Where(p => p.HasChanges))
             {
-                if (!_pageConfigLookup.TryGetValue(tabPage, out ConfigurationForm configForm))
+                if (!_pageConfigLookup.TryGetValue(tabPage, out Component configForm))
                     continue;
 
                 if (!_pagePathLookup.TryGetValue(tabPage, out string configPath))
@@ -172,13 +175,13 @@ namespace CfgBinEditor.Forms
 
         private void FileSaved(FileSavedMessage msg)
         {
-            MarkChangedFile(msg.ConfigForm, msg.Error != null);
+            MarkChangedFile(msg.Source, msg.Error != null);
             SetStatus(string.Empty, LabelStatus.None);
 
             if (msg.Error == null)
                 return;
 
-            if (!_configPageLookup.TryGetValue(msg.ConfigForm, out TabPage configPage))
+            if (!_configPageLookup.TryGetValue(msg.Source, out TabPage configPage))
                 return;
 
             if (!_pagePathLookup.TryGetValue(configPage, out string configPath))
@@ -187,9 +190,9 @@ namespace CfgBinEditor.Forms
             SetStatus(LocalizationResources.FileSaveErrorCaption(Path.GetFileName(configPath), GetInnermostException(msg.Error).Message), LabelStatus.Error);
         }
 
-        private void MarkChangedFile(ConfigurationForm configForm, bool hasChanges)
+        private void MarkChangedFile(Component sourceForm, bool hasChanges)
         {
-            if (_configPageLookup.TryGetValue(configForm, out TabPage page))
+            if (_configPageLookup.TryGetValue(sourceForm, out TabPage page))
                 page.HasChanges = hasChanges;
 
             UpdateSaveButtons();
@@ -232,11 +235,21 @@ namespace CfgBinEditor.Forms
                 return true;
             }
 
-            if (!TryLoadFile(filePath, out Configuration config))
+            Component configForm;
+            TabPage page;
+
+            if (TryLoadT2bFile(filePath, out T2b t2b))
+            {
+                configForm = _formFactory.CreateT2bForm(t2b);
+            }
+            else if (TryLoadRdbnFile(filePath, out Rdbn rdbn))
+            {
+                configForm = _formFactory.CreateRdbnForm(rdbn);
+            }
+            else
                 return false;
 
-            ConfigurationForm configForm = _formFactory.CreateConfigurationForm(config);
-            TabPage page = new(configForm) { Title = Path.GetFileName(filePath) };
+            page = new(configForm) { Title = Path.GetFileName(filePath) };
 
             _tabControl.AddPage(page);
 
@@ -253,17 +266,37 @@ namespace CfgBinEditor.Forms
             return true;
         }
 
-        private bool TryLoadFile(string filePath, out Configuration config)
+        private bool TryLoadT2bFile(string filePath, out T2b config)
         {
             config = null;
 
             try
             {
                 using Stream fileStream = File.OpenRead(filePath);
-                config = _configReader.Read(fileStream);
+                config = _t2bReader.Read(fileStream);
 
                 if (config == null)
-                    SetStatus(LocalizationResources.FileOpenErrorCaption(Path.GetFileName(filePath), ()=>LocalizationResources.FileOpenUnsupportedFileType), LabelStatus.Error);
+                    SetStatus(LocalizationResources.FileOpenErrorCaption(Path.GetFileName(filePath), () => LocalizationResources.FileOpenUnsupportedFileType), LabelStatus.Error);
+            }
+            catch (Exception e)
+            {
+                SetStatus(LocalizationResources.FileOpenErrorCaption(Path.GetFileName(filePath), () => GetInnermostException(e).Message), LabelStatus.Error);
+            }
+
+            return config != null;
+        }
+
+        private bool TryLoadRdbnFile(string filePath, out Rdbn config)
+        {
+            config = null;
+
+            try
+            {
+                using Stream fileStream = File.OpenRead(filePath);
+                config = _rdbnReader.Read(fileStream);
+
+                if (config == null)
+                    SetStatus(LocalizationResources.FileOpenErrorCaption(Path.GetFileName(filePath), () => LocalizationResources.FileOpenUnsupportedFileType), LabelStatus.Error);
             }
             catch (Exception e)
             {
@@ -297,7 +330,7 @@ namespace CfgBinEditor.Forms
             return e;
         }
 
-        private void RaiseFileSaveRequest(IDictionary<ConfigurationForm, string> configs)
+        private void RaiseFileSaveRequest(IDictionary<Component, string> configs)
         {
             _events.Raise(new FileSaveRequestMessage(configs));
         }

@@ -1,0 +1,65 @@
+{
+  "Name": "Français",
+
+  // Application
+  "Application.Title": "CfgBin Editor",
+  "Application.Close.UnsavedChanges.Caption": "Modifications non-sauvegardées",
+  "Application.Close.UnsavedChanges.Text": "Des fichiers ont été modifiés. Vous pourriez perdre votre progression, si vous fermez l'application maintenant. Continuer?",
+
+  // File Menu
+  "Menu.File.Caption": "Fichier",
+  "Menu.File.Open.Caption": "Ouvrir (CTRL + O)",
+
+  // Settings
+  "Menu.Settings.Caption": "Paramètres",
+  "Menu.Settings.Languages.Caption": "Langues",
+  "Menu.Settings.Themes.Caption": "Thèmes",
+
+  "Menu.Settings.Theme.Dark.Caption": "Sombre",
+  "Menu.Settings.Theme.Light.Caption": "Clair",
+
+  // Info
+  "Menu.Info.Caption": "?",
+
+  // Open File
+  "File.Open.Caption": "Choisir un fichier à ouvrir...",
+  "File.Open.CfgBinFilter.Caption": "Fichier de configuration",
+  "File.Open.Cancel": "Aucun fichier selectionné",
+  "File.Open.Error.Caption": "Une erreur est survenue en chargeant {0}: {1}",
+  "File.Open.Error.Type.Caption": "Ce fichier n'est pas un cfg.bin valide.",
+
+  // Save File
+  "File.Save.Tooltip.Single.Caption": "Sauvegarder {0} (CTRL + S)",
+  "File.Save.Tooltip.All.Caption": "Tout sauvegarder (CTRL + SHIFT + S)",
+  "File.Save.Error.Caption": "Une erreur est survenue en sauvegardant {0}: {1}",
+
+  // Close File
+  "File.Close.UnsavedChanges.Caption": "Modifications non sauvegardées",
+  "File.Close.UnsavedChanges.Text": "Le fichier a été modifié. Vous pourriez perdre votre progression, si vous fermez l'application maintenant. Continuer?",
+
+  // Game settings
+  "Game.Add.Button.Caption": "+",
+  "Game.Add.Dialog.Caption": "Ajouter un nouveau jeu",
+  "Game.Add.Dialog.Text": "Entrer le nom du nouveau jeu:",
+  "Game.Add.Dialog.Placeholder": "Nom du jeu",
+
+  // Cfg Entry
+  "CfgBin.Entry.Name.Caption": "Nom",
+  "CfgBin.Entry.Type.Caption": "Type",
+  "CfgBin.Entry.Value.Caption": "Valeur",
+  "CfgBin.Entry.IsHex.Caption": "Afficher en tant qu'hex",
+
+  // Cfg Value Types
+  "CfgBin.Entry.Type.String.Caption": "String",
+  "CfgBin.Entry.Type.Int.Caption": "Int",
+  "CfgBin.Entry.Type.Float.Caption": "Float",
+
+  // Cfg Entry Search
+  "CfgBin.Entry.Search.Placeholder.Caption": "Rechercher...",
+
+  // Cfg Entry Duplication
+  "CfgBin.Entry.Duplicate.Caption": "Dupliquer",
+
+  // Value Tags
+  "CfgBin.Tags.Load.Error.Caption": "Une erreur est survenue en chargeant les tags: {0}"
+}

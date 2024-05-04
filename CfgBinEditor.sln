@@ -69,6 +69,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic.Domain.Kuriimu2.Krypt
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting.Core.Settings", "CfgBinEditor\CrossCutting.Core.Settings\CrossCutting.Core.Settings.csproj", "{F7E0F772-40BF-4040-96BE-46E3DAC76FC8}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImGui.Forms", "..\..\ImGui.Forms\ImGui.Forms\ImGui.Forms.csproj", "{432C0082-55C2-4BAD-9939-0A3A54475F75}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -167,6 +169,10 @@ Global
 		{F7E0F772-40BF-4040-96BE-46E3DAC76FC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7E0F772-40BF-4040-96BE-46E3DAC76FC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7E0F772-40BF-4040-96BE-46E3DAC76FC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{432C0082-55C2-4BAD-9939-0A3A54475F75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{432C0082-55C2-4BAD-9939-0A3A54475F75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{432C0082-55C2-4BAD-9939-0A3A54475F75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{432C0082-55C2-4BAD-9939-0A3A54475F75}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -200,6 +206,7 @@ Global
 		{6772CE7E-BDAC-458E-ADD7-C22309EE18A2} = {85393D63-0C6D-462F-B5F5-D9BE832AB011}
 		{FDD1BED6-205F-452C-B774-E4AB911303A8} = {85393D63-0C6D-462F-B5F5-D9BE832AB011}
 		{F7E0F772-40BF-4040-96BE-46E3DAC76FC8} = {B5935625-B197-4029-87AF-5211BA4212BD}
+		{432C0082-55C2-4BAD-9939-0A3A54475F75} = {97A9C7A4-6BA4-474F-AC79-D68F55BCE86D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3B8F2F29-D3C5-49D2-8087-6541A395CFE7}
