@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using CfgBinEditor.Components;
 using CfgBinEditor.resources;
 using ImGui.Forms.Controls.Tree;
 using Logic.Domain.Level5Management.Contract.DataClasses;
@@ -44,7 +45,76 @@ namespace CfgBinEditor.Forms
 
         protected override bool IsEntrySearched(object entry, string searchText)
         {
-            throw new NotImplementedException();
+            switch (entry)
+            {
+                case (RdbnTypeDeclaration type, object[][] values):
+                    return IsListEntrySearched(type, values, searchText);
+            }
+
+            return false;
+        }
+
+        private bool IsListEntrySearched(RdbnTypeDeclaration type, object[][] values, string searchText)
+        {
+            for (var i = 0; i < type.Fields.Length; i++)
+            {
+                RdbnFieldDeclaration field = type.Fields[i];
+
+                for (var j = 0; j < field.Count; j++)
+                {
+                    if (IsFieldSearched(values[i][j], field.FieldType, searchText))
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool IsFieldSearched(object value, FieldType fieldType, string searchText)
+        {
+            switch (fieldType)
+            {
+                case FieldType.Bool:
+                    if (searchText.Equals("false", StringComparison.OrdinalIgnoreCase))
+                        return !(bool)value;
+
+                    if (searchText.Equals("true", StringComparison.OrdinalIgnoreCase))
+                        return (bool)value;
+
+                    break;
+
+                case FieldType.RateMatrix:
+                case FieldType.StatusRate:
+                    var floatValues = (float[])value;
+                    foreach (float floatValue in floatValues)
+                    {
+                        string valueText1 = RdbnValueComponent.GetValueText(floatValue, fieldType);
+                        if (valueText1.Contains(searchText, StringComparison.OrdinalIgnoreCase))
+                            return true;
+                    }
+
+                    break;
+
+                case FieldType.DataTuple:
+                    var shortValues = (short[])value;
+                    foreach (short shortValue in shortValues)
+                    {
+                        string valueText1 = RdbnValueComponent.GetValueText(shortValue, fieldType);
+                        if (valueText1.Contains(searchText, StringComparison.OrdinalIgnoreCase))
+                            return true;
+                    }
+
+                    break;
+
+                default:
+                    string valueText3 = RdbnValueComponent.GetValueText(value, fieldType);
+                    if (valueText3.Contains(searchText, StringComparison.OrdinalIgnoreCase))
+                        return true;
+
+                    break;
+            }
+
+            return false;
         }
     }
 }

@@ -56,7 +56,7 @@ namespace CfgBinEditor.Components
                 case FieldType.AbilityData:
                 case FieldType.EnhanceData:
                 case FieldType.StatusRate:
-                    var textBox2 = new TextBox { Text = $"{Convert.ToHexString((byte[])values[index])}" };
+                    var textBox2 = new TextBox { Text = GetValueText(values[index], fieldDeclaration.FieldType) };
                     textBox2.TextChanged += (s, e) => SetBytesValue(values, index, textBox2.Text);
 
                     result = textBox2;
@@ -75,14 +75,14 @@ namespace CfgBinEditor.Components
                 case FieldType.ActType:
                 case FieldType.Flag:
                 case FieldType.Hash:
-                    var textBox = new TextBox { Text = $"{values[index]}" };
+                    var textBox = new TextBox { Text = GetValueText(values[index], fieldDeclaration.FieldType) };
                     textBox.TextChanged += (s, e) => SetNumericValue(values, index, textBox.Text, fieldDeclaration.FieldType);
 
                     result = textBox;
                     break;
 
                 case FieldType.Float:
-                    var textBox1 = new TextBox { Text = $"{values[index]}" };
+                    var textBox1 = new TextBox { Text = GetValueText(values[index], fieldDeclaration.FieldType) };
                     textBox1.TextChanged += (s, e) => SetFloatValue(values, index, textBox1.Text);
 
                     result = textBox1;
@@ -95,7 +95,7 @@ namespace CfgBinEditor.Components
                     var valueArray = (float[])values[index];
                     for (var i = 0; i < 4; i++)
                     {
-                        var textBox3 = new TextBox { Text = $"{valueArray[i]}" };
+                        var textBox3 = new TextBox { Text = GetValueText(valueArray[i], FieldType.Float) };
 
                         int valueIndex = i;
                         textBox3.TextChanged += (s, e) => SetFloatValue(valueArray, valueIndex, textBox3.Text);
@@ -109,14 +109,14 @@ namespace CfgBinEditor.Components
                 case FieldType.String:
                     TextBox textBox4;
 
-                    if (values[index] is string stringValue)
+                    if (values[index] is string)
                     {
-                        textBox4 = new TextBox { Text = stringValue };
+                        textBox4 = new TextBox { Text = GetValueText(values[index], fieldDeclaration.FieldType) };
                         textBox4.TextChanged += (s, e) => SetStringValue(values, index, textBox4.Text);
                     }
                     else
                     {
-                        textBox4 = new TextBox { Text = $"{values[index]}" };
+                        textBox4 = new TextBox { Text = GetValueText(values[index], fieldDeclaration.FieldType) };
                         textBox4.TextChanged += (s, e) => SetNumericValue(values, index, textBox4.Text, FieldType.Hash);
                     }
 
@@ -129,8 +129,8 @@ namespace CfgBinEditor.Components
                     var valueArray1 = (short[])values[index];
                     for (var i = 0; i < 2; i++)
                     {
-                        var textBox3 = new TextBox { Text = $"{valueArray1[i]}" };
-                        
+                        var textBox3 = new TextBox { Text = GetValueText(valueArray1[i], FieldType.Short) };
+
                         int valueIndex = i;
                         textBox3.TextChanged += (s, e) => SetShortValue(valueArray1, valueIndex, textBox3.Text);
 
@@ -145,6 +145,35 @@ namespace CfgBinEditor.Components
             }
 
             return result;
+        }
+
+        public static string GetValueText(object value, FieldType fieldType)
+        {
+            switch (fieldType)
+            {
+                case FieldType.AbilityData:
+                case FieldType.EnhanceData:
+                case FieldType.StatusRate:
+                    return $"{Convert.ToHexString((byte[])value)}";
+
+                case FieldType.Byte:
+                case FieldType.Short:
+                case FieldType.Int:
+                case FieldType.ActType:
+                case FieldType.Flag:
+                case FieldType.Float:
+                case FieldType.Hash:
+                    return $"{value}";
+
+                case FieldType.String:
+                    if (value is string stringValue)
+                        return stringValue;
+
+                    return $"{value}";
+
+                default:
+                    throw new InvalidOperationException($"Unknown field type {fieldType}.");
+            }
         }
     }
 }
