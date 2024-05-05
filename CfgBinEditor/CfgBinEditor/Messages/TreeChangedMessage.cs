@@ -7,7 +7,7 @@ using CfgBinEditor.Forms;
 
 namespace CfgBinEditor.Messages
 {
-    internal class TreeChangedMessage<TConfig, TEntry>
+    internal class TreeChangedMessage<TConfig, TEntry> where TEntry : class
     {
         public BaseTreeViewForm<TConfig, TEntry> TreeViewForm { get; }
 

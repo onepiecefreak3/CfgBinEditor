@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Logic.Domain.Kuriimu2.KomponentAdapter.Contract;
 using Logic.Domain.Kuriimu2.KryptographyAdapter.Contract;
-using Logic.Domain.Level5Management.ConfigBinary.InternalContract.DataClasses;
 using Logic.Domain.Level5Management.Contract;
 using Logic.Domain.Level5Management.Contract.DataClasses;
 using Logic.Domain.Level5Management.Cryptography.InternalContract;
+using Logic.Domain.Level5Management.T2b.InternalContract.DataClasses;
 using ValueType = Logic.Domain.Level5Management.Contract.DataClasses.ValueType;
 
 namespace Logic.Domain.Level5Management
@@ -24,7 +24,7 @@ namespace Logic.Domain.Level5Management
             _checksumFactory = checksumFactory;
         }
 
-        public Stream Write(T2b config)
+        public Stream Write(Contract.DataClasses.T2b config)
         {
             Stream stream = new MemoryStream();
             using IBinaryWriterX bw = _binaryFactory.CreateWriter(stream, true);
@@ -119,15 +119,27 @@ namespace Logic.Domain.Level5Management
                         WriteString(bw, (string)value.Value, encoding, valueLength, stringOffsetBase, writtenStrings, ref stringOffset, ref stringCount);
                         break;
 
-                    case ValueType.Long:
-                        WriteValue(bw, (long)value.Value, valueLength);
-                        break;
-
-                    case ValueType.Double:
+                    case ValueType.Integer:
                         switch (valueLength)
                         {
                             case ValueLength.Int:
-                                bw.Write((float)(double)value.Value);
+                                bw.Write((int)value.Value);
+                                break;
+
+                            case ValueLength.Long:
+                                bw.Write((long)value.Value);
+                                break;
+
+                            default:
+                                throw new InvalidOperationException($"Unknown value length {valueLength}.");
+                        }
+                        break;
+
+                    case ValueType.FloatingPoint:
+                        switch (valueLength)
+                        {
+                            case ValueLength.Int:
+                                bw.Write((float)value.Value);
                                 break;
 
                             case ValueLength.Long:
@@ -264,6 +276,9 @@ namespace Logic.Domain.Level5Management
                 case ValueLength.Long:
                     bw.Write(value);
                     break;
+
+                default:
+                    throw new InvalidOperationException($"Unknown value length {valueLength}.");
             }
         }
 

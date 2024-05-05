@@ -69,8 +69,10 @@ namespace CfgBinEditor.Forms
             if (beginIndex < 0)
                 return entryNode;
 
-            entryNode.Text = entry.Name[..beginIndex];
-            index = PopulateNode(entryNode, config, index + 1, entryNode.Text + "_END", textColor);
+            entryNode.Text = beginIndex == 0 ? entry.Name : entry.Name[..beginIndex];
+            string beginPart = beginIndex == 0 ? string.Empty : entry.Name[beginIndex..];
+
+            index = PopulateNode(entryNode, config, index + 1, GetEndName(entryNode.Text, beginPart), textColor);
 
             return entryNode;
         }
@@ -81,16 +83,28 @@ namespace CfgBinEditor.Forms
             if (beginIndex < 0)
                 return entry.Name;
 
-            return entry.Name[..beginIndex];
+            return beginIndex == 0 ? entry.Name : entry.Name[..beginIndex];
         }
 
         private int GetBeginIndex(string name)
         {
+            if (name == "PTREE")
+                return 0;
+
             int beginIndex = name.LastIndexOf("_BEGIN", StringComparison.Ordinal);
             int begIndex = name.LastIndexOf("_BEG", StringComparison.Ordinal);
             int bgnIndex = name.LastIndexOf("_BGN", StringComparison.Ordinal);
+            int underScoreIndex = name.EndsWith("_", StringComparison.Ordinal) ? name.Length - 1 : -1;
 
-            return beginIndex < 0 ? begIndex < 0 ? bgnIndex : begIndex : beginIndex;
+            return beginIndex < 0 ? begIndex < 0 ? bgnIndex < 0 ? underScoreIndex : bgnIndex : begIndex : beginIndex;
+        }
+
+        private string GetEndName(string beginName, string beginPart)
+        {
+            if (beginName == "PTREE" || beginPart == "_")
+                return "_" + beginName;
+
+            return beginName + "_END";
         }
 
         #endregion
@@ -119,11 +133,39 @@ namespace CfgBinEditor.Forms
                 case ValueType.String:
                     return $"{value}";
 
-                case ValueType.Long:
-                    return isHex ? $"0x{value:X8}" : $"{value}";
+                case ValueType.Integer:
+                    if (!isHex)
+                        return $"{value}";
 
-                case ValueType.Double:
-                    return $"{value}";
+                    switch (_config.ValueLength)
+                    {
+                        case ValueLength.Int:
+                            return $"0x{value:X8}";
+
+                        case ValueLength.Long:
+                            return $"0x{value:X16}";
+
+                        default:
+                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                    }
+
+                case ValueType.FloatingPoint:
+                    if (!isHex)
+                        return $"{value}";
+
+                    switch (_config.ValueLength)
+                    {
+                        case ValueLength.Int:
+                            int iValue = BitConverter.SingleToInt32Bits((float)value);
+                            return $"0x{iValue:X8}";
+
+                        case ValueLength.Long:
+                            long lValue = BitConverter.DoubleToInt64Bits((double)value);
+                            return $"0x{lValue:X16}";
+
+                        default:
+                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                    }
 
                 default:
                     throw new InvalidOperationException($"Unknown value type {type}.");

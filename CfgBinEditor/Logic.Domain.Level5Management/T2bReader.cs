@@ -1,10 +1,11 @@
 ﻿using System.Text;
 using Logic.Domain.Kuriimu2.KomponentAdapter.Contract;
 using Logic.Domain.Kuriimu2.KryptographyAdapter.Contract;
-using Logic.Domain.Level5Management.ConfigBinary.InternalContract.DataClasses;
 using Logic.Domain.Level5Management.Contract;
 using Logic.Domain.Level5Management.Contract.DataClasses;
 using Logic.Domain.Level5Management.Cryptography.InternalContract;
+using Logic.Domain.Level5Management.T2b.InternalContract.DataClasses;
+using T2bEntry = Logic.Domain.Level5Management.T2b.InternalContract.DataClasses.T2bEntry;
 using ValueType = Logic.Domain.Level5Management.Contract.DataClasses.ValueType;
 
 namespace Logic.Domain.Level5Management
@@ -22,7 +23,7 @@ namespace Logic.Domain.Level5Management
             _checksumFactory = checksumFactory;
         }
 
-        public T2b? Read(Stream input)
+        public Contract.DataClasses.T2b? Read(Stream input)
         {
             using IBinaryReaderX br = _binaryFactory.CreateReader(input);
 
@@ -43,14 +44,45 @@ namespace Logic.Domain.Level5Management
             if (entrySection == null)
                 return null;
 
+            // Read value string section
+            byte[] valueStringData;
+            if (entrySection.Value.StringSize > 0)
+            {
+                br.BaseStream.Position = entrySection.Value.StringOffset;
+                valueStringData = br.ReadBytes(entrySection.Value.StringSize);
+            }
+            else
+            {
+                valueStringData = Array.Empty<byte>();
+            }
+
+            br.SeekAlignment();
+
             // Read t2b checksum section
             var encoding = (T2bStringEncoding)footer.encoding;
+            long checksumPosition = br.BaseStream.Position;
 
-            T2bChecksumSection? checksumSection = ReadChecksumSection(br, encoding);
-            if (checksumSection == null)
+            T2bChecksumSection? checksumSection = ReadChecksumSection(br);
+
+            // Read checksum string section
+            br.BaseStream.Position = checksumPosition + checksumSection.Value.StringOffset;
+
+            byte[] checksumStringData;
+            if (checksumSection.Value.StringSize > 0)
+            {
+                br.BaseStream.Position = checksumSection.Value.StringOffset;
+                checksumStringData = br.ReadBytes(checksumSection.Value.StringSize);
+            }
+            else
+            {
+                checksumStringData = Array.Empty<byte>();
+            }
+
+            if (!TryDetectHashType(checksumSection.Value.Entries[0], checksumStringData, encoding, out HashType hashType))
                 return null;
 
-            return CreateConfiguration(br, entrySection.Value, checksumSection.Value, encoding);
+            // Create final object
+            return CreateConfiguration(entrySection.Value, checksumSection.Value, valueStringData, checksumStringData, encoding, hashType);
         }
 
         #region Entries
@@ -63,7 +95,7 @@ namespace Logic.Domain.Level5Management
             long stringOffset = sectionPosition + entryHeader.stringDataOffset;
 
             ValueLength valueLength = default;
-            ConfigBinary.InternalContract.DataClasses.T2bEntry[] entries = Array.Empty<ConfigBinary.InternalContract.DataClasses.T2bEntry>();
+            T2bEntry[] entries = Array.Empty<T2bEntry>();
 
             if (entryHeader.entryCount > 0)
             {
@@ -73,12 +105,11 @@ namespace Logic.Domain.Level5Management
                 entries = ReadEntries(br, entryHeader.entryCount, valueLength);
             }
 
-            br.BaseStream.Position = Math.Max(0x10, (stringOffset + entryHeader.stringDataLength + 15) & ~15);
-
             return new T2bEntrySection
             {
                 Entries = entries,
                 StringOffset = stringOffset,
+                StringSize = (int)entryHeader.stringDataLength,
                 ValueLength = valueLength
             };
         }
@@ -129,7 +160,7 @@ namespace Logic.Domain.Level5Management
                 br.BaseStream.Position += 4;
 
                 int count = br.ReadByte();
-                Contract.DataClasses.ValueType[] types = ReadEntryTypes(br, count);
+                ValueType[] types = ReadEntryTypes(br, count);
 
                 if (br.BaseStream.Position > dataEndOffset)
                     return false;
@@ -143,13 +174,13 @@ namespace Logic.Domain.Level5Management
             return br.BaseStream.Position <= dataEndOffset && dataEndOffset - br.BaseStream.Position < 0x10;
         }
 
-        private ConfigBinary.InternalContract.DataClasses.T2bEntry[] ReadEntries(IBinaryReaderX br, uint entryCount, ValueLength valueLength)
+        private T2bEntry[] ReadEntries(IBinaryReaderX br, uint entryCount, ValueLength valueLength)
         {
-            var result = new ConfigBinary.InternalContract.DataClasses.T2bEntry[entryCount];
+            var result = new T2bEntry[entryCount];
 
             for (var i = 0; i < entryCount; i++)
             {
-                result[i] = new ConfigBinary.InternalContract.DataClasses.T2bEntry
+                result[i] = new T2bEntry
                 {
                     crc32 = br.ReadUInt32(),
                     entryCount = br.ReadByte()
@@ -162,9 +193,9 @@ namespace Logic.Domain.Level5Management
             return result;
         }
 
-        private Contract.DataClasses.ValueType[] ReadEntryTypes(IBinaryReaderX br, int count)
+        private ValueType[] ReadEntryTypes(IBinaryReaderX br, int count)
         {
-            var types = new Contract.DataClasses.ValueType[count];
+            var types = new ValueType[count];
 
             for (var j = 0; j < types.Length; j += 4)
             {
@@ -174,7 +205,7 @@ namespace Logic.Domain.Level5Management
                     if (j + h >= types.Length)
                         break;
 
-                    types[j + h] = (Contract.DataClasses.ValueType)((typeChunk >> h * 2) & 0x3);
+                    types[j + h] = (ValueType)((typeChunk >> h * 2) & 0x3);
                 }
             }
 
@@ -183,7 +214,7 @@ namespace Logic.Domain.Level5Management
             return types;
         }
 
-        private long[] ReadEntryValues(IBinaryReaderX br, Contract.DataClasses.ValueType[] types, ValueLength valueLength)
+        private long[] ReadEntryValues(IBinaryReaderX br, ValueType[] types, ValueLength valueLength)
         {
             var values = new long[types.Length];
 
@@ -208,31 +239,23 @@ namespace Logic.Domain.Level5Management
 
         #region Checksums
 
-        private T2bChecksumSection? ReadChecksumSection(IBinaryReaderX br, T2bStringEncoding encoding)
+        private T2bChecksumSection ReadChecksumSection(IBinaryReaderX br)
         {
             long sectionPosition = br.BaseStream.Position;
 
             T2bChecksumHeader checksumHeader = ReadChecksumHeader(br);
             long stringOffset = sectionPosition + checksumHeader.stringOffset;
 
-            HashType hashType = default;
             T2bChecksumEntry[] checksumEntries = Array.Empty<T2bChecksumEntry>();
 
             if (checksumHeader.count > 0)
-            {
-                if (!TryDetectHashType(br, stringOffset, encoding, out hashType))
-                    return null;
-
                 checksumEntries = ReadChecksumEntries(br, checksumHeader.count);
-            }
-
-            br.BaseStream.Position = Math.Max(0x10, (stringOffset + checksumHeader.stringSize + 15) & ~15);
 
             return new T2bChecksumSection
             {
                 Entries = checksumEntries,
                 StringOffset = stringOffset,
-                HashType = hashType
+                StringSize = (int)checksumHeader.stringSize
             };
         }
 
@@ -247,18 +270,11 @@ namespace Logic.Domain.Level5Management
             };
         }
 
-        private bool TryDetectHashType(IBinaryReaderX br, long stringOffset, T2bStringEncoding encoding, out HashType fileHashType)
+        private bool TryDetectHashType(T2bChecksumEntry entry, byte[] stringData, T2bStringEncoding encoding, out HashType fileHashType)
         {
             fileHashType = default;
 
-            long origPosition = br.BaseStream.Position;
-
-            T2bChecksumEntry checksumEntry = ReadChecksumEntries(br, 1)[0];
-
-            br.BaseStream.Position = stringOffset; // HINT: Assume string offset 0 for first entry
-            string stringValue = ReadString(br, encoding);
-
-            br.BaseStream.Position = origPosition;
+            string stringValue = ReadString(stringData, entry.stringOffset, encoding);
 
             var hashTypes = new[] { HashType.Crc32Standard, HashType.Crc32Jam };
             foreach (HashType hashType in hashTypes)
@@ -279,7 +295,7 @@ namespace Logic.Domain.Level5Management
                 }
 
                 uint stringHash = checksum.ComputeValue(stringValue);
-                if (stringHash == checksumEntry.crc32)
+                if (stringHash == entry.crc32)
                 {
                     fileHashType = hashType;
                     return true;
@@ -318,7 +334,8 @@ namespace Logic.Domain.Level5Management
             };
         }
 
-        private T2b CreateConfiguration(IBinaryReaderX br, T2bEntrySection entrySection, T2bChecksumSection checksumSection, T2bStringEncoding encoding)
+        private Contract.DataClasses.T2b CreateConfiguration(T2bEntrySection entrySection, T2bChecksumSection checksumSection,
+            byte[] entryStringData, byte[] checksumStringData, T2bStringEncoding encoding, HashType hashType)
         {
             var checksumOffsetLookup = checksumSection.Entries.ToDictionary(x => x.crc32, y => y.stringOffset - checksumSection.Entries[0].stringOffset);
 
@@ -341,19 +358,30 @@ namespace Logic.Domain.Level5Management
                                 break;
                             }
 
-                            br.BaseStream.Position = entrySection.StringOffset + entryValue;
-                            value = ReadString(br, encoding);
+                            value = ReadString(entryStringData, entryValue, encoding);
                             break;
 
-                        case ValueType.Long:
-                            value = entryValue;
-                            break;
-
-                        case ValueType.Double:
+                        case ValueType.Integer:
                             switch (entrySection.ValueLength)
                             {
                                 case ValueLength.Int:
-                                    value = (double)BitConverter.Int32BitsToSingle((int)entryValue);
+                                    value = (int)entryValue;
+                                    break;
+
+                                case ValueLength.Long:
+                                    value = entryValue;
+                                    break;
+
+                                default:
+                                    throw new InvalidOperationException($"Unknown value length {entrySection.ValueLength}.");
+                            }
+                            break;
+
+                        case ValueType.FloatingPoint:
+                            switch (entrySection.ValueLength)
+                            {
+                                case ValueLength.Int:
+                                    value = BitConverter.Int32BitsToSingle((int)entryValue);
                                     break;
 
                                 case ValueLength.Long:
@@ -376,8 +404,7 @@ namespace Logic.Domain.Level5Management
                     };
                 }
 
-                br.BaseStream.Position = checksumSection.StringOffset + checksumOffsetLookup[entrySection.Entries[i].crc32];
-                string name = ReadString(br, encoding);
+                string name = ReadString(checksumStringData, checksumOffsetLookup[entrySection.Entries[i].crc32], encoding);
 
                 configEntries[i] = new Contract.DataClasses.T2bEntry
                 {
@@ -386,35 +413,29 @@ namespace Logic.Domain.Level5Management
                 };
             }
 
-            return new T2b
+            return new Contract.DataClasses.T2b
             {
                 Entries = configEntries,
                 Encoding = GetStringEncoding(encoding),
                 ValueLength = entrySection.ValueLength,
-                HashType = checksumSection.HashType
+                HashType = hashType
             };
         }
 
-        private string ReadString(IBinaryReaderX br, T2bStringEncoding encoding)
+        private string ReadString(byte[] stringData, long offset, T2bStringEncoding encoding)
         {
-            var result = new List<byte>();
-
-            byte byteValue = br.ReadByte();
-            while (byteValue != 0)
-            {
-                result.Add(byteValue);
-                byteValue = br.ReadByte();
-            }
+            long endOffset = offset;
+            while (stringData[endOffset++] != 0) ;
 
             switch (encoding)
             {
                 case T2bStringEncoding.Sjis:
-                    return Encoding.GetEncoding("Shift-JIS").GetString(result.ToArray());
+                    return Encoding.GetEncoding("Shift-JIS").GetString(stringData[(int)offset..(int)(endOffset - 1)]);
 
                 case T2bStringEncoding.Utf8:
                 case T2bStringEncoding.Utf8_2:
                 case T2bStringEncoding.Utf8_3:
-                    return Encoding.UTF8.GetString(result.ToArray());
+                    return Encoding.UTF8.GetString(stringData[(int)offset..(int)(endOffset - 1)]);
 
                 default:
                     throw new InvalidOperationException($"Unknown encoding {encoding}.");

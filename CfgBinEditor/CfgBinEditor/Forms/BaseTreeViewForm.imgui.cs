@@ -22,9 +22,11 @@ namespace CfgBinEditor.Forms
 
         private ContextMenu _treeViewContextMenu;
         private MenuBarButton _duplicateButton;
+        private MenuBarButton _removeButton;
 
         private ContextMenu _filteredTreeViewContextMenu;
         private MenuBarButton _filteredDuplicateButton;
+        private MenuBarButton _filteredRemoveButton;
 
         private void InitializeComponent(TConfig config)
         {
@@ -35,20 +37,24 @@ namespace CfgBinEditor.Forms
             _filteredTreeView = new TreeView<TreeNode<TEntry>>();
 
             _duplicateButton = new MenuBarButton { Text = LocalizationResources.CfgBinEntryDuplicateCaption };
+            _removeButton = new MenuBarButton { Text = LocalizationResources.CfgBinEntryRemoveCaption };
             _treeViewContextMenu = new ContextMenu
             {
                 Items =
                 {
-                    _duplicateButton
+                    _duplicateButton,
+                    _removeButton
                 }
             };
 
             _filteredDuplicateButton = new MenuBarButton { Text = LocalizationResources.CfgBinEntryDuplicateCaption };
+            _filteredRemoveButton = new MenuBarButton { Text = LocalizationResources.CfgBinEntryRemoveCaption };
             _filteredTreeViewContextMenu = new ContextMenu
             {
                 Items =
                 {
-                    _filteredDuplicateButton
+                    _filteredDuplicateButton,
+                    _filteredRemoveButton
                 }
             };
 

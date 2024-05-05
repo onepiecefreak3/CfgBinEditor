@@ -7,9 +7,9 @@ namespace CfgBinEditor.Messages
     internal class FileSavedMessage
     {
         public Component Source { get; }
-        public Exception Error { get; }
+        public Exception? Error { get; }
 
-        public FileSavedMessage(Component source, Exception e)
+        public FileSavedMessage(Component source, Exception? e)
         {
             Source = source;
             Error = e;

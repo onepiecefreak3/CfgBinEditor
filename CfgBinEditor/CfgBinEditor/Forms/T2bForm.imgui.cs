@@ -71,23 +71,5 @@ namespace CfgBinEditor.Forms
             foreach (string game in settingsProvider.GetGames())
                 _gameComboBox.Items.Add(game);
         }
-
-        private string GetValueString(object value, ValueType type, bool isHex)
-        {
-            switch (type)
-            {
-                case ValueType.String:
-                    return $"{value}";
-
-                case ValueType.Long:
-                    return isHex ? $"0x{value:X8}" : $"{value}";
-
-                case ValueType.Double:
-                    return $"{value}";
-
-                default:
-                    throw new InvalidOperationException($"Unknown value type {type}.");
-            }
-        }
     }
 }

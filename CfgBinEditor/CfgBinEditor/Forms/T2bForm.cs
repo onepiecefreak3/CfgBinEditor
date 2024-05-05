@@ -6,6 +6,7 @@ using System.Numerics;
 using CfgBinEditor.InternalContract;
 using CfgBinEditor.Messages;
 using CfgBinEditor.resources;
+using CrossCutting.Core.Contract.Configuration.DataClasses;
 using CrossCutting.Core.Contract.EventBrokerage;
 using ImGui.Forms.Controls;
 using ImGui.Forms.Controls.Base;
@@ -16,6 +17,7 @@ using Logic.Business.CfgBinValueSettingsManagement.Contract;
 using Logic.Business.CfgBinValueSettingsManagement.Contract.DataClasses;
 using Logic.Domain.Level5Management.Contract;
 using Logic.Domain.Level5Management.Contract.DataClasses;
+using Newtonsoft.Json.Linq;
 using ValueType = Logic.Domain.Level5Management.Contract.DataClasses.ValueType;
 
 namespace CfgBinEditor.Forms
@@ -46,7 +48,7 @@ namespace CfgBinEditor.Forms
             if (_treeViewForm.SelectedEntry != null)
                 ChangeEntry(_treeViewForm.SelectedEntry);
 
-            _eventBroker.Subscribe<TreeChangedMessage<T2b,T2bEntry>>(msg =>
+            _eventBroker.Subscribe<TreeChangedMessage<T2b, T2bEntry>>(msg =>
             {
                 if (msg.TreeViewForm == _treeViewForm)
                     RaiseFileChanged();
@@ -59,7 +61,7 @@ namespace CfgBinEditor.Forms
             });
         }
 
-        private void ChangeEntry(T2bEntry entry)
+        private void ChangeEntry(T2bEntry? entry)
         {
             var layout = new TableLayout { Size = new Size(SizeValue.Parent, SizeValue.Content), Spacing = new Vector2(5, 5) };
 
@@ -74,6 +76,12 @@ namespace CfgBinEditor.Forms
                 }
             };
             layout.Rows.Add(headerRow);
+
+            if (entry == null)
+            {
+                _configContent.Content = layout;
+                return;
+            }
 
             string currentGame = GetCurrentGame();
             for (var i = 0; i < entry.Values.Length; i++)
@@ -91,8 +99,8 @@ namespace CfgBinEditor.Forms
                     Items =
                     {
                         new ComboBoxItem<ValueType>(ValueType.String, LocalizationResources.CfgBinEntryTypeStringCaption),
-                        new ComboBoxItem<ValueType>(ValueType.Long, LocalizationResources.CfgBinEntryTypeIntCaption),
-                        new ComboBoxItem<ValueType>(ValueType.Double, LocalizationResources.CfgBinEntryTypeFloatCaption)
+                        new ComboBoxItem<ValueType>(ValueType.Integer, LocalizationResources.CfgBinEntryTypeIntCaption),
+                        new ComboBoxItem<ValueType>(ValueType.FloatingPoint, LocalizationResources.CfgBinEntryTypeFloatCaption)
                     }
                 };
                 typeComboBox.SelectedItem = typeComboBox.Items.FirstOrDefault(x => x.Content == entryValue.Type);
@@ -202,7 +210,7 @@ namespace CfgBinEditor.Forms
 
         private void SaveFile(FileSaveRequestMessage msg)
         {
-            if (!msg.ConfigForms.TryGetValue(this, out string savePath))
+            if (!msg.ConfigForms.TryGetValue(this, out string? savePath))
                 return;
 
             if (!TryWriteFile(savePath, out Exception e))
@@ -288,16 +296,19 @@ namespace CfgBinEditor.Forms
             if (rowIndex < 0)
                 return;
 
+            var valueTextBox = row!.Cells[2].Content as TextBox;
+            if (valueTextBox == null)
+                return;
+
             var configEntry = _treeViewForm.SelectedEntry;
             var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Name, rowIndex - 1);
 
-            var newValueType = comboBox.SelectedItem.Content;
-            object newValue = newValueType == ValueType.String ? string.Empty : 0;
+            ValueType newValueType = comboBox.SelectedItem.Content;
+            object newValue = ConvertValue(configEntry.Values[rowIndex - 1].Value, configEntry.Values[rowIndex - 1].Type, newValueType);
 
             SetEntryType(configEntry, rowIndex - 1, newValueType);
             SetEntryValue(configEntry, rowIndex - 1, newValue);
 
-            var valueTextBox = row!.Cells[2].Content as TextBox;
             SetValueText(valueTextBox, newValueType, newValue, settingsEntry.IsHex);
         }
 
@@ -319,31 +330,9 @@ namespace CfgBinEditor.Forms
             var configEntry = _treeViewForm.SelectedEntry;
             var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Name, rowIndex - 1);
 
-            var valueType = configEntry.Values[rowIndex - 1].Type;
-            switch (valueType)
-            {
-                case ValueType.String:
-                    SetEntryValue(configEntry, rowIndex - 1, textBox.Text);
-                    break;
-
-                case ValueType.Long:
-                    if (settingsEntry.IsHex && textBox.Text.StartsWith("0x"))
-                    {
-                        if (long.TryParse(textBox.Text[2..], NumberStyles.HexNumber, CultureInfo.CurrentCulture, out long lValue))
-                            SetEntryValue(configEntry, rowIndex - 1, lValue);
-                    }
-                    else
-                    {
-                        if (long.TryParse(textBox.Text, out long lValue))
-                            SetEntryValue(configEntry, rowIndex - 1, lValue);
-                    }
-                    break;
-
-                case ValueType.Double:
-                    if (double.TryParse(textBox.Text, out var dValue))
-                        SetEntryValue(configEntry, rowIndex - 1, dValue);
-                    break;
-            }
+            ValueType valueType = configEntry.Values[rowIndex - 1].Type;
+            if (TryParseValue(textBox.Text, valueType, settingsEntry.IsHex, out object? parsedValue))
+                SetEntryValue(configEntry, rowIndex - 1, parsedValue!);
         }
 
         private void ValueIsHexCheckbox_CheckChanged(object sender, EventArgs e)
@@ -370,7 +359,7 @@ namespace CfgBinEditor.Forms
 
             var valueTextBox = layout.Rows[rowIndex].Cells[2].Content as TextBox;
 
-            if (configEntry.Values[rowIndex - 1].Type == ValueType.Long)
+            if (configEntry.Values[rowIndex - 1].Type is ValueType.Integer or ValueType.FloatingPoint)
                 SetValueText(valueTextBox, configEntry.Values[rowIndex - 1], checkBox.Checked);
         }
 
@@ -410,6 +399,263 @@ namespace CfgBinEditor.Forms
         {
             entry.Values[index].Value = value;
             RaiseFileChanged();
+        }
+
+        private bool TryParseValue(string text, ValueType type, bool isHex, out object? parsedValue)
+        {
+            parsedValue = null;
+
+            switch (type)
+            {
+                case ValueType.String:
+                    parsedValue = text;
+                    return true;
+
+                case ValueType.Integer:
+                    NumberStyles styles = isHex ? NumberStyles.HexNumber : NumberStyles.None;
+                    text = isHex ? text.StartsWith("0x") ? text[2..] : text : text;
+
+                    switch (_config.ValueLength)
+                    {
+                        case ValueLength.Int:
+                            if (!int.TryParse(text, styles, CultureInfo.InvariantCulture, out int iValue))
+                                return false;
+
+                            parsedValue = iValue;
+                            return true;
+
+                        case ValueLength.Long:
+                            if (!long.TryParse(text, styles, CultureInfo.InvariantCulture, out long lValue))
+                                return false;
+
+                            parsedValue = lValue;
+                            return true;
+
+                        default:
+                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                    }
+
+                case ValueType.FloatingPoint:
+                    NumberStyles styles1 = isHex ? NumberStyles.HexNumber : NumberStyles.None;
+                    text = isHex ? text.StartsWith("0x") ? text[2..] : text : text;
+
+                    switch (_config.ValueLength)
+                    {
+                        case ValueLength.Int:
+                            if (!float.TryParse(text, styles1, CultureInfo.InvariantCulture, out float fValue))
+                                return false;
+
+                            parsedValue = fValue;
+                            return true;
+
+                        case ValueLength.Long:
+                            if (!double.TryParse(text, styles1, CultureInfo.InvariantCulture, out double dValue))
+                                return false;
+
+                            parsedValue = dValue;
+                            return true;
+
+                        default:
+                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                    }
+
+                default:
+                    throw new InvalidOperationException($"Unknown value type {type}.");
+            }
+        }
+
+        private object ConvertValue(object value, ValueType sourceType, ValueType targetType)
+        {
+            if (sourceType == targetType)
+                return value;
+
+            switch (sourceType)
+            {
+                case ValueType.String:
+                    var sValue = (string)value;
+                    switch (targetType)
+                    {
+                        case ValueType.Integer:
+                            switch (_config.ValueLength)
+                            {
+                                case ValueLength.Int:
+                                    if (int.TryParse(sValue, out int iValue))
+                                        return iValue;
+
+                                    if (float.TryParse(sValue, out float fValue))
+                                        return (int)Math.Round(fValue);
+
+                                    return GetDefaultValue(targetType);
+
+                                case ValueLength.Long:
+                                    if (long.TryParse(sValue, out long lValue))
+                                        return lValue;
+
+                                    if (double.TryParse(sValue, out double dValue))
+                                        return (long)Math.Round(dValue);
+
+                                    return GetDefaultValue(targetType);
+
+                                default:
+                                    throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                            }
+
+                        case ValueType.FloatingPoint:
+                            switch (_config.ValueLength)
+                            {
+                                case ValueLength.Int:
+                                    if (float.TryParse(sValue, out float fValue))
+                                        return fValue;
+
+                                    return GetDefaultValue(targetType);
+
+                                case ValueLength.Long:
+                                    if (double.TryParse(sValue, out double dValue))
+                                        return dValue;
+
+                                    return GetDefaultValue(targetType);
+
+                                default:
+                                    throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                            }
+
+                        default:
+                            throw new InvalidOperationException($"Unknown value type {targetType}.");
+                    }
+
+                case ValueType.Integer:
+                    switch (targetType)
+                    {
+                        case ValueType.String:
+                            return $"{value}";
+
+                        case ValueType.FloatingPoint:
+                            switch (_config.ValueLength)
+                            {
+                                case ValueLength.Int:
+                                    return (float)(int)value;
+
+                                case ValueLength.Long:
+                                    return (double)(long)value;
+
+                                default:
+                                    throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                            }
+
+                        default:
+                            throw new InvalidOperationException($"Unknown value type {targetType}.");
+                    }
+
+                case ValueType.FloatingPoint:
+                    switch (targetType)
+                    {
+                        case ValueType.String:
+                            return $"{value}";
+
+                        case ValueType.Integer:
+                            switch (_config.ValueLength)
+                            {
+                                case ValueLength.Int:
+                                    return (int)Math.Round((float)value);
+
+                                case ValueLength.Long:
+                                    return (long)Math.Round((double)value);
+
+                                default:
+                                    throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                            }
+
+                        default:
+                            throw new InvalidOperationException($"Unknown value type {targetType}.");
+                    }
+
+                default:
+                    throw new InvalidOperationException($"Unknown value type {targetType}.");
+            }
+        }
+
+        private object GetDefaultValue(ValueType type)
+        {
+            switch (type)
+            {
+                case ValueType.String:
+                    return string.Empty;
+
+                case ValueType.Integer:
+                    switch (_config.ValueLength)
+                    {
+                        case ValueLength.Int:
+                            return 0;
+
+                        case ValueLength.Long:
+                            return (long)0;
+
+                        default:
+                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                    }
+
+                case ValueType.FloatingPoint:
+                    switch (_config.ValueLength)
+                    {
+                        case ValueLength.Int:
+                            return .0f;
+
+                        case ValueLength.Long:
+                            return .0d;
+
+                        default:
+                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                    }
+
+                default:
+                    throw new InvalidOperationException($"Unknown value type {type}.");
+            }
+        }
+
+        private string GetValueString(object value, ValueType type, bool isHex)
+        {
+            switch (type)
+            {
+                case ValueType.String:
+                    return $"{value}";
+
+                case ValueType.Integer:
+                    if (!isHex)
+                        return $"{value}";
+
+                    switch (_config.ValueLength)
+                    {
+                        case ValueLength.Int:
+                            return $"0x{value:X8}";
+
+                        case ValueLength.Long:
+                            return $"0x{value:X16}";
+
+                        default:
+                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                    }
+
+                case ValueType.FloatingPoint:
+                    if (!isHex)
+                        return $"{value}";
+
+                    switch (_config.ValueLength)
+                    {
+                        case ValueLength.Int:
+                            int iValue = BitConverter.SingleToInt32Bits((float)value);
+                            return $"0x{iValue:X8}";
+
+                        case ValueLength.Long:
+                            long lValue = BitConverter.DoubleToInt64Bits((double)value);
+                            return $"0x{lValue:X16}";
+
+                        default:
+                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                    }
+
+                default:
+                    throw new InvalidOperationException($"Unknown value type {type}.");
+            }
         }
 
         private string GetCurrentGame()

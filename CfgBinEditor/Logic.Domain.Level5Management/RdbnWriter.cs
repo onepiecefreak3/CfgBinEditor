@@ -32,6 +32,7 @@ namespace Logic.Domain.Level5Management
             RdbnFieldEntry[] fieldEntries = GetFieldEntries(distinctTypes);
 
             RdbnRootEntry[] rootEntries = GetRootEntries(config, distinctTypes, ref valueOffset);
+            RdbnRootEntry lastRootEntry = rootEntries.Length > 0 ? rootEntries[^1] : new RdbnRootEntry();
 
             var output = new MemoryStream();
             using IBinaryWriterX bw = _binaryFactory.CreateWriter(output, true);
@@ -42,7 +43,7 @@ namespace Logic.Domain.Level5Management
             WriteLists(bw, rootEntries);
 
             int hashSize = hashEntryCount * 8;
-            int valueSize = rootEntries[^1].valueOffset + rootEntries[^1].valueCount * rootEntries[^1].valueSize;
+            int valueSize = lastRootEntry.valueOffset + lastRootEntry.valueCount * lastRootEntry.valueSize;
 
             long hashOffset = output.Position;
             long stringOffset = hashOffset + hashSize + valueSize;

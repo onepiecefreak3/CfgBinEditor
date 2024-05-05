@@ -9,7 +9,7 @@ using CfgBinEditor.Messages;
 
 namespace CfgBinEditor.Forms
 {
-    public abstract partial class BaseTreeViewForm<TConfig, TEntry> : Component
+    public abstract partial class BaseTreeViewForm<TConfig, TEntry> : Component where TEntry : class
     {
         private readonly IEventBroker _eventBroker;
 
@@ -21,14 +21,20 @@ namespace CfgBinEditor.Forms
 
             _eventBroker = eventBroker;
 
-            _fullTreeView.SelectedNodeChanged += (s, e) => ChangeEntry(_fullTreeView.SelectedNode.Data);
-            _filteredTreeView.SelectedNodeChanged += (s, e) => ChangeEntry(_filteredTreeView.SelectedNode.Data.Data);
+            _fullTreeView.SelectedNodeChanged += (s, e) => ChangeEntry(_fullTreeView.SelectedNode?.Data);
+            _filteredTreeView.SelectedNodeChanged += (s, e) => ChangeEntry(_filteredTreeView.SelectedNode?.Data?.Data);
 
             _duplicateButton.Clicked += (s, e) => DuplicateNode(_fullTreeView.SelectedNode);
             _filteredDuplicateButton.Clicked += (s, e) => DuplicateNode(_filteredTreeView.SelectedNode.Data);
 
+            _removeButton.Clicked += (s, e) => RemoveNode(_fullTreeView.SelectedNode);
+            _filteredRemoveButton.Clicked += (s, e) => RemoveNode(_filteredTreeView.SelectedNode.Data);
+
             _searchTextBox.TextChanged += (s, e) => UpdateTreeView();
             _clearSearchButton.Clicked += (s, e) => ClearSearch();
+
+            _treeViewContextMenu.Show += (s, e) => UpdateContextMenu();
+            _filteredTreeViewContextMenu.Show += (s, e) => UpdateFilteredContextMenu();
 
             if (_fullTreeView.Nodes.Count > 0)
                 _fullTreeView.SelectedNode = _fullTreeView.Nodes[0];
@@ -50,13 +56,29 @@ namespace CfgBinEditor.Forms
             _mainLayout.Update(contentRect);
         }
 
-        private void ChangeEntry(TEntry entry)
+        private void UpdateContextMenu()
+        {
+            _duplicateButton.Enabled = CanDuplicate(_fullTreeView.SelectedNode);
+            _removeButton.Enabled = CanDuplicate(_fullTreeView.SelectedNode);
+        }
+
+        private void UpdateFilteredContextMenu()
+        {
+            _filteredDuplicateButton.Enabled = CanDuplicate(_filteredTreeView.SelectedNode.Data);
+            _filteredRemoveButton.Enabled = CanDuplicate(_filteredTreeView.SelectedNode.Data);
+        }
+
+        private void ChangeEntry(TEntry? entry)
         {
             SelectedEntry = entry;
             RaiseTreeEntryChanged(entry);
         }
 
+        protected abstract bool CanDuplicate(TreeNode<TEntry> node);
         protected abstract void DuplicateNode(TreeNode<TEntry> node);
+
+        protected abstract bool CanRemove(TreeNode<TEntry> node);
+        protected abstract void RemoveNode(TreeNode<TEntry> node);
 
         protected void UpdateTreeView()
         {
@@ -90,7 +112,7 @@ namespace CfgBinEditor.Forms
             return _fullTreeView.Nodes;
         }
 
-        protected void RaiseTreeEntryChanged(TEntry entry)
+        protected void RaiseTreeEntryChanged(TEntry? entry)
         {
             _eventBroker.Raise(new TreeEntryChangedMessage<TConfig, TEntry>(this, entry));
         }

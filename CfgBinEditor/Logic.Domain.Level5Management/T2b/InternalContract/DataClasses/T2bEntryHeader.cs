@@ -1,4 +1,4 @@
-﻿namespace Logic.Domain.Level5Management.ConfigBinary.InternalContract.DataClasses
+﻿namespace Logic.Domain.Level5Management.T2b.InternalContract.DataClasses
 {
     public struct T2bEntryHeader
     {

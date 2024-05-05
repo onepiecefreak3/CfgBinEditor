@@ -60,6 +60,7 @@ namespace CfgBinEditor.resources
             new("CfgBin.Entry.Search.Placeholder.Caption");
 
         public static LocalizedString CfgBinEntryDuplicateCaption => new("CfgBin.Entry.Duplicate.Caption");
+        public static LocalizedString CfgBinEntryRemoveCaption => new("CfgBin.Entry.Remove.Caption");
 
         public static LocalizedString CfgBinTagsLoadErrorCaption(string error) =>
             new("CfgBin.Tags.Load.Error.Caption", () => error);

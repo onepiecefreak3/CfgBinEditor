@@ -30,8 +30,14 @@ namespace CfgBinEditor.Forms
 
             eventBroker.Subscribe<FileSaveRequestMessage>(SaveFile);
 
-            if (_treeViewForm.SelectedEntry != null)
+            if (_treeViewForm!.SelectedEntry != null)
                 ChangeEntry(_treeViewForm.SelectedEntry);
+
+            _eventBroker.Subscribe<TreeChangedMessage<Rdbn, object>>(msg =>
+            {
+                if (msg.TreeViewForm == _treeViewForm)
+                    RaiseFileChanged();
+            });
 
             eventBroker.Subscribe<TreeEntryChangedMessage<Rdbn, object>>(msg =>
             {
@@ -42,10 +48,10 @@ namespace CfgBinEditor.Forms
 
         private void SaveFile(FileSaveRequestMessage msg)
         {
-            if (!msg.ConfigForms.TryGetValue(this, out string savePath))
+            if (!msg.ConfigForms.TryGetValue(this, out string? savePath))
                 return;
 
-            if (!TryWriteFile(savePath, out Exception e))
+            if (!TryWriteFile(savePath, out Exception? e))
             {
                 RaiseFileSaved(e);
                 return;
@@ -56,7 +62,7 @@ namespace CfgBinEditor.Forms
             RaiseFileSaved();
         }
 
-        private bool TryWriteFile(string savePath, out Exception ex)
+        private bool TryWriteFile(string savePath, out Exception? ex)
         {
             ex = null;
 
@@ -76,16 +82,19 @@ namespace CfgBinEditor.Forms
             return true;
         }
 
-        private void ChangeEntry(object obj)
+        private void ChangeEntry(object? obj)
         {
-            if (obj is not (RdbnTypeDeclaration type, object[][] values))
-                return;
-
             var list = new List
             {
                 Alignment = Alignment.Vertical,
                 ItemSpacing = 5
             };
+
+            if (obj is not (RdbnTypeDeclaration type, object[][] values))
+            {
+                _contentPanel.Content = list;
+                return;
+            }
 
             for (var i = 0; i < type.Fields.Length; i++)
             {
@@ -96,7 +105,12 @@ namespace CfgBinEditor.Forms
             _contentPanel.Content = list;
         }
 
-        private void RaiseFileSaved(Exception e = null)
+        private void RaiseFileChanged()
+        {
+            _eventBroker.Raise(new FileChangedMessage(this));
+        }
+
+        private void RaiseFileSaved(Exception? e = null)
         {
             _eventBroker.Raise(new FileSavedMessage(this, e));
         }

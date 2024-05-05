@@ -139,6 +139,8 @@ namespace CfgBinEditor.Forms
 
             _pageConfigLookup.Remove(page);
             _pagePathLookup.Remove(page);
+
+            UpdateSaveButtons();
         }
 
 
@@ -200,7 +202,7 @@ namespace CfgBinEditor.Forms
 
         private void UpdateSaveButtons()
         {
-            _saveBtn.Enabled = _tabControl.SelectedPage.HasChanges;
+            _saveBtn.Enabled = _tabControl.SelectedPage?.HasChanges ?? false;
             _saveAllBtn.Enabled = _tabControl.Pages.Any(p => p.HasChanges);
         }
 

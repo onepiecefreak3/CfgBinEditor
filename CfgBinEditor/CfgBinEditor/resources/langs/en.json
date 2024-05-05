@@ -60,6 +60,9 @@
   // Cfg Entry Duplication
   "CfgBin.Entry.Duplicate.Caption": "Duplicate",
 
+  // Cfg Entry Removal
+  "CfgBin.Entry.Remove.Caption": "Remove",
+
   // Value Tags
   "CfgBin.Tags.Load.Error.Caption": "Error loading the tags: {0}"
 }
