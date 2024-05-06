@@ -34,5 +34,10 @@ namespace CfgBinEditor.Forms
         {
             _contentLayout.Update(contentRect);
         }
+
+        protected override void SetTabInactiveCore()
+        {
+            _contentLayout.SetTabInactive();
+        }
     }
 }

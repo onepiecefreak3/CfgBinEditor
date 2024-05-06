@@ -211,6 +211,7 @@ namespace CfgBinEditor.Forms
             var ofd = new OpenFileDialog
             {
                 Caption = LocalizationResources.FileOpenCaption,
+                InitialDirectory = GetLoadDirectory(_settingsProvider),
                 FileFilters =
                 {
                     new FileFilter(LocalizationResources.FileOpenCfgBinFilterCaption, "cfg.bin")
@@ -223,6 +224,8 @@ namespace CfgBinEditor.Forms
                 SetStatus(LocalizationResources.FileOpenCancel, LabelStatus.Error);
                 return;
             }
+
+            SetLoadDirectory(Path.GetDirectoryName(ofd.SelectedPath), _settingsProvider);
 
             bool wasOpened = OpenFile(ofd.SelectedPath);
             if (wasOpened)

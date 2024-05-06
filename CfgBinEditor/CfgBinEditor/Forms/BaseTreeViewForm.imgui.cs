@@ -5,6 +5,7 @@ using ImGui.Forms.Controls.Tree;
 using ImGui.Forms.Controls;
 using System.Collections.Generic;
 using System.Drawing;
+using Rectangle = Veldrid.Rectangle;
 using Size = ImGui.Forms.Models.Size;
 
 namespace CfgBinEditor.Forms
@@ -85,6 +86,21 @@ namespace CfgBinEditor.Forms
             };
 
             PopulateFullTreeView(config, _fullTreeView);
+        }
+
+        public override Size GetSize()
+        {
+            return Size.Parent;
+        }
+
+        protected override void UpdateInternal(Rectangle contentRect)
+        {
+            _mainLayout.Update(contentRect);
+        }
+
+        protected override void SetTabInactiveCore()
+        {
+            _mainLayout.SetTabInactive();
         }
 
         private void ResetNodesChangeState(IEnumerable<TreeNode> nodes)

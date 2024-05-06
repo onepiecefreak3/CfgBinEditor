@@ -37,6 +37,11 @@ namespace CfgBinEditor.Components
             _valueLayout.Update(contentRect);
         }
 
+        protected override void SetTabInactiveCore()
+        {
+            _valueLayout.SetTabInactive();
+        }
+
         protected override int GetContentHeight(int parentHeight, float layoutCorrection = 1)
         {
             return _valueLayout.GetHeight(parentHeight, layoutCorrection);

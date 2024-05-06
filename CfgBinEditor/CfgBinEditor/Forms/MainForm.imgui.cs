@@ -11,6 +11,7 @@ using ImGui.Forms.Localization;
 using ImGui.Forms.Models;
 using ImGui.Forms.Models.IO;
 using ImGuiNET;
+using Microsoft.VisualBasic.FileIO;
 using Veldrid;
 
 namespace CfgBinEditor.Forms
@@ -142,9 +143,29 @@ namespace CfgBinEditor.Forms
             return settingsProvider.Get("CfgBinEditor.Settings.Theme", Style.Theme);
         }
 
+        private string GetLoadDirectory(ISettingsProvider settingsProvider)
+        {
+            return settingsProvider.Get("CfgBinEditor.Settings.LoadDirectory", SpecialDirectories.Desktop);
+        }
+
+        private string GetSaveDirectory(ISettingsProvider settingsProvider)
+        {
+            return settingsProvider.Get("CfgBinEditor.Settings.SaveDirectory", SpecialDirectories.Desktop);
+        }
+
         private void SetThemeSetting(Theme theme, ISettingsProvider settingsProvider)
         {
             settingsProvider.Set("CfgBinEditor.Settings.Theme", theme);
+        }
+
+        private void SetLoadDirectory(string path, ISettingsProvider settingsProvider)
+        {
+            settingsProvider.Set("CfgBinEditor.Settings.LoadDirectory", path);
+        }
+
+        private void SetSaveDirectory(string path, ISettingsProvider settingsProvider)
+        {
+            settingsProvider.Set("CfgBinEditor.Settings.SaveDirectory", path);
         }
     }
 }

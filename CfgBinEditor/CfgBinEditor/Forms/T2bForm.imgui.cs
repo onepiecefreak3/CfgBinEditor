@@ -17,7 +17,7 @@ namespace CfgBinEditor.Forms
         private const string NoGame_ = "None";
 
         private StackLayout _contentLayout;
-        
+
         private T2bTreeViewForm _treeViewForm;
         private StackLayout _gameLayout;
         private StackLayout _valuesLayout;
@@ -30,7 +30,7 @@ namespace CfgBinEditor.Forms
         private void InitializeComponent(T2b config, IFormFactory formFactory, IValueSettingsProvider settingsProvider)
         {
             _contentLayout = new StackLayout { Alignment = Alignment.Horizontal, ItemSpacing = 5 };
-            
+
             _gameLayout = new StackLayout { Alignment = Alignment.Horizontal, ItemSpacing = 5, Size = new Size(SizeValue.Parent, SizeValue.Content) };
             _valuesLayout = new StackLayout { Alignment = Alignment.Vertical, ItemSpacing = 5 };
 
@@ -61,6 +61,11 @@ namespace CfgBinEditor.Forms
         protected override void UpdateInternal(Rectangle contentRect)
         {
             _contentLayout.Update(contentRect);
+        }
+
+        protected override void SetTabInactiveCore()
+        {
+            _contentLayout.SetTabInactive();
         }
 
         private void InitializeGames(IValueSettingsProvider settingsProvider)

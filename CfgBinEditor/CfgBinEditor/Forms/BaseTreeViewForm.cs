@@ -46,16 +46,6 @@ namespace CfgBinEditor.Forms
             ResetNodesChangeState(_filteredTreeView.Nodes);
         }
 
-        public override Size GetSize()
-        {
-            return Size.Parent;
-        }
-
-        protected override void UpdateInternal(Rectangle contentRect)
-        {
-            _mainLayout.Update(contentRect);
-        }
-
         private void UpdateContextMenu()
         {
             _duplicateButton.Enabled = CanDuplicate(_fullTreeView.SelectedNode);
