@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Drawing;
 using CfgBinEditor.Components;
 using CfgBinEditor.resources;
+using ImGui.Forms;
 using ImGui.Forms.Controls.Tree;
 using Logic.Domain.Level5Management.Contract.DataClasses;
 
@@ -18,7 +18,7 @@ namespace CfgBinEditor.Forms
             }
         }
 
-        private TreeNode<object> CreateListNode(Rdbn config, RdbnListEntry entry, Color nodeColor)
+        private TreeNode<object> CreateListNode(Rdbn config, RdbnListEntry entry, ThemedColor nodeColor)
         {
             var rootNode = new TreeNode<object> { Text = entry.Name, Data = entry, IsExpanded = true, TextColor = nodeColor };
 
@@ -33,7 +33,7 @@ namespace CfgBinEditor.Forms
             return rootNode;
         }
 
-        private TreeNode<object> CreateValueNode(RdbnTypeDeclaration type, object[][] values, int index, Color nodeColor)
+        private TreeNode<object> CreateValueNode(RdbnTypeDeclaration type, object[][] values, int index, ThemedColor nodeColor)
         {
             return new TreeNode<object> { Text = GetNodeName(type, index), Data = (type, values), TextColor = nodeColor };
         }

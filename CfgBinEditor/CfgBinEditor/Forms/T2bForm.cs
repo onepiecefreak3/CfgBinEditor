@@ -72,6 +72,7 @@ namespace CfgBinEditor.Forms
                     new Label { Text = LocalizationResources.CfgBinEntryNameCaption },
                     new Label { Text = LocalizationResources.CfgBinEntryTypeCaption },
                     new Label { Text = LocalizationResources.CfgBinEntryValueCaption },
+                    new Label { Text = string.Empty },
                     new Label { Text = LocalizationResources.CfgBinEntryIsHexCaption }
                 }
             };
@@ -111,6 +112,16 @@ namespace CfgBinEditor.Forms
 
                 SetValueText(valueTextBox, entryValue, settingEntry.IsHex);
 
+                var randomButton = new ImageButton
+                {
+                    Image = ImageResources.Random,
+                    ImageSize = new Vector2(17, 17),
+                    Padding = Vector2.One,
+                    Tooltip = LocalizationResources.CfgBinEntryRandomTooltip,
+                    Enabled = entryValue.Type is not ValueType.String
+                };
+                randomButton.Clicked += RandomButton_Clicked;
+
                 var valueIsHexCheckbox = new CheckBox { Checked = settingEntry.IsHex, Enabled = currentGame != NoGame_ };
                 valueIsHexCheckbox.CheckChanged += ValueIsHexCheckbox_CheckChanged;
 
@@ -121,6 +132,7 @@ namespace CfgBinEditor.Forms
                         new TableCell(valueNameTextBox) { Size = new Size(SizeValue.Absolute(200), SizeValue.Content) },
                         typeComboBox,
                         valueTextBox,
+                        randomButton,
                         new TableCell(valueIsHexCheckbox){HorizontalAlignment = HorizontalAlignment.Center}
                     }
                 };
@@ -173,7 +185,7 @@ namespace CfgBinEditor.Forms
                 if (valueTextBox == null)
                     continue;
 
-                var isHexCheckbox = layout.Rows[i].Cells[3].Content as CheckBox;
+                var isHexCheckbox = layout.Rows[i].Cells[4].Content as CheckBox;
                 if (isHexCheckbox == null)
                     continue;
 
@@ -300,11 +312,17 @@ namespace CfgBinEditor.Forms
             if (valueTextBox == null)
                 return;
 
+            var randomBtn = row.Cells[3].Content as ImageButton;
+            if (randomBtn == null)
+                return;
+
             var configEntry = _treeViewForm.SelectedEntry;
             var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Name, rowIndex - 1);
 
             ValueType newValueType = comboBox.SelectedItem.Content;
             object newValue = ConvertValue(configEntry.Values[rowIndex - 1].Value, configEntry.Values[rowIndex - 1].Type, newValueType);
+
+            randomBtn.Enabled = newValueType is not ValueType.String;
 
             SetEntryType(configEntry, rowIndex - 1, newValueType);
             SetEntryValue(configEntry, rowIndex - 1, newValue);
@@ -335,6 +353,78 @@ namespace CfgBinEditor.Forms
                 SetEntryValue(configEntry, rowIndex - 1, parsedValue!);
         }
 
+        private void RandomButton_Clicked(object? sender, EventArgs e)
+        {
+            var randomBtn = sender as ImageButton;
+            if (randomBtn == null)
+                return;
+
+            var layout = _configContent.Content as TableLayout;
+            if (layout == null)
+                return;
+
+            var row = layout.Rows.FirstOrDefault(r => r.Cells[3].Content == randomBtn);
+            var rowIndex = layout.Rows.IndexOf(row);
+            if (rowIndex < 0)
+                return;
+
+            var valueTextBox = row.Cells[2].Content as TextBox;
+            if (valueTextBox == null)
+                return;
+
+            var checkBox = row.Cells[4].Content as CheckBox;
+            if (checkBox == null)
+                return;
+
+            var configEntry = _treeViewForm.SelectedEntry;
+            ValueType valueType = configEntry.Values[rowIndex - 1].Type;
+            if (valueType is ValueType.String)
+                return;
+
+            var random = new Random();
+            object randomValue;
+            switch (valueType)
+            {
+                case ValueType.Integer:
+                    switch (_config.ValueLength)
+                    {
+                        case ValueLength.Int:
+                            randomValue = random.Next();
+                            break;
+
+                        case ValueLength.Long:
+                            randomValue = random.NextInt64();
+                            break;
+
+                        default:
+                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                    }
+                    break;
+
+                case ValueType.FloatingPoint:
+                    switch (_config.ValueLength)
+                    {
+                        case ValueLength.Int:
+                            randomValue = random.NextSingle();
+                            break;
+
+                        case ValueLength.Long:
+                            randomValue = random.NextDouble();
+                            break;
+
+                        default:
+                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                    }
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"Unknown value type {valueType}.");
+            }
+
+            SetEntryValue(configEntry, rowIndex - 1, randomValue);
+            SetValueText(valueTextBox, configEntry.Values[rowIndex - 1], checkBox.Checked);
+        }
+
         private void ValueIsHexCheckbox_CheckChanged(object sender, EventArgs e)
         {
             var checkBox = sender as CheckBox;
@@ -345,7 +435,7 @@ namespace CfgBinEditor.Forms
             if (layout == null)
                 return;
 
-            var row = layout.Rows.FirstOrDefault(r => r.Cells[3].Content == checkBox);
+            var row = layout.Rows.FirstOrDefault(r => r.Cells[4].Content == checkBox);
             var rowIndex = layout.Rows.IndexOf(row);
             if (rowIndex < 0)
                 return;

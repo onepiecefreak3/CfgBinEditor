@@ -62,6 +62,8 @@ namespace CfgBinEditor.resources
         public static LocalizedString CfgBinEntryDuplicateCaption => new("CfgBin.Entry.Duplicate.Caption");
         public static LocalizedString CfgBinEntryRemoveCaption => new("CfgBin.Entry.Remove.Caption");
 
+        public static LocalizedString CfgBinEntryRandomTooltip => new("CfgBin.Entry.Random.Tooltip");
+
         public static LocalizedString CfgBinTagsLoadErrorCaption(string error) =>
             new("CfgBin.Tags.Load.Error.Caption", () => error);
     }

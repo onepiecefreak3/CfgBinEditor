@@ -19,12 +19,17 @@ namespace CfgBinEditor.resources
 
         private const string ClosePath_ = "resources/images/close.png";
 
+        private const string RandomLightPath_ = "resources/images/random_light.png";
+        private const string RandomDarkPath_ = "resources/images/random_dark.png";
+
         public static Image Icon => FromFile(IconPath_);
 
-        public static ImageResource Save => ImageResource.FromFile(SavePath_);
-        public static ImageResource SaveAll => ImageResource.FromFile(SaveAllPath_);
+        public static ThemedImageResource Save => ImageResource.FromFile(SavePath_);
+        public static ThemedImageResource SaveAll => ImageResource.FromFile(SaveAllPath_);
 
-        public static ImageResource Close => ImageResource.FromFile(ClosePath_);
+        public static ThemedImageResource Close => ImageResource.FromFile(ClosePath_);
+
+        public static ThemedImageResource Random => new(ImageResource.FromFile(RandomLightPath_), ImageResource.FromFile(RandomDarkPath_));
 
         private static Image FromFile(string filePath)
         {

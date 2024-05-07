@@ -1,9 +1,9 @@
-﻿using ImGui.Forms.Controls.Tree;
+﻿using ImGui.Forms;
+using ImGui.Forms.Controls.Tree;
 using Logic.Business.CfgBinValueSettingsManagement.Contract.DataClasses;
 using Logic.Domain.Level5Management.Contract.DataClasses;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using ValueType = Logic.Domain.Level5Management.Contract.DataClasses.ValueType;
 
@@ -28,7 +28,7 @@ namespace CfgBinEditor.Forms
                 treeView.Nodes.Add(node);
         }
 
-        private int PopulateNode(TreeNode<T2bEntry> rootNode, T2b config, int index, string endNodeName = null, Color textColor = default)
+        private int PopulateNode(TreeNode<T2bEntry> rootNode, T2b config, int index, string endNodeName = null, ThemedColor textColor = default)
         {
             for (; index < config.Entries.Length; index++)
             {
@@ -59,7 +59,7 @@ namespace CfgBinEditor.Forms
             }
         }
 
-        private TreeNode<T2bEntry> CreateNode(T2b config, ref int index, Color textColor)
+        private TreeNode<T2bEntry> CreateNode(T2b config, ref int index, ThemedColor textColor)
         {
             T2bEntry entry = config.Entries[index];
 

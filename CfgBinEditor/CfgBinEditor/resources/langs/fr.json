@@ -63,6 +63,9 @@
   // Cfg Entry Removal
   "CfgBin.Entry.Remove.Caption": "Retirer",
 
+  // Randomize number
+  "CfgBin.Entry.Random.Tooltip": "Aléatoire",
+
   // Value Tags
   "CfgBin.Tags.Load.Error.Caption": "Une erreur est survenue en chargeant les tags: {0}"
 }
