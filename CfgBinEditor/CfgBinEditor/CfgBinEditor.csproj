@@ -52,6 +52,12 @@
     <None Update="resources\images\save_all.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="resources\images\random_light.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resources\images\random_dark.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="resources\images\save_all_1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
