@@ -4,7 +4,6 @@ using Autofac.Core.Lifetime;
 using Castle.Core.Logging;
 using CrossCutting.Core.Contract.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace CrossCutting.Core.DI.AutofacAdapter

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using CrossCutting.Core.Contract.DependencyInjection;
 using CrossCutting.Core.Contract.DependencyInjection.DataClasses;
 using Logic.Domain.Kuriimu2.KomponentAdapter.Contract;

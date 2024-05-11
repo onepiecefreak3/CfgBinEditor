@@ -1,5 +1,4 @@
-﻿using CfgBinEditor.Forms;
-using System;
+﻿using System;
 using ImGui.Forms.Controls.Base;
 
 namespace CfgBinEditor.Messages

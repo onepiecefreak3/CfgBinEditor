@@ -35,5 +35,18 @@
         "Value": "Info"
       }
     ]
+  },
+  {
+    "Name": "CfgBinEditor",
+    "Entries": [
+      {
+        "Key": "ValueSettingsPath",
+        "Value": "MyTags.txt"
+      },
+      {
+        "Key": "EntryNamesPath",
+        "Value": "MyIDs.txt"
+      }
+    ]
   }
 ]

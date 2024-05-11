@@ -6,18 +6,17 @@ using System.Numerics;
 using CfgBinEditor.InternalContract;
 using CfgBinEditor.Messages;
 using CfgBinEditor.resources;
-using CrossCutting.Core.Contract.Configuration.DataClasses;
 using CrossCutting.Core.Contract.EventBrokerage;
 using ImGui.Forms.Controls;
 using ImGui.Forms.Controls.Base;
 using ImGui.Forms.Controls.Layouts;
+using ImGui.Forms.Localization;
 using ImGui.Forms.Modals.IO;
 using ImGui.Forms.Models;
-using Logic.Business.CfgBinValueSettingsManagement.Contract;
-using Logic.Business.CfgBinValueSettingsManagement.Contract.DataClasses;
+using Logic.Business.CfgBinEditorManagement.Contract;
+using Logic.Business.CfgBinEditorManagement.Contract.DataClasses;
 using Logic.Domain.Level5Management.Contract;
 using Logic.Domain.Level5Management.Contract.DataClasses;
-using Newtonsoft.Json.Linq;
 using ValueType = Logic.Domain.Level5Management.Contract.DataClasses.ValueType;
 
 namespace CfgBinEditor.Forms
@@ -41,6 +40,8 @@ namespace CfgBinEditor.Forms
             _gameComboBox.SelectedItemChanged += (s, e) => ChangeGame(_gameComboBox.SelectedItem.Content);
             _gameAddButton.Clicked += (s, e) => AddNewGame();
 
+            _valueAddButton.Clicked += (s, e) => AddEntryValue();
+
             eventBroker.Subscribe<ValueSettingsChangedMessage>(ChangeValueSettings);
             eventBroker.Subscribe<FileSaveRequestMessage>(SaveFile);
             eventBroker.Subscribe<GameAddedMessage>(AddGame);
@@ -63,6 +64,8 @@ namespace CfgBinEditor.Forms
 
         private void ChangeEntry(T2bEntry? entry)
         {
+            _valueAddButton.Enabled = true;
+
             var layout = new TableLayout { Size = new Size(SizeValue.Parent, SizeValue.Content), Spacing = new Vector2(5, 5) };
 
             var headerRow = new TableRow
@@ -84,65 +87,95 @@ namespace CfgBinEditor.Forms
                 return;
             }
 
-            string currentGame = GetCurrentGame();
             for (var i = 0; i < entry.Values.Length; i++)
             {
-                T2bEntryValue entryValue = entry.Values[i];
-                ValueSettingEntry settingEntry = _settingsProvider.GetEntrySettings(currentGame, entry.Name, i);
-
-                var valueNameTextBox = new TextBox { Enabled = currentGame != NoGame_ };
-                valueNameTextBox.TextChanged += ValueNameTextBox_TextChanged;
-
-                SetValueNameText(valueNameTextBox, settingEntry.Name);
-
-                var typeComboBox = new ComboBox<ValueType>
-                {
-                    Items =
-                    {
-                        new ComboBoxItem<ValueType>(ValueType.String, LocalizationResources.CfgBinEntryTypeStringCaption),
-                        new ComboBoxItem<ValueType>(ValueType.Integer, LocalizationResources.CfgBinEntryTypeIntCaption),
-                        new ComboBoxItem<ValueType>(ValueType.FloatingPoint, LocalizationResources.CfgBinEntryTypeFloatCaption)
-                    }
-                };
-                typeComboBox.SelectedItem = typeComboBox.Items.FirstOrDefault(x => x.Content == entryValue.Type);
-                typeComboBox.SelectedItemChanged += TypeComboBox_SelectedItemChanged;
-
-                var valueTextBox = new TextBox();
-                valueTextBox.TextChanged += ValueTextBox_TextChanged;
-
-                SetValueText(valueTextBox, entryValue, settingEntry.IsHex);
-
-                var randomButton = new ImageButton
-                {
-                    Image = ImageResources.Random,
-                    ImageSize = new Vector2(17, 17),
-                    Padding = Vector2.One,
-                    Tooltip = LocalizationResources.CfgBinEntryRandomTooltip,
-                    Enabled = entryValue.Type is not ValueType.String
-                };
-                randomButton.Clicked += RandomButton_Clicked;
-
-                var valueIsHexCheckbox = new CheckBox { Checked = settingEntry.IsHex, Enabled = currentGame != NoGame_ };
-                valueIsHexCheckbox.CheckChanged += ValueIsHexCheckbox_CheckChanged;
-
-                var valueRow = new TableRow
-                {
-                    Cells =
-                    {
-                        new TableCell(valueNameTextBox) { Size = new Size(SizeValue.Absolute(200), SizeValue.Content) },
-                        typeComboBox,
-                        valueTextBox,
-                        randomButton,
-                        new TableCell(valueIsHexCheckbox){HorizontalAlignment = HorizontalAlignment.Center}
-                    }
-                };
+                TableRow valueRow = CreateValueRow(entry, i);
                 layout.Rows.Add(valueRow);
             }
 
             _configContent.Content = layout;
         }
 
-        private void ChangeGame(string gameName)
+        private void AddEntryValue()
+        {
+            T2bEntry? entry = _treeViewForm.SelectedEntry;
+            if (entry == null)
+                return;
+
+            // Add value entry
+            T2bEntryValue[] values = entry.Values;
+            Array.Resize(ref values, values.Length + 1);
+            entry.Values = values;
+
+            entry.Values[^1] = new T2bEntryValue
+            {
+                Type = ValueType.Integer,
+                Value = GetDefaultValue(ValueType.Integer)
+            };
+
+            // Add table row
+            TableRow newValueRow = CreateValueRow(entry, entry.Values.Length - 1);
+            ((TableLayout)_configContent.Content).Rows.Add(newValueRow);
+
+            RaiseFileChanged();
+        }
+
+        private TableRow CreateValueRow(T2bEntry entry, int index)
+        {
+            string currentGame = GetCurrentGame();
+
+            T2bEntryValue entryValue = entry.Values[index];
+            ValueSettingEntry settingEntry = _settingsProvider.GetEntrySettings(currentGame, entry.Name, index);
+
+            var valueNameTextBox = new TextBox { Enabled = currentGame != LocalizationResources.GameNoneCaption };
+            valueNameTextBox.TextChanged += ValueNameTextBox_TextChanged;
+
+            SetValueNameText(valueNameTextBox, settingEntry.Name);
+
+            var typeComboBox = new ComboBox<ValueType>
+            {
+                Items =
+                {
+                    new ComboBoxItem<ValueType>(ValueType.String, LocalizationResources.CfgBinEntryTypeStringCaption),
+                    new ComboBoxItem<ValueType>(ValueType.Integer, LocalizationResources.CfgBinEntryTypeIntCaption),
+                    new ComboBoxItem<ValueType>(ValueType.FloatingPoint, LocalizationResources.CfgBinEntryTypeFloatCaption)
+                }
+            };
+            typeComboBox.SelectedItem = typeComboBox.Items.FirstOrDefault(x => x.Content == entryValue.Type);
+            typeComboBox.SelectedItemChanged += TypeComboBox_SelectedItemChanged;
+
+            var valueTextBox = new TextBox();
+            valueTextBox.TextChanged += ValueTextBox_TextChanged;
+
+            SetValueText(valueTextBox, entryValue, settingEntry.IsHex);
+
+            var randomButton = new ImageButton
+            {
+                Image = ImageResources.Random,
+                ImageSize = new Vector2(17, 17),
+                Padding = Vector2.One,
+                Tooltip = LocalizationResources.CfgBinEntryRandomTooltip,
+                Enabled = entryValue.Type is not ValueType.String
+            };
+            randomButton.Clicked += RandomButton_Clicked;
+
+            var valueIsHexCheckbox = new CheckBox { Checked = settingEntry.IsHex, Enabled = currentGame != LocalizationResources.GameNoneCaption };
+            valueIsHexCheckbox.CheckChanged += ValueIsHexCheckbox_CheckChanged;
+
+            return new TableRow
+            {
+                Cells =
+                {
+                    new TableCell(valueNameTextBox) { Size = new Size(SizeValue.Absolute(200), SizeValue.Content) },
+                    typeComboBox,
+                    valueTextBox,
+                    randomButton,
+                    new TableCell(valueIsHexCheckbox){HorizontalAlignment = HorizontalAlignment.Center}
+                }
+            };
+        }
+
+        private void ChangeGame(LocalizedString gameName)
         {
             if (_treeViewForm.SelectedEntry != null)
                 ChangeValueSettings(gameName, _treeViewForm.SelectedEntry.Name);
@@ -164,7 +197,7 @@ namespace CfgBinEditor.Forms
             ChangeValueSettings(message.GameName, message.EntryName);
         }
 
-        private void ChangeValueSettings(string gameName, string entryName)
+        private void ChangeValueSettings(LocalizedString gameName, string entryName)
         {
             var layout = _configContent.Content as TableLayout;
             if (layout == null)
@@ -178,7 +211,7 @@ namespace CfgBinEditor.Forms
                 if (nameTextBox == null)
                     continue;
 
-                nameTextBox.Enabled = gameName != NoGame_;
+                nameTextBox.Enabled = gameName != LocalizationResources.GameNoneCaption;
                 SetValueNameText(nameTextBox, entrySettings.Name);
 
                 var valueTextBox = layout.Rows[i].Cells[2].Content as TextBox;
@@ -189,7 +222,7 @@ namespace CfgBinEditor.Forms
                 if (isHexCheckbox == null)
                     continue;
 
-                isHexCheckbox.Enabled = gameName != NoGame_;
+                isHexCheckbox.Enabled = gameName != LocalizationResources.GameNoneCaption;
                 SetValueIsHex(isHexCheckbox, entrySettings.IsHex);
                 SetValueText(valueTextBox, _treeViewForm.SelectedEntry.Values[i - 1], entrySettings.IsHex);
             }
@@ -210,7 +243,7 @@ namespace CfgBinEditor.Forms
 
         private void AddGame(GameAddedMessage msg)
         {
-            _gameComboBox.Items.Add(msg.Game);
+            _gameComboBox.Items.Add(new ComboBoxItem<LocalizedString>(msg.Game));
 
             if (msg.Sender != this)
                 return;
@@ -502,7 +535,7 @@ namespace CfgBinEditor.Forms
                     return true;
 
                 case ValueType.Integer:
-                    NumberStyles styles = isHex ? NumberStyles.HexNumber : NumberStyles.None;
+                    NumberStyles styles = isHex ? NumberStyles.HexNumber : NumberStyles.AllowLeadingSign;
                     text = isHex ? text.StartsWith("0x") ? text[2..] : text : text;
 
                     switch (_config.ValueLength)
@@ -748,12 +781,12 @@ namespace CfgBinEditor.Forms
             }
         }
 
-        private string GetCurrentGame()
+        private LocalizedString GetCurrentGame()
         {
             return _gameComboBox.SelectedItem.Content;
         }
 
-        private void RaiseValueSettingsChanged(string gameName, string entryName)
+        private void RaiseValueSettingsChanged(LocalizedString gameName, string entryName)
         {
             _eventBroker.Raise(new ValueSettingsChangedMessage(this, gameName, entryName));
         }

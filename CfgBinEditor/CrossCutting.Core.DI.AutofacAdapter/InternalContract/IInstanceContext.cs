@@ -4,7 +4,6 @@ using Autofac.Core;
 using CrossCutting.Core.Contract.DependencyInjection.DataClasses;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace CrossCutting.Core.DI.AutofacAdapter.InternalContract
 {

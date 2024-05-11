@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+	<RootNamespace>Logic.Business.CfgBinEditorManagement</RootNamespace>
+	<AssemblyName>Logic.Business.CfgBinEditorManagement</AssemblyName>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Logic.Business.CfgBinEditorManagement.Contract\Logic.Business.CfgBinEditorManagement.Contract.csproj" />
+    <ProjectReference Include="..\Logic.Domain.CodeAnalysis.Contract\Logic.Domain.CodeAnalysis.Contract.csproj" />
+  </ItemGroup>
+
+</Project>

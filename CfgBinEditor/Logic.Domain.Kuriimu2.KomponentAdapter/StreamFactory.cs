@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Komponent.IO.Streams;
+﻿using Komponent.IO.Streams;
 using Logic.Domain.Kuriimu2.KomponentAdapter.Contract;
 
 namespace Logic.Domain.Kuriimu2.KomponentAdapter

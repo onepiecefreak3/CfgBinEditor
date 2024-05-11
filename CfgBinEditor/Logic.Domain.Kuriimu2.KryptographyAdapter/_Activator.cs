@@ -2,13 +2,6 @@
 using CrossCutting.Core.Contract.Configuration;
 using CrossCutting.Core.Contract.DependencyInjection;
 using CrossCutting.Core.Contract.EventBrokerage;
-using CrossCutting.Core.Contract.Messages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Kryptography.Hash.Crc;
 using Logic.Domain.Kuriimu2.KryptographyAdapter.Contract;
 using Logic.Domain.Kuriimu2.KryptographyAdapter.Checksum.InternalContract;
 using Logic.Domain.Kuriimu2.KryptographyAdapter.Checksum;

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using CfgBinEditor.Forms;
+﻿using CfgBinEditor.Forms;
 using CfgBinEditor.InternalContract;
 using CrossCutting.Core.Contract.DependencyInjection;
 using CrossCutting.Core.Contract.DependencyInjection.DataClasses;
@@ -38,11 +32,10 @@ namespace CfgBinEditor
                 new ConstructorParameter("config", config));
         }
 
-        public T2bTreeViewForm CreateT2bTreeViewForm(T2b config, string gameName)
+        public T2bTreeViewForm CreateT2bTreeViewForm(T2b config)
         {
             return _kernel.Get<T2bTreeViewForm>(
-                new ConstructorParameter("config", config),
-                new ConstructorParameter("gameName", gameName));
+                new ConstructorParameter("config", config));
         }
 
         public RdbnTreeViewForm CreateRdbnTreeViewForm(Rdbn config)

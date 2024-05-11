@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CrossCutting.Core.Contract.Aspects;
+﻿using CrossCutting.Core.Contract.Aspects;
 using Logic.Domain.Kuriimu2.KomponentAdapter.Contract;
 using Logic.Domain.Kuriimu2.KomponentAdapter.InternalContract.Exceptions;
 

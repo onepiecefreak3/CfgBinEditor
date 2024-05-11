@@ -1,11 +1,14 @@
 ﻿using ImGui.Forms;
 using ImGui.Forms.Controls.Tree;
-using Logic.Business.CfgBinValueSettingsManagement.Contract.DataClasses;
+using Logic.Business.CfgBinEditorManagement.Contract.DataClasses;
 using Logic.Domain.Level5Management.Contract.DataClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CfgBinEditor.InternalContract.DataClasses;
+using ImGui.Forms.Localization;
 using ValueType = Logic.Domain.Level5Management.Contract.DataClasses.ValueType;
+using CfgBinEditor.resources;
 
 namespace CfgBinEditor.Forms
 {
@@ -16,7 +19,12 @@ namespace CfgBinEditor.Forms
 
         #region Tree population
 
-        protected override void PopulateFullTreeView(T2b config, TreeView<T2bEntry> treeView)
+        protected override LocalizedString GetRootButtonCaption()
+        {
+            return LocalizationResources.CfgBinEntryAddRootCaption;
+        }
+
+        protected override void PopulateFullTreeViewInternal(T2b config, TreeView<T2bEntry> treeView)
         {
             var root = new TreeNode<T2bEntry>();
 
@@ -26,6 +34,8 @@ namespace CfgBinEditor.Forms
             treeView.Nodes.Clear();
             foreach (TreeNode<T2bEntry> node in root.Nodes)
                 treeView.Nodes.Add(node);
+
+            AdjustNodeNames(root.Nodes);
         }
 
         private int PopulateNode(TreeNode<T2bEntry> rootNode, T2b config, int index, string endNodeName = null, ThemedColor textColor = default)
@@ -41,21 +51,25 @@ namespace CfgBinEditor.Forms
                 rootNode.Nodes.Add(node);
             }
 
-            AdjustNodeNames(rootNode.Nodes);
-
             return index;
         }
 
         private void AdjustNodeNames(IList<TreeNode<T2bEntry>> nodes)
         {
-            foreach (IGrouping<string, TreeNode<T2bEntry>> group in nodes.GroupBy(x => x.Data.Name, x => x))
+            foreach (IGrouping<string, TreeNode<T2bEntry>> group in nodes.GroupBy(x => GetNodeName(x.Data), x => x))
             {
                 TreeNode<T2bEntry>[] sameNameNodes = group.ToArray();
-                if (sameNameNodes.Length <= 1)
+                if (sameNameNodes.Length <= 0)
                     continue;
 
                 for (var i = 0; i < sameNameNodes.Length; i++)
-                    sameNameNodes[i].Text = GetNodeName(sameNameNodes[i].Data) + $"_{i}";
+                {
+                    sameNameNodes[i].Text = group.Key;
+                    if (sameNameNodes.Length > 1)
+                        sameNameNodes[i].Text += $"_{i}";
+
+                    AdjustNodeNames(sameNameNodes[i].Nodes);
+                }
             }
         }
 
@@ -81,9 +95,25 @@ namespace CfgBinEditor.Forms
         {
             int beginIndex = GetBeginIndex(entry.Name);
             if (beginIndex < 0)
+            {
+                if (_gameName == LocalizationResources.GameNoneCaption)
+                    return entry.Name;
+
+                if (entry.Values.Length <= 0 || entry.Values[0].Type != ValueType.Integer)
+                    return entry.Name;
+
+                if (_namesProvider.TryGetName(_gameName, entry, _config.ValueLength, out string? name))
+                    return name!;
+
                 return entry.Name;
+            }
 
             return beginIndex == 0 ? entry.Name : entry.Name[..beginIndex];
+        }
+
+        private bool IsNestedNode(string name)
+        {
+            return GetBeginIndex(name) >= 0;
         }
 
         private int GetBeginIndex(string name)
@@ -116,8 +146,29 @@ namespace CfgBinEditor.Forms
 
             for (var i = 0; i < entry.Values.Length; i++)
             {
-                ValueSettingEntry settingEntry = _settingsProvider.GetEntrySettings(GameName, entry.Name, i);
-                string valueString = GetValueString(entry.Values[i].Value, entry.Values[i].Type, settingEntry.IsHex);
+                bool isHex;
+
+                SearchComparisonType comparisonType = GetComparisonType();
+                switch (comparisonType)
+                {
+                    case SearchComparisonType.Hex:
+                        isHex = true;
+                        break;
+
+                    case SearchComparisonType.Dec:
+                        isHex = false;
+                        break;
+
+                    case SearchComparisonType.Tags:
+                        ValueSettingEntry settingEntry = _valueSettingsProvider.GetEntrySettings(GameName, entry.Name, i);
+                        isHex = settingEntry.IsHex;
+                        break;
+
+                    default:
+                        throw new InvalidOperationException($"Unknown value comparison type {comparisonType}.");
+                }
+
+                string valueString = GetValueString(entry.Values[i].Value, entry.Values[i].Type, isHex);
 
                 if (valueString.Contains(searchText))
                     return true;

@@ -18,7 +18,7 @@ using CrossCutting.Core.Logging.NLogAdapter;
 using CrossCutting.Core.Scheduling.QuartzAdapter;
 using CrossCutting.Core.Serialization.JsonAdapter;
 using CrossCutting.Core.Settings;
-using Logic.Business.CfgBinValueSettingsManagement;
+using Logic.Business.CfgBinEditorManagement;
 using Logic.Domain.CodeAnalysis;
 using Logic.Domain.Kuriimu2.KomponentAdapter;
 using Logic.Domain.Kuriimu2.KryptographyAdapter;
@@ -66,7 +66,7 @@ namespace Mappings.CfgBinEditor
             kernel.RegisterComponent<Kuriimu2KomponentActivator>();
             kernel.RegisterComponent<Kuriimu2KryptographyActivator>();
             kernel.RegisterComponent<CodeAnalysisActivator>();
-            kernel.RegisterComponent<CfgBinValueSettingsManagementActivator>();
+            kernel.RegisterComponent<CfgBinEditorManagementActivator>();
         }
     }
 }

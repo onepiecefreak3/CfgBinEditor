@@ -3,13 +3,19 @@ using CfgBinEditor.Components;
 using CfgBinEditor.resources;
 using ImGui.Forms;
 using ImGui.Forms.Controls.Tree;
+using ImGui.Forms.Localization;
 using Logic.Domain.Level5Management.Contract.DataClasses;
 
 namespace CfgBinEditor.Forms
 {
     public partial class RdbnTreeViewForm
     {
-        protected override void PopulateFullTreeView(Rdbn config, TreeView<object> treeView)
+        protected override LocalizedString GetRootButtonCaption()
+        {
+            return LocalizationResources.RdbnListAddCaption;
+        }
+
+        protected override void PopulateFullTreeViewInternal(Rdbn config, TreeView<object> treeView)
         {
             foreach (RdbnListEntry root in config.Lists)
             {

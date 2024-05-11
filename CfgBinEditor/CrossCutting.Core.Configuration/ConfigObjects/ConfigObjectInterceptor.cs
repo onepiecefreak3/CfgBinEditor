@@ -3,7 +3,6 @@ using CrossCutting.Core.Contract.Configuration;
 using CrossCutting.Core.Contract.Configuration.DataClasses;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace CrossCutting.Core.Configuration.ConfigObjects

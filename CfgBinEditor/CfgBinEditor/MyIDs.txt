@@ -1,0 +1,604 @@
+YKW2  [
+	YokaiParam (
+		0x54A489A6|Whisper
+		0x5AB7D81E|Whispocrates
+		0x1FF85A03|Pandle
+		0x1B7526B1|Pandull
+		0xD4DF5ED|Undy
+		0x1456C4AC|Tanbo
+		0xB5F19288|D'wanna
+		0x2826AA31|N'more
+		0x313D9B70|Q'wit
+		0x909ACD54|Mochismo
+		0x8981FC15|Minochi
+		0x9417B1E6|Mochisless
+		0x822F62BA|Cutta-nah
+		0x3A9305DF|Cutta-nah-nah
+		0x2388349E|Slacka-slash
+		0x62F01589|Chansin
+		0x667D693B|Chaninverse
+		0x5A4C72EC|Sheen
+		0x435743AD|Gleam
+		0x5EC10E5E|Shin
+		0x9A2414D6|Snee
+		0x229873B3|Helmsman
+		0x302DDC5D|Reuknight
+		0x2936ED1C|Corptain
+		0x34A0A0EF|Fi-knight
+		0x8891BB38|Blazion
+		0x918A8A79|Quaken
+		0xBAA7D9BA|Siro
+		0x8C1CC78A|Blazioff
+		0x15468381|Beetler
+		0x683177C4|Beetler
+		0x11CBFF33|Cheatler
+		0xADFAE4E4|Beetall
+		0xB4E1D5A5|Cruncha
+		0x508D10A1|Beetall
+		0xBF4F4B0A|Benkei
+		0xA6547A4B|B3-NK1
+		0x7F32C6F|Zerberker
+		0x1EE81D2E|Snartle
+		0x37E50DD|Zeroberker
+		0x5F903C39|Snotsolong
+		0x468B0D78|Duchoo
+		0x272C5B5C|Espy
+		0x2376A1D|Infour
+		0x23A127EE|Falspy
+		0x5D846E06|Wazzat
+		0x449F5F47|Dummkap
+		0x590912B4|Recap
+		0x65380963|Lafalotta
+		0x7C233822|Blips
+		0x778DA68D|Sushiyama
+		0x6E9697CC|Kapunki
+		0x7300DA3F|Sushinoma
+		0x4F31C1E8|Cupistol
+		0x4BBCBD5A|Impistol
+		0x52E6F951|Casanuva
+		0x4BFDC810|Casanono
+		0x2A5A9E34|Tattletell
+		0x1341AF75|Skranny
+		0x2ED7E286|Tattletwin
+		0x8EF31DA|Tattlecast
+		0x405356BF|Baku
+		0x594867FE|Whapir
+		0x3D24A2FA|Whapir
+		0x183046E9|Signibble
+		0xA08C218C|Signiton
+		0xB99710CD|Statiking
+		0x20E447B6|Mirapo
+		0x9FF76F7|Mircle
+		0x585820D3|Illoo
+		0x41431192|Elloo
+		0x6A6E4251|Alloo
+		0x5CD55C61|Illow
+		0x4AED8F3D|Frostina
+		0x4E60F38F|Falsina
+		0x1251E858|Blizzaria
+		0x2B4AD919|Damona
+		0x6F86D0E1|Kyubi
+		0x769DE1A0|Frostail
+		0x5DB0B263|Darkyubi
+		0x573AB784|Dulluma
+		0x458F186A|Darumacho
+		0x5C94292B|Goruma
+		0x7D337F0F|Coughkoff
+		0x64284E4E|Hurchin
+		0x25506F59|Dazzabel
+		0x21DD13EB|Dullabel
+		0x9DEC083C|Rattelle
+		0x84F7397D|Skelebella
+		0x52C49BA6|Noway
+		0x2FB36FE3|Noway
+		0x2A78FCC3|Impass
+		0x1363CD82|Walldin
+		0x970F0886|Impass
+		0x8CD532D|Blowkade
+		0x21D6626C|Ledballoon
+		0x40713448|Armsman
+		0x5DA60CF1|Mad Mountain
+		0x44BD3DB0|Lava Lord
+		0x651A6B94|Rhinoggin
+		0x186D9FD1|Rhinoggin
+		0x61971726|Rhinopposite
+		0x77AFC47A|Rhinormous
+		0x6EB4F53B|Hornaplenty
+		0xAD8303F|Rhinormous
+		0x4F13A31F|Castelius I
+		0x5608925E|Castelius III
+		0x525C19D|Castelius II
+		0x243EF0DC|Castelius Max
+		0x4B9EDFAD|Castelilose
+		0x9770B349|Dromp
+		0x8E6B8208|Swosh
+		0x2FCCD42C|Cadin
+		0x2B41A89E|Cadout
+		0x6FA4B216|Cadable
+		0x76BF8357|Singcada
+		0x5718D573|Buhu
+		0x4E03E432|Flumpy
+		0x252EB7F1|Skreek
+		0x5395A9C1|Buher
+		0x45AD7A9D|Jibanyan
+		0x4120062F|Doppelnyan
+		0x4A7C4112|Jibanyan S
+		0x7D111DF8|Thornyan
+		0x20C62541|Baddinyan
+		0x587A4224|Robonyan
+		0x41617365|Goldenyan
+		0x4ACFEDCA|Dianyan
+		0x53D4DC8B|Sapphinyan
+		0x78F98F48|Emenyan
+		0x61E2BE09|Rubinyan
+		0x2EA328CE|Topanyan
+		0x12738AAF|Walkappa
+		0x8F047EEA|Walkappa
+		0x16FEF61D|Watkappa
+		0xAA109AF9|Appak
+		0xB30BABB8|Supyo
+		0x57676EBC|Appak
+		0xAE9DE64B|Pakka
+		0x12ACFD9C|Komasan
+		0xBB7CCDD|Komajiro
+		0x6FDB09D9|Komajiro
+		0x1621812E|Komasham
+		0x1D7DC613|Komasan S
+		0x466F752|Komajiro S
+		0x2804C8C6|Komane
+		0x1A32AA44|Komiger
+		0x55733C83|Komiger
+		0x2C89B474|Koshame
+		0x90B8AFA3|Daiz
+		0x89A39EE2|Confuze
+		0x9435D311|Daizn't
+		0x820D004D|Pupsicle
+		0x17AF408|Pupsicle
+		0x3AB16728|Chilhuahua
+		0x23AA5669|Swelterrier
+		0x47C6936D|Chilhuahua
+		0x3E3C1B9A|Fussky
+		0xA7665F91|Fidgephant
+		0xBE7D6ED0|Touphant
+		0x1FDA38F4|Rollen
+		0x6C109B5|Dubbles
+		0xD6F971A|Tengu
+		0x1474A65B|Flengu
+		0x9E2EBA8|Zerogu
+		0xB5D3F07F|Hungramps
+		0x48A4043A|Hungramps
+		0xACC8C13E|Grainpa
+		0xB15E8CCD|Fullgramps
+		0x2DB0E029|Hungorge
+		0x90C7146C|Hungorge
+		0x550C874C|Manjimutt
+		0x5181FBFE|Manjimitate
+		0x1564E176|Multimutt
+		0xC7FD037|Sir Berus
+		0xADD88613|Heheheel
+		0xB4C3B752|Croonger
+		0x9FEEE491|Urnaconda
+		0xA955FAA1|Conger
+		0xBF6D29FD|Enerfly
+		0xA67618BC|Enefly
+		0xBBE0554F|Enofly
+		0x7D14E98|Betterfly
+		0x1ECA7FD9|Peppillon
+		0x9A067621|Wiglin
+		0x831D4760|Steppa
+		0xA83014A3|Rhyth
+		0x9E8B0A93|Trippa
+		0x22BA1144|Shmoopie
+		0x26376DF6|Whoopie
+		0x300FBEAA|Pinkipoo
+		0x29148FEB|Pookivil
+		0x88B3D9CF|Happierre
+		0x50D0C999|Reversa
+		0x49CBF8D8|Reversette
+		0x686CAEFC|Ol' Saint Trick
+		0x71779FBD|Ol' Fortune
+		0x6CE1D24E|Ol' Slap Stick
+		0x973476A7|Mama Aura
+		0x8E2F47E6|Auntie Heart
+		0x2F8811C2|Papa Bolt
+		0x36932083|Uncle Infinite
+		0x2B056D70|Papa Dolt
+		0x3D3DBE2C|Ake
+		0x8581D949|Payn
+		0x9C9AE808|Agon
+		0x1856E1F0|Negatibuzz
+		0x1CDB9D42|Negatibuzz-kill
+		0xA0EA8695|Moskevil
+		0xB9F1B7D4|Scritchy
+		0xB25F297B|Leadoni
+		0xAB44183A|Mynimo
+		0xAE34E1E|Peckpocket
+		0x13F87F5F|Rockabelly
+		0x7794BA5B|Rockabelly
+		0x52805E48|Chatalie
+		0x4B9B6F09|Nagatha
+		0x2FF7AA0D|Nagatha
+		0x2A3C392D|Roughraff
+		0x2EB1459F|Roughraffony
+		0xAA545F17|Badude
+		0x98623D95|Bruff
+		0x12E83872|Negasus
+		0xBF30933|Neighfarious
+		0x166544C0|Bogusus
+		0x5D979C|Grumples
+		0x4D0EB2E|Grimples
+		0xB8E1F0F9|Everfore
+		0xA1FAC1B8|Eterna
+		0xBC6C8C4B|Neverfore
+		0x2536C840|Cheeksqueek
+		0x3C2DF901|Cuttincheez
+		0x9D8AAF25|Compunzer
+		0x84919E64|Lamedian
+		0x9907D397|Blamedian
+		0x8F3F00CB|Insomni
+		0x9624318A|Sandi
+		0x8BB27C79|Apni
+		0x378367AE|Dimmy
+		0x4AF493EB|Dimmy
+		0x6FE077F8|Blandon
+		0x76FB46B9|Nul
+		0x129783BD|Blandon
+		0x575C109D|Droplette
+		0x4E4721DC|Slush
+		0x256A721F|Gush
+		0x21D04FC8|Drizzle
+		0x38CB7E89|Alhail
+		0x996C28AD|Dismarelda
+		0x8BD98743|Wantston
+		0x92C2B602|Grubsnitch
+		0x3365E026|Hidabat
+		0xAEB2D89F|Abodabat
+		0xB7A9E9DE|Belfree
+		0x160EBFFA|Lodo
+		0xF158EBB|Chippa
+		0x1283C348|Lodon't
+		0x4BB1014|Tengloom
+		0x1DA02155|Nird
+		0x366CA6|Fouwl
+		0xBC077771|Suspicioni
+		0xA51C4630|Tantroni
+		0x8E3115F3|Contrarioni
+		0x41708334|Suspicioni
+		0x24646727|Timidevil
+		0x20E91B95|Mimicevil
+		0x5CD80042|Beelzebold
+		0x45C33103|Count Cavity
+		0x1CB06678|Greesel
+		0x5AB5739|Awevil
+		0x183D1ACA|Geezel
+		0xA40C011D|Noko
+		0xBD17305C|Pandanoko
+		0xA0817DAF|Nogo
+		0xB6B9AEF3|Bloominoko
+		0xE05C996|Draggie
+		0xA88B524|Shaggie
+		0x93D2F12F|Dragon Lord
+		0x8AC9C06E|Azure Dragon
+		0x2B6E964A|Fishpicable
+		0x39DB39A4|Rageon
+		0x20C008E5|Tunatic
+		0x81675EC1|Chummer
+		0x987C6F80|Shrook
+		0x85EA2273|Mummer
+		0x59044E97|Spenp
+		0x401F7FD6|Almi
+		0x5D893225|Sdend
+		0x61B829F2|Babblong
+		0x78A318B3|Bananose
+		0x5B101CA8|Copperled
+		0x420B2DE9|Slitheref
+		0x5F9D601A|Copyled
+		0x69267E2A|Cynake
+		0x23AC7BCD|Venoct
+		0xAB74A8C|Shad. Venoct
+		0x519A194F|Illuminoct
+		0x1119D423|Shogunyan
+		0x49A5B346|Komashura
+		0x54728BFF|Dandoodle
+		0x6CCEEC9A|Elder Bloom
+		0x7E7B4374|Gilgaros
+		0x5ECC527D|Lie-in
+		0x4C79FD93|Brushido
+		0x74C59AF6|Hissfit
+		0x2912A24F|Slicenrice
+		0x9465560A|Slicenrice
+		0x51AEC52A|Tublappa
+		0x5523B998|Sublappa
+		0x431B6AC4|Hovernyan
+		0xBA70DA1|Mudmunch
+		0x12A7113|Sud Munch
+		0xA3C41DF7|Sgt. Burly
+		0x1B787A92|Washogun
+		0x5450E908|Lie-in Heart
+		0x6CEC8E6D|Flamurice
+		0x119B7A28|Flamurice
+		0x7E592183|Demuncher
+		0x674210C2|Devourer
+		0x46E546E6|Brokenbrella
+		0x5B327E5F|Smogling
+		0x5FBF02ED|Wutring
+		0x238E193A|So-Sorree
+		0x113BB6D4|Mimikin
+		0x4987D1B1|Failian
+		0x11E4C1E7|Houzzat
+		0xA958A682|Smogmella
+		0xADD5DA30|Nagmella
+		0x2930C0B8|Master Oden
+		0x518CA7DD|Bowminos
+		0x43390833|Miradox
+		0xB856F56|Chymera
+		0x229E5E17|Kingmera
+		0x665257EF|Terrorpotta
+		0x5EEE308A|Wotchagot
+		0x4C5B9F64|Swelton
+		0x74E7F801|Zappary
+		0x2C84E857|No-Go Kart
+		0x94388F32|Gimme
+		0xAE90BA68|Pride Shrimp
+		0x162CDD0D|Mistank
+		0x49972E3|Eyesoar
+		0x1D8243A2|Eyellure
+		0x140E51|Blabeye
+		0xBC251586|Carniboy
+		0x21F22D3F|Frazzel
+		0x994E4A5A|Enduriphant
+		0x8BFBE5B4|Toadal Dude
+		0x92E0D4F5|Uber Geeko
+		0x334782D1|Faysoff
+		0x37CAFE63|Faykoff
+		0x6B249287|Boyclops
+		0x6FA9EE35|Eyeclops
+		0x5398F5E2|Leggly
+		0x93F093D8|Nekidspeed
+		0x2B4CF4BD|Drizzelda
+		0x39F95B53|Jumbelina
+		0x81453C36|Bakulia
+		0x1C92048F|Faux Kappa
+		0x58935CE|Tigappa
+		0x181F783D|Kappeasy
+		0xA42E63EA|Master Nyada
+		0xB69BCC04|Tongus
+		0xE27AB61|Pallysol
+		0xAAAD7D3|Follysol
+		0x5644BB37|Sandmeh
+		0x2B334F72|Sandmeh
+		0x2EF8DC52|Don Chan
+		0x11A00409|Predictabull
+		0x152D78BB|Unbelievabull
+		0xA91C636C|Gnomey
+		0xAD911FDE|No Me
+		0xBBA9CC82|Ray O'Light
+		0x315ABE7|Kelpacabana
+		0x9EC2935E|Nurse Tongus
+		0x267EF43B|Mr. Sandmeh
+		0x5B09007E|Mr. Sandmeh
+		0x34CB5BD5|Scarasol
+		0x8C773CB0|High Gnomey
+		0x54142CE6|Supoor Hero
+		0x6CA84B83|Smashibull
+		0x2CC02DB9|Kyryn
+		0x35DB1CF8|Unikirin
+		0x947C4ADC|Pittapatt
+		0x90F1366E|Floppaflip
+		0x86C9E532|Wydeawake
+		0x3E758257|Yoink
+		0xA3A2BAEE|Herbiboy
+		0x1B1EDD8B|K'mon-K'mon
+		0x9AB7265|Yoodooit
+		0xB1171500|Count Zapaway
+		0x29740556|Slimamander
+		0x51C86233|Snobetty
+		0x2A8C9C6D|Dracunyan
+		0x5230FB08|Allnyta
+		0x408554E6|Wobblewok
+		0x8393383|Furgus
+		0x4B44F31|Fake-gus
+		0x65EE0B3A|Nosirs
+		0x5D526C5F|Papa Windbag
+		0x4FE7C3B1|Toiletta
+		0x775BA4D4|Ben Tover
+		0x2F38B482|Robbinyu
+		0x9784D3E7|Sproink
+		0x57ECB5DD|Rawry
+		0x6F50D2B8|Furdinand
+		0x6BDDAE0A|Fake-inand
+		0x7DE57D56|Foiletta
+		0x45591A33|Arachnus
+		0x5C422B72|Arachnia
+		0x588E228A|Harry Barry
+		0x203245EF|Cricky
+		0x1287EA01|Snaggly
+		0x4A3B8D64|Squeeky
+		0x12589D32|Flushback
+		0xAAE4FA57|SV Snaggerjag
+		0x904CCF0D|Irewig
+		0x28F0A868|Mermaidyn
+		0x2C7DD4DA|Malmaiden
+		0x3A450786|Lady Longnek
+		0x3EC87B34|Strongnek
+		0x82F960E3|Draaagin
+		0x1F2E585A|Firewig
+		0xA7923F3F|Vacuumory
+		0xB52790D1|Whinona
+		0xD9BF7B4|Mermadonna
+		0x1480C6F5|Mermother
+		0x55F8E7E2|Meganyan
+		0x2D448087|Spoilerina
+		0xAD2CE6BD|Poofessor
+		0x159081D8|Slurpent
+		0x7252E36|Flicker
+		0xBF994953|Loiter
+		0x224E71EA|Schemer
+		0x9AF2168F|Unfairy
+		0x8847B961|Unkaind
+		0x30FBDE04|Untidy
+		0x6898CE52|Unpleasant
+		0x5024A937|Unkeen
+		0x1F0C3AAD|Tyrat
+		0xA7B05DC8|Apelican
+		0xB505F226|Darknyan
+		0xDB99543|Buchinyan
+		0x906EADFA|Verygoodsir
+		0x28D2CA9F|Robonyan F
+		0x3A676571|Sailornyan
+		0x82DB0214|Machonyan
+		0x5AB81242|Jibakoma
+		0x62047527|Jetnyan
+		0x226C131D|Wondernyan
+		0x8865DB96|Directator
+		0x30D9BCF3|Snottle
+		0xAD0E844A|Moximous N
+		0x15B2E32F|Moximous K
+		0x7074CC1|Jibanyan
+		0xBFBB2BA4|Strangineer
+		0x65CC69CD|Gargaros
+		0x5D700EA8|Ogralus
+		0x4FC5A146|Orcanos
+		0x49A1B91E|Grumpus Khan
+		0x5B1416F0|Groupus Khan
+		0x63A87195|Slumberhog
+		0x27F492C|Snortlehog
+		0x46C32E49|Panja Pupil
+		0x547681A7|Panja Pro
+		0x2CCAE6C2|Samureel
+		0xB4A9F694|Time Keeler
+		0xC1591F1|Takoyakid
+		0x4C7DF7CB|Takoyaking
+		0x14C190AE|Danke Sand
+		0x26743F40|No Sandkyu
+		0x5EC85825|Sumodon
+		0x431F609C|Yokozudon
+		0x7BA307F9|Whateverest
+		0x6916A817|Whatuption
+		0x51AACF72|Happycane
+		0x89C9DF24|Starrycane
+		0x3175B841|Robokapp
+		0xBDD8D1B|Robokoma
+		0xB361EA7E|Robogramps
+		0xA1D44590|Robomutt
+		0x196822F5|Robonoko
+		0x84BF1A4C|Robodraggie
+		0x3C037D29|Melonyan
+		0x25184C68|Oranyan
+		0xE351FAB|Kiwinyan
+		0x172E2EEA|Grapenyan
+		0x586FB82D|Strawbnyan
+		0x4174896C|Watermelnyan
+		0x576507C1|Grublappa
+		0x56CCF4A|Madmunch
+		0xAF936469|Badsmella
+		0x1A59C664|Mad Kappa
+		0x8EC698A|Shamasol
+		0xAFD7A187|Gnomine
+		0x176BC6E2|Defectabull
+		0x2F2F168|Feargus
+		0x2E3B6A83|Scaremaiden
+		0x3C8EC56D|Wrongnek
+		0x72D38212|Gargaros
+		0x60662DFC|Ogralus
+		0x58DA4A99|Orcanos
+		0x41C17BD8|Orcanos
+		0xB98F51B7|Slimamander
+		0xAB3AFE59|Slimamander
+		0x1386993C|Slimamander
+		0x8E51A185|Slimamander
+		0xA09460F6|Eyedra
+		0xB221CF18|Eyedra
+		0xA9DA87D|Eyedra
+		0x974A90C4|Eyedra
+		0x84EF7807|Sproink
+		0x9DF44946|Hoggles
+		0x434F02D7|SV Snaggerjag
+		0x51FAAD39|Tantrump
+		0x6946CA5C|Grumpus
+		0x1491F2E5|Meditatum
+		0x4C2D9580|Shuter
+		0x5A543396|Styx Mk.VI
+		0x48E19C78|Crattoo
+		0x705DFB1D|Scarp
+		0x2D8AC3A4|Gemble
+		0x5536A4C1|Zeybrow
+		0x22F2B67|Massiface
+		0x27341A26|Clipso
+		0x4C0FF777|Phantasmurai
+		0x5EBA5899|Unnamed
+		0x5514C636|Spooklunk
+		0x47A169D8|Unnamed
+		0x716FDEC7|Tarantutor
+		0x36CFA417|Dr. Maddiman
+		0x2FD49556|Dr. Nogut
+		0x247A0BF9|Unnamed
+		0x3D613AB8|Unnamed
+		0xBAF8DA7|McKraken
+		0x191A2249|Unnamed
+		0xA1A6452C|Unnamed
+		0x3C717D95|Unnamed
+		0x84CD1AF0|Unnamed
+		0x9678B51E|Unnamed
+		0x89FF1A76|McKraken
+		0x90E42B37|Squisker
+		0xB49F33C6|Wobblewok
+		0x3F1B2319|Duwheel
+		0x27B0AA9|Chirpster
+		0x10CEA547|Big Box
+		0xA872C222|Li'l Box
+		0x1447F0BC|Gutsy Bones
+		0x2D5CC1FD|Goldy Bones
+		0x4671923E|Glitzy Bones
+		0x26F25F52|Crow
+		0x296E13|Crow
+		0x5E4E3837|Crow
+		0x47550976|Crow
+		0x4399008E|Unnamed
+		0x5A8231CF|Unnamed
+		0x7B2567EB|Unnamed
+		0x4927D90C|Dame Dedtime
+		0x503CE84D|Dame Dredful
+		0x4FEC1BE7|Dame Deartime
+		0x8E87A3DC|Kin
+		0x979C929D|Flippa
+		0x9C320C32|Gin
+		0x85293D73|Floppa
+		0x248E6B57|Bronzlow
+		0xB3E78A6C|Hans Full
+		0xAAFCBB2D|Hans Galore
+		0x1C7567C|Eyeclone
+		0x1372F992|Eyeclone - Cloud
+		0x18DC673D|Eyephoon
+		0xA69C8D3|Eyephoon - Cloud
+		0x33F134FE|Retinado
+		0x21449B10|Retinado - Cloud
+		0x3CA77FCC|Cap'n Crash
+		0x25BC4E8D|Cap'n Rex
+		0x2E12D022|Bird
+		0x3709E163|Bird
+		0x7B07051C|Mallice
+		0x621C345D|Stake
+		0x46672CAC|Dame Demona
+		0x4437BB7D|Kat Kraydel
+		0x2942C004|Teastroyer
+		0xBF76FEA|Unnamed
+		0x434B088F|Unnamed
+		0x5E9C3036|Unnamed
+		0x66205753|Unnamed
+		0x7495F8BD|Unnamed
+		0x4C299FD8|Unnamed
+		0x944A8F8E|Unnamed
+		0x5422E9B4|Infinipea
+		0x4697465A|Infinipea
+		0x93829364|Hardy Hound
+		0xAEE2BAD4|Rubeus J
+		0x3317E09A|Unnamed
+		0x8BAB87FF|Unnamed
+		0x660235A4|Kabuking
+		0x74B79A4A|Unnamed
+		0x23581B63|Unnamed
+		0x4973B11F|Unnamed
+		0x46FAB3A8|Unnamed
+	)
+]

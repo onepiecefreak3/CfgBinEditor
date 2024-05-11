@@ -4,7 +4,6 @@ using CrossCutting.Core.Serialization.JsonAdapter;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 
 namespace CrossCutting.Core.Configuration.File
@@ -35,7 +34,7 @@ namespace CrossCutting.Core.Configuration.File
 
         private string GetConfigPath()
         {
-            return Path.Combine(Environment.ProcessPath!, "config.json");
+            return Path.Combine(Path.GetDirectoryName(Environment.ProcessPath)!, "config.json");
         }
     }
 }

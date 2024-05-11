@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Logic.Domain.CodeAnalysis.Contract.DataClasses
 {
     [DebuggerDisplay("[{FullSpan.Position}..{FullSpan.EndPosition}) {Text}")]
     public struct SyntaxToken
     {
+        private static readonly StringBuilder _sb = new();
+
         private int _textPosition;
 
         public SyntaxNode? Parent { get; internal set; }
@@ -55,6 +53,21 @@ namespace Logic.Domain.CodeAnalysis.Contract.DataClasses
             TrailingTrivia = null;
 
             return this;
+        }
+
+        public override string ToString()
+        {
+            _sb.Clear();
+
+            if (LeadingTrivia.HasValue)
+                _sb.Append(LeadingTrivia.Value.ToString());
+
+            _sb.Append(Text);
+
+            if (TrailingTrivia.HasValue)
+                _sb.Append(TrailingTrivia.Value.ToString());
+
+            return _sb.ToString();
         }
 
         internal int UpdatePosition(int fullPosition, ref int line, ref int column)

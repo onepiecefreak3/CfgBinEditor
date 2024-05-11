@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Logic.Domain.CodeAnalysis.Contract.DataClasses
+﻿namespace Logic.Domain.CodeAnalysis.Contract.DataClasses
 {
     public readonly struct SyntaxTokenTrivia
     {
@@ -27,6 +21,11 @@ namespace Logic.Domain.CodeAnalysis.Contract.DataClasses
         public SyntaxTokenTrivia(string text)
         {
             Text = text;
+        }
+
+        public override string ToString()
+        {
+            return Text;
         }
     }
 }

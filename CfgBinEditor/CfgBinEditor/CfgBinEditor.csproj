@@ -15,9 +15,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\ImGui.Forms\ImGui.Forms\ImGui.Forms.csproj" />
     <ProjectReference Include="..\CrossCutting.Core.Contract\CrossCutting.Core.Contract.csproj" />
-    <ProjectReference Include="..\Logic.Business.CfgBinValueSettingsManagement.Contract\Logic.Business.CfgBinValueSettingsManagement.Contract.csproj" />
+    <ProjectReference Include="..\Logic.Business.CfgBinEditorManagement.Contract\Logic.Business.CfgBinEditorManagement.Contract.csproj" />
     <ProjectReference Include="..\Mappings.CfgBinEditor\Mappings.CfgBinEditor.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -35,6 +34,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Update="MyIDs.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="MyTags.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -53,5 +55,11 @@
     <None Update="resources\images\save_all_1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Dialogs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Imgui.Forms" Version="1.0.56" />
   </ItemGroup>
 </Project>

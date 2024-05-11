@@ -1,13 +1,7 @@
 ﻿using CrossCutting.Core.Contract.Aspects;
 using Logic.Domain.Kuriimu2.KomponentAdapter.Contract.DataClasses;
 using Logic.Domain.Kuriimu2.KomponentAdapter.Contract.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Reflection.PortableExecutable;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Logic.Domain.Kuriimu2.KomponentAdapter.Contract
 {

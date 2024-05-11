@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace CrossCutting.Core.Contract.Configuration.DataClasses
 {

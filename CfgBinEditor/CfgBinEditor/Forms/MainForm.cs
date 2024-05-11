@@ -17,9 +17,10 @@ using ImGui.Forms.Localization;
 using ImGui.Forms.Modals;
 using ImGui.Forms.Modals.IO;
 using ImGui.Forms.Models;
-using Logic.Business.CfgBinValueSettingsManagement.Contract;
+using Logic.Business.CfgBinEditorManagement.Contract;
 using Logic.Domain.Level5Management.Contract;
 using Logic.Domain.Level5Management.Contract.DataClasses;
+using Veldrid.Sdl2;
 
 namespace CfgBinEditor.Forms
 {
@@ -38,7 +39,7 @@ namespace CfgBinEditor.Forms
         private readonly IDictionary<string, TabPage> _pathPageLookup;
         private readonly IDictionary<TabPage, string> _pagePathLookup;
 
-        public MainForm(IEventBroker eventBroker, ILocalizer localizer, IFormFactory formFactory, ISettingsProvider settingsProvider, IT2bReader t2BReader, IRdbnReader rdbnReader, IValueSettingsProvider valueSettingsProvider)
+        public MainForm(IEventBroker eventBroker, ILocalizer localizer, IFormFactory formFactory, ISettingsProvider settingsProvider, IT2bReader t2BReader, IRdbnReader rdbnReader, IValueSettingsProvider valueSettingsProvider, IEntryNamesProvider entryNamesProvider)
         {
             InitializeComponent(localizer, settingsProvider);
 
@@ -73,16 +74,24 @@ namespace CfgBinEditor.Forms
             Closing += (s, e) => CloseApplication(e);
 
             AllowDragDrop = true;
-            DragDrop += (s, e) => OpenFile(e.File);
+            DragDrop += (s, e) => OpenFiles(e);
 
             _events.Subscribe<FileChangedMessage>(msg => MarkChangedFile(msg.Source, true));
             _events.Subscribe<FileSavedMessage>(FileSaved);
+            _events.Subscribe<UpdateStatusMessage>(msg => SetStatus(msg.Text, msg.Status));
 
-            if (valueSettingsProvider.TryGetError(out Exception error))
+            if (valueSettingsProvider.TryGetError(out Exception? error))
             {
-                error = GetInnermostException(error);
+                error = GetInnermostException(error!);
                 if (error is not FileNotFoundException)
                     SetStatus(LocalizationResources.CfgBinTagsLoadErrorCaption(error.Message), LabelStatus.Error);
+            }
+
+            if (entryNamesProvider.TryGetError(out error))
+            {
+                error = GetInnermostException(error!);
+                if (error is not FileNotFoundException)
+                    SetStatus(LocalizationResources.CfgBinIdsLoadErrorCaption(error.Message), LabelStatus.Error);
             }
         }
 
@@ -230,6 +239,12 @@ namespace CfgBinEditor.Forms
             bool wasOpened = OpenFile(ofd.SelectedPath);
             if (wasOpened)
                 SetStatus(string.Empty, LabelStatus.None);
+        }
+
+        private void OpenFiles(DragDropEvent[] events)
+        {
+            foreach (DragDropEvent e in events)
+                OpenFile(e.File);
         }
 
         private bool OpenFile(string filePath)

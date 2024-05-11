@@ -38,6 +38,7 @@
 	"File.Close.UnsavedChanges.Text": "Die Datei wurde verändert. Du verlierst deine Änderungen, wenn du die Datei jetzt schließt. Fortfahren?",
 
 	// Game settings
+	"Game.None.Caption": "Keins",
 	"Game.Button.Add.Caption": "+",
 	"Game.Add.Dialog.Caption": "Neues Spiel",
 	"Game.Add.Dialog.Text": "Gib neuen Spielnamen ein:",
@@ -57,15 +58,44 @@
 	// Cfg Entry Search
 	"CfgBin.Entry.Search.Placeholder.Caption": "Suchen...",
 
+	// Cfg Entry Search Comparison
+	"CfgBin.Entry.Search.Comparison.Dialog.Caption": "Sucheinstellungen",
+	"CfgBin.Entry.Search.Comparison.Caption": "Vergleiche Werte als:",
+
+	"CfgBin.Entry.Search.Comparison.Hex": "Hex",
+	"CfgBin.Entry.Search.Comparison.Dec": "Dezimal",
+	"CfgBin.Entry.Search.Comparison.Tags": "Tags",
+
+	// Cfg Entry Addition
+	"CfgBin.Entry.Add.Caption": "Hinzufügen",
+	"CfgBin.Entry.Add.Value.Caption": "Wert hinzufügen",
+	"CfgBin.Entry.Add.Root.Caption": "Wurzeleintrag hinzufügen",
+	"CfgBin.Entry.Add.Dialog.Caption": "Gib den Eintragsnamen ein:",
+	"CfgBin.Entry.Add.Error.Caption": "Eintragsname war leer.",
+
 	// Cfg Entry Duplication
 	"CfgBin.Entry.Duplicate.Caption": "Duplizieren",
 
 	// Cfg Entry Removal
 	"CfgBin.Entry.Remove.Caption": "Entfernen",
 
+	// Cfg Entry Import
+	"CfgBin.Entry.Import.Caption": "Importieren",
+
+	// Cfg Entry Export
+	"CfgBin.Entry.Export.Caption": "Exportieren",
+
 	// Randomize number
 	"CfgBin.Entry.Random.Tooltip": "Zufällige Zahl",
 
+	// RDBN Add List
+	"Rdbn.List.Add.Caption": "Liste hinzufügen",
+	"Rdbn.List.Add.Type.Dialog.Caption": "Typ auswählen:",
+	"Rdbn.List.Add.Type.Error.Caption": "Kein Typ wurde ausgewählt.",
+	"Rdbn.List.Add.Name.Dialog.Caption": "Gib den Listennamen ein:",
+	"Rdbn.List.Add.Name.Error.Caption": "Listenname war leer.",
+
 	// Value Tags
-	"CfgBin.Tags.Load.Error.Caption": "Fehler beim Laden der Tags: {0}"
+	"CfgBin.Tags.Load.Error.Caption": "Fehler beim Laden der Tags: {0}",
+	"CfgBin.Ids.Load.Error.Caption": "Fehler beim Laden der IDs: {0}"
 }

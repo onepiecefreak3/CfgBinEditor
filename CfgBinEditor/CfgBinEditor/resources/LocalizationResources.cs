@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ImGui.Forms.Localization;
 using ImGui.Forms.Models;
 
@@ -42,6 +38,7 @@ namespace CfgBinEditor.resources
         public static LocalizedString FileCloseUnsavedChangesCaption => new("File.Close.UnsavedChanges.Caption");
         public static LocalizedString FileCloseUnsavedChangesText => new("File.Close.UnsavedChanges.Text");
 
+        public static LocalizedString GameNoneCaption => new("Game.None.Caption");
         public static LocalizedString GameAddButtonCaption => new("Game.Add.Button.Caption");
         public static LocalizedString GameAddDialogCaption => new("Game.Add.Dialog.Caption");
         public static LocalizedString GameAddDialogText => new("Game.Add.Dialog.Text");
@@ -59,12 +56,34 @@ namespace CfgBinEditor.resources
         public static LocalizedString CfgBinEntrySearchPlaceholderCaption =>
             new("CfgBin.Entry.Search.Placeholder.Caption");
 
+        public static LocalizedString CfgBinEntrySearchDialogCaption => new("CfgBin.Entry.Search.Comparison.Dialog.Caption");
+        public static LocalizedString CfgBinEntrySearchComparisonCaption => new("CfgBin.Entry.Search.Comparison.Caption");
+
+        public static LocalizedString CfgBinEntrySearchHex => new("CfgBin.Entry.Search.Comparison.Hex");
+        public static LocalizedString CfgBinEntrySearchDec => new("CfgBin.Entry.Search.Comparison.Dec");
+        public static LocalizedString CfgBinEntrySearchTags => new("CfgBin.Entry.Search.Comparison.Tags");
+
         public static LocalizedString CfgBinEntryDuplicateCaption => new("CfgBin.Entry.Duplicate.Caption");
         public static LocalizedString CfgBinEntryRemoveCaption => new("CfgBin.Entry.Remove.Caption");
+        public static LocalizedString CfgBinEntryImportCaption => new("CfgBin.Entry.Import.Caption");
+        public static LocalizedString CfgBinEntryExportCaption => new("CfgBin.Entry.Export.Caption");
+        public static LocalizedString CfgBinEntryAddCaption => new("CfgBin.Entry.Add.Caption");
+        public static LocalizedString CfgBinEntryAddValueCaption => new("CfgBin.Entry.Add.Value.Caption");
+        public static LocalizedString CfgBinEntryAddRootCaption => new("CfgBin.Entry.Add.Root.Caption");
+        public static LocalizedString CfgBinEntryAddDialogCaption => new("CfgBin.Entry.Add.Dialog.Caption");
+        public static LocalizedString CfgBinEntryAddErrorCaption => new("CfgBin.Entry.Add.Error.Caption");
+
+        public static LocalizedString RdbnListAddCaption => new("Rdbn.List.Add.Caption");
+        public static LocalizedString RdbnListAddTypeDialogCaption => new("Rdbn.List.Add.Type.Dialog.Caption");
+        public static LocalizedString RdbnListAddTypeErrorCaption => new("Rdbn.List.Add.Type.Error.Caption");
+        public static LocalizedString RdbnListAddNameDialogCaption => new("Rdbn.List.Add.Name.Dialog.Caption");
+        public static LocalizedString RdbnListAddNameErrorCaption => new("Rdbn.List.Add.Name.Error.Caption");
 
         public static LocalizedString CfgBinEntryRandomTooltip => new("CfgBin.Entry.Random.Tooltip");
 
         public static LocalizedString CfgBinTagsLoadErrorCaption(string error) =>
             new("CfgBin.Tags.Load.Error.Caption", () => error);
+        public static LocalizedString CfgBinIdsLoadErrorCaption(string error) =>
+            new("CfgBin.Ids.Load.Error.Caption", () => error);
     }
 }

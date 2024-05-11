@@ -2,17 +2,11 @@
 using CrossCutting.Core.Contract.Configuration;
 using CrossCutting.Core.Contract.DependencyInjection;
 using CrossCutting.Core.Contract.EventBrokerage;
-using CrossCutting.Core.Contract.Messages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CrossCutting.Core.Contract.DependencyInjection.DataClasses;
 using Logic.Domain.CodeAnalysis.Contract;
-using Logic.Domain.CodeAnalysis.Contract.CfgBinValueSettings;
-using Logic.Domain.CodeAnalysis.CfgBinValueSettings.InternalContract.DataClasses;
-using Logic.Domain.CodeAnalysis.CfgBinValueSettings;
+using Logic.Domain.CodeAnalysis.Contract.Tiniifan;
+using Logic.Domain.CodeAnalysis.Tiniifan.InternalContract.DataClasses;
+using Logic.Domain.CodeAnalysis.Tiniifan;
 
 namespace Logic.Domain.CodeAnalysis
 {
@@ -36,16 +30,16 @@ namespace Logic.Domain.CodeAnalysis
 
         public void Register(ICoCoKernel kernel)
         {
-            kernel.Register<ITokenFactory<CfgBinValueSettingsSyntaxToken>, CfgBinValueSettingsFactory>(ActivationScope.Unique);
-            kernel.Register<ILexer<CfgBinValueSettingsSyntaxToken>, CfgBinValueSettingsLexer>();
-            kernel.Register<IBuffer<CfgBinValueSettingsSyntaxToken>, TokenBuffer<CfgBinValueSettingsSyntaxToken>>();
+            kernel.Register<ITokenFactory<GameSettingsSyntaxToken>, GameSettingsFactory>(ActivationScope.Unique);
+            kernel.Register<ILexer<GameSettingsSyntaxToken>, GameSettingsLexer>();
+            kernel.Register<IBuffer<GameSettingsSyntaxToken>, TokenBuffer<GameSettingsSyntaxToken>>();
             kernel.Register<IBuffer<int>, StringBuffer>();
 
-            kernel.Register<ICfgBinValueSettingsParser, CfgBinValueSettingsParser>(ActivationScope.Unique);
-            kernel.Register<ICfgBinValueSettingsComposer, CfgBinValueSettingsComposer>(ActivationScope.Unique);
-            kernel.Register<ICfgBinValueSettingsWhitespaceNormalizer, CfgBinValueSettingsWhitespaceNormalizer>(ActivationScope.Unique);
+            kernel.Register<IGameSettingsParser, GameSettingsParser>(ActivationScope.Unique);
+            kernel.Register<IGameSettingsComposer, GameSettingsComposer>(ActivationScope.Unique);
+            kernel.Register<IGameSettingsWhitespaceNormalizer, GameSettingsWhitespaceNormalizer>(ActivationScope.Unique);
 
-            kernel.Register<ICfgBinValueSettingsSyntaxFactory, CfgBinValueSettingsSyntaxFactory>();
+            kernel.Register<IGameSettingsSyntaxFactory, GameSettingsSyntaxFactory>();
 
             kernel.RegisterConfiguration<CodeAnalysisConfiguration>();
         }

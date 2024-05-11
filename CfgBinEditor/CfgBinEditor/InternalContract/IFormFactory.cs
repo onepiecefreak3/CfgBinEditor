@@ -11,7 +11,7 @@ namespace CfgBinEditor.InternalContract
         MainForm CreateMainForm();
         T2bForm CreateT2bForm(T2b config);
         RdbnForm CreateRdbnForm(Rdbn config);
-        T2bTreeViewForm CreateT2bTreeViewForm(T2b config, string gameName);
+        T2bTreeViewForm CreateT2bTreeViewForm(T2b config);
         RdbnTreeViewForm CreateRdbnTreeViewForm(Rdbn config);
     }
 }

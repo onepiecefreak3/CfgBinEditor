@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Komponent.IO;
 using Logic.Domain.Kuriimu2.KomponentAdapter.Contract;
 using Logic.Domain.Kuriimu2.KomponentAdapter.Contract.DataClasses;

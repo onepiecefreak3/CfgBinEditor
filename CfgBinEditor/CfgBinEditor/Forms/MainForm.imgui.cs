@@ -10,7 +10,6 @@ using ImGui.Forms.Controls.Menu;
 using ImGui.Forms.Localization;
 using ImGui.Forms.Models;
 using ImGui.Forms.Models.IO;
-using ImGuiNET;
 using Microsoft.VisualBasic.FileIO;
 using Veldrid;
 

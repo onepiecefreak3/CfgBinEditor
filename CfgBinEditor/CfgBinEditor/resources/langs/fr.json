@@ -38,6 +38,7 @@
   "File.Close.UnsavedChanges.Text": "Le fichier a été modifié. Vous pourriez perdre votre progression, si vous fermez l'application maintenant. Continuer?",
 
   // Game settings
+  "Game.None.Caption": "Aucun",
   "Game.Add.Button.Caption": "+",
   "Game.Add.Dialog.Caption": "Ajouter un nouveau jeu",
   "Game.Add.Dialog.Text": "Entrer le nom du nouveau jeu:",
@@ -47,7 +48,7 @@
   "CfgBin.Entry.Name.Caption": "Nom",
   "CfgBin.Entry.Type.Caption": "Type",
   "CfgBin.Entry.Value.Caption": "Valeur",
-  "CfgBin.Entry.IsHex.Caption": "Afficher en tant qu'hex",
+  "CfgBin.Entry.IsHex.Caption": "Hex",
 
   // Cfg Value Types
   "CfgBin.Entry.Type.String.Caption": "String",
@@ -57,15 +58,44 @@
   // Cfg Entry Search
   "CfgBin.Entry.Search.Placeholder.Caption": "Rechercher...",
 
+  // Cfg Entry Search Comparison
+  "CfgBin.Entry.Search.Comparison.Dialog.Caption": "Paramètres de recherche",
+  "CfgBin.Entry.Search.Comparison.Caption": "Correspondance des valeurs en:",
+
+  "CfgBin.Entry.Search.Comparison.Hex": "Hexadécimal",
+  "CfgBin.Entry.Search.Comparison.Dec": "Décimal",
+  "CfgBin.Entry.Search.Comparison.Tags": "Tags",
+
+  // Cfg Entry Addition
+  "CfgBin.Entry.Add.Caption": "Ajouter",
+  "CfgBin.Entry.Add.Value.Caption": "Ajouter valeur",
+  "CfgBin.Entry.Add.Root.Caption": "Ajouter racine",
+  "CfgBin.Entry.Add.Dialog.Caption": "Saisir le nom de l'entrée:",
+  "CfgBin.Entry.Add.Error.Caption": "Le nom de la nouvelle entrée était vide.",
+
   // Cfg Entry Duplication
   "CfgBin.Entry.Duplicate.Caption": "Dupliquer",
 
   // Cfg Entry Removal
   "CfgBin.Entry.Remove.Caption": "Retirer",
 
+  // Cfg Entry Import
+  "CfgBin.Entry.Import.Caption": "Importer",
+
+  // Cfg Entry Export
+  "CfgBin.Entry.Export.Caption": "Exporter",
+
   // Randomize number
-  "CfgBin.Entry.Random.Tooltip": "Aléatoire",
+  "CfgBin.Entry.Random.Tooltip": "Randomiser",
+
+  // RDBN Add List
+  "Rdbn.List.Add.Caption": "Ajouter liste",
+  "Rdbn.List.Add.Type.Dialog.Caption": "Choisir un type:",
+  "Rdbn.List.Add.Type.Error.Caption": "Aucun type n'a été choisi.",
+  "Rdbn.List.Add.Name.Dialog.Caption": "Saisir le nom de la liste:",
+  "Rdbn.List.Add.Name.Error.Caption": "Le nom de la liste était vide.",
 
   // Value Tags
-  "CfgBin.Tags.Load.Error.Caption": "Une erreur est survenue en chargeant les tags: {0}"
+  "CfgBin.Tags.Load.Error.Caption": "Une erreur est survenue en chargeant les tags: {0}",
+  "CfgBin.Ids.Load.Error.Caption": "Une erreur est survenue en chargeant les ids: {0}"
 }

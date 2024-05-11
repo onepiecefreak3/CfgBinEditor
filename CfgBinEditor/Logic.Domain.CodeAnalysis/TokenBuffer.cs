@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Logic.Domain.CodeAnalysis.Contract;
+﻿using Logic.Domain.CodeAnalysis.Contract;
 
 namespace Logic.Domain.CodeAnalysis
 {

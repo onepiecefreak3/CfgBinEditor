@@ -1,5 +1,4 @@
 ﻿using CrossCutting.Core.Contract.DependencyInjection;
-using System.Diagnostics.CodeAnalysis;
 
 namespace CrossCutting.Core.DI.AutofacAdapter
 {

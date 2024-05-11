@@ -2,17 +2,102 @@
 using ImGui.Forms.Controls.Tree;
 using Logic.Domain.Level5Management.Contract.DataClasses;
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 using CfgBinEditor.resources;
+using ImGui.Forms.Localization;
+using ImGui.Forms.Modals.IO;
+using CfgBinEditor.InternalContract.DataClasses;
+using CfgBinEditor.Messages;
 
 namespace CfgBinEditor.Forms
 {
     public partial class RdbnTreeViewForm : BaseTreeViewForm<Rdbn, object>
     {
         private readonly Rdbn _config;
+        private readonly IEventBroker _events;
 
         public RdbnTreeViewForm(Rdbn config, IEventBroker eventBroker) : base(config, eventBroker)
         {
             _config = config;
+            _events = eventBroker;
+
+            PopulateFullTreeView(config);
+        }
+
+        protected override bool CanAdd(TreeNode<object>? parentNode)
+        {
+            return parentNode == null || parentNode.Data is RdbnListEntry;
+        }
+
+        protected override async void AddNode(TreeNode<object>? parentNode)
+        {
+            if (parentNode == null)
+            {
+                // Select type
+                RdbnTypeDeclaration? type = await SelectListType();
+                if (type == null)
+                {
+                    RaiseErrorStatus(LocalizationResources.RdbnListAddTypeErrorCaption);
+                    return;
+                }
+
+                // Set list name
+                string listName = await InputBox.ShowAsync(LocalizationResources.RdbnListAddCaption, LocalizationResources.RdbnListAddNameDialogCaption);
+                if (string.IsNullOrEmpty(listName))
+                {
+                    RaiseErrorStatus(LocalizationResources.RdbnListAddNameErrorCaption);
+                    return;
+                }
+
+                // Add list
+                RdbnListEntry[] lists = _config.Lists;
+                Array.Resize(ref lists, lists.Length + 1);
+                _config.Lists = lists;
+
+                lists[^1] = new RdbnListEntry
+                {
+                    TypeIndex = Array.IndexOf(_config.Types, type),
+                    Name = listName,
+                    Values = Array.Empty<object[][]>()
+                };
+
+                TreeNode<object> newNode = CreateListNode(_config, lists[^1], ColorResources.TextSuccessful);
+                GetRootNodes().Add(newNode);
+
+                UpdateTreeView();
+                RaiseTreeChanged();
+
+                RaiseSuccessStatus();
+                return;
+            }
+
+            switch (parentNode.Data)
+            {
+                case RdbnListEntry list:
+                    RdbnTypeDeclaration type = _config.Types[list.TypeIndex];
+
+                    object[][][] values = list.Values;
+                    Array.Resize(ref values, values.Length + 1);
+                    list.Values = values;
+
+                    list.Values[^1] = new object[type.Fields.Length][];
+                    for (var i = 0; i < type.Fields.Length; i++)
+                    {
+                        list.Values[^1][i] = new object[type.Fields[i].Count];
+                        for (var j = 0; j < type.Fields[i].Count; j++)
+                            list.Values[^1][i][j] = GetDefaultValue(type.Fields[i]);
+                    }
+
+                    TreeNode<object> newNode = CreateValueNode(type, list.Values[^1], parentNode.Nodes.Count + 1, ColorResources.TextSuccessful);
+                    parentNode.Nodes.Add(newNode);
+
+                    UpdateTreeView();
+                    RaiseTreeChanged();
+
+                    RaiseSuccessStatus();
+                    break;
+            }
         }
 
         protected override bool CanDuplicate(TreeNode<object> node)
@@ -95,6 +180,38 @@ namespace CfgBinEditor.Forms
 
             UpdateTreeView();
             RaiseTreeChanged();
+        }
+
+        protected override bool CanImport(TreeNode<object>? parentNode)
+        {
+            return false;
+        }
+
+        protected override void Import(TreeNode<object>? parentNode)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool CanExport(TreeNode<object>? node)
+        {
+            return false;
+        }
+
+        protected override void Export(TreeNode<object>? node)
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task<RdbnTypeDeclaration?> SelectListType()
+        {
+            LocalizedString[] types = _config.Types.Select(x => (LocalizedString)x.Name).ToArray();
+
+            LocalizedString? selectedItem = await ComboInputBox.ShowAsync(
+                LocalizationResources.RdbnListAddCaption,
+                LocalizationResources.RdbnListAddTypeDialogCaption,
+                types, types.FirstOrDefault());
+
+            return _config.Types.FirstOrDefault(x => x.Name == selectedItem);
         }
 
         private RdbnListEntry DuplicateListEntry(RdbnListEntry list)
@@ -192,6 +309,60 @@ namespace CfgBinEditor.Forms
                 default:
                     throw new InvalidOperationException($"Unknown field type {field.FieldType}.");
             }
+        }
+
+        private object GetDefaultValue(RdbnFieldDeclaration field)
+        {
+            switch (field.FieldType)
+            {
+                case FieldType.AbilityData:
+                case FieldType.EnhanceData:
+                case FieldType.StatusRate:
+                    return new byte[field.Size];
+
+                case FieldType.Bool:
+                    return false;
+
+                case FieldType.Byte:
+                    return (byte)0;
+
+                case FieldType.Short:
+                case FieldType.ActType:
+                    return (short)0;
+
+                case FieldType.Int:
+                case FieldType.Flag:
+                    return 0;
+
+                case FieldType.Hash:
+                    return 0u;
+
+                case FieldType.Float:
+                    return 0f;
+
+                case FieldType.RateMatrix:
+                case FieldType.Position:
+                    return new float[] { 0, 0, 0, 0 };
+
+                case FieldType.String:
+                    return string.Empty;
+
+                case FieldType.DataTuple:
+                    return new short[] { 0, 0 };
+
+                default:
+                    throw new InvalidOperationException($"Unknown field type {field.FieldType}.");
+            }
+        }
+
+        private void RaiseErrorStatus(LocalizedString text)
+        {
+            _events.Raise(new UpdateStatusMessage(text, LabelStatus.Error));
+        }
+
+        private void RaiseSuccessStatus()
+        {
+            _events.Raise(new UpdateStatusMessage(string.Empty, LabelStatus.None));
         }
     }
 }
