@@ -78,8 +78,12 @@ namespace Logic.Domain.Level5Management
                 checksumStringData = Array.Empty<byte>();
             }
 
-            if (!TryDetectHashType(checksumSection.Value.Entries[0], checksumStringData, encoding, out HashType hashType))
-                return null;
+            HashType hashType = default;
+            if (checksumSection.Value.Entries.Length > 0)
+            {
+                if (!TryDetectHashType(checksumSection.Value.Entries[0], checksumStringData, encoding, out hashType))
+                    return null;
+            }
 
             // Create final object
             return CreateConfiguration(entrySection.Value, checksumSection.Value, valueStringData, checksumStringData, encoding, hashType);

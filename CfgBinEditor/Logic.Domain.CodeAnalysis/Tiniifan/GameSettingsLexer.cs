@@ -40,6 +40,7 @@ namespace Logic.Domain.CodeAnalysis.Tiniifan
                 case '|':
                     return new GameSettingsSyntaxToken(SyntaxTokenKind.Pipe, Position, Line, Column, $"{ReadChar()}");
 
+                case '/':
                 case ' ':
                 case '\t':
                 case '\r':
@@ -56,20 +57,21 @@ namespace Logic.Domain.CodeAnalysis.Tiniifan
                 case '7':
                 case '8':
                 case '9':
-                    return ReadNumericLiteral();
+                    return ReadNumericLiteralOrIdentifierOrKeyword();
 
                 default:
-                    return ReadIdentifierOrKeyword();
+                    return ReadIdentifierOrKeyword(string.Empty);
             }
         }
 
-        private GameSettingsSyntaxToken ReadIdentifierOrKeyword()
+        private GameSettingsSyntaxToken ReadIdentifierOrKeyword(string prefixed)
         {
             int position = Position;
             int line = Line;
             int column = Column;
 
             _sb.Clear();
+            _sb.Append(prefixed);
 
             while (TryPeekChar(out char character))
             {
@@ -80,6 +82,7 @@ namespace Logic.Domain.CodeAnalysis.Tiniifan
                     case '(':
                     case ')':
                     case '|':
+                    case '/':
                     case ' ':
                     case '\t':
                     case '\r':
@@ -143,7 +146,7 @@ namespace Logic.Domain.CodeAnalysis.Tiniifan
             return new GameSettingsSyntaxToken(SyntaxTokenKind.Trivia, position, line, column, _sb.ToString());
         }
 
-        private GameSettingsSyntaxToken ReadNumericLiteral()
+        private GameSettingsSyntaxToken ReadNumericLiteralOrIdentifierOrKeyword()
         {
             int position = Position;
             int line = Line;
@@ -152,18 +155,29 @@ namespace Logic.Domain.CodeAnalysis.Tiniifan
             _sb.Clear();
 
             var isHex = false;
-            var kind = SyntaxTokenKind.NumericLiteral;
 
             while (TryPeekChar(out char character))
             {
                 switch (character)
                 {
+                    case '[':
+                    case ']':
+                    case '(':
+                    case ')':
+                    case '|':
+                    case '/':
+                    case ' ':
+                    case '\t':
+                    case '\r':
+                    case '\n':
+                        break;
+
                     case '0':
                         if (!IsPeekedChar(1, 'x'))
                             goto case '1';
 
                         if (_sb.Length != 0)
-                            throw CreateException($"Invalid hex identifier in numeric literal {character} in numeric literal.");
+                            return ReadIdentifierOrKeyword(_sb.ToString());
 
                         _sb.Append(ReadChar());
                         _sb.Append(ReadChar());
@@ -196,16 +210,19 @@ namespace Logic.Domain.CodeAnalysis.Tiniifan
                     case 'd':
                     case 'e':
                         if (!isHex)
-                            throw CreateException("Invalid character in numeric literal.");
+                            return ReadIdentifierOrKeyword(_sb.ToString());
 
                         _sb.Append(ReadChar());
                         continue;
+
+                    default:
+                        return ReadIdentifierOrKeyword(_sb.ToString());
                 }
 
                 break;
             }
 
-            return new GameSettingsSyntaxToken(kind, position, line, column, _sb.ToString());
+            return new GameSettingsSyntaxToken(SyntaxTokenKind.NumericLiteral, position, line, column, _sb.ToString());
         }
 
         private bool IsPeekedChar(char expected)
