@@ -9,13 +9,11 @@ using CrossCutting.Core.Contract.DependencyInjection;
 using CrossCutting.Core.Contract.DependencyInjection.DataClasses;
 using CrossCutting.Core.Contract.EventBrokerage;
 using CrossCutting.Core.Contract.Logging;
-using CrossCutting.Core.Contract.Scheduling;
 using CrossCutting.Core.Contract.Serialization;
 using CrossCutting.Core.Contract.Settings;
 using CrossCutting.Core.DI.AutofacAdapter;
 using CrossCutting.Core.EventBrokerage;
 using CrossCutting.Core.Logging.NLogAdapter;
-using CrossCutting.Core.Scheduling.QuartzAdapter;
 using CrossCutting.Core.Serialization.JsonAdapter;
 using CrossCutting.Core.Settings;
 using Logic.Business.CfgBinEditorManagement;
@@ -55,7 +53,6 @@ namespace Mappings.CfgBinEditor
             kernel.Register<IConfigObjectProvider, ConfigObjectProvider>(ActivationScope.Unique);
             kernel.Register<ILogger, Logger>(ActivationScope.Unique);
             kernel.Register<ISerializer, JsonSerializer>();
-            kernel.Register<IScheduler, Scheduler>(ActivationScope.Unique);
             kernel.Register<ISettingsProvider, SettingsProvider>(ActivationScope.Unique);
         }
 

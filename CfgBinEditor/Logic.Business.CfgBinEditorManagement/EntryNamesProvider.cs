@@ -40,7 +40,7 @@ namespace Logic.Business.CfgBinEditorManagement
                 switch (length)
                 {
                     case ValueLength.Int:
-                        if (gameNames[key].TryGetValue((int)entry.Values[0].Value, out name))
+                        if (gameNames[key].TryGetValue((uint)(int)entry.Values[0].Value, out name))
                             return true;
 
                         break;
