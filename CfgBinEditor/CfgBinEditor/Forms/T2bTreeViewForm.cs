@@ -97,8 +97,6 @@ namespace CfgBinEditor.Forms
 
         protected override async void AddNode(TreeNode<T2bEntry>? parentNode)
         {
-            int newEntryIndex = AllocateEntries(parentNode, 1);
-
             // Set new entry name
             string entryName = await InputBox.ShowAsync(LocalizationResources.CfgBinEntryAddRootCaption, LocalizationResources.CfgBinEntryAddDialogCaption);
             if (string.IsNullOrEmpty(entryName))
@@ -106,6 +104,8 @@ namespace CfgBinEditor.Forms
                 RaiseErrorStatus(LocalizationResources.CfgBinEntryAddErrorCaption);
                 return;
             }
+
+            int newEntryIndex = AllocateEntries(parentNode, 1);
 
             _config.Entries[newEntryIndex] = new T2bEntry
             {
