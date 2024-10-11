@@ -94,7 +94,7 @@ namespace CfgBinEditor.Forms
                     var floatValues = (float[])value;
                     foreach (float floatValue in floatValues)
                     {
-                        string valueText1 = RdbnValueComponent.GetValueText(floatValue, fieldType);
+                        string valueText1 = RdbnValueComponent.GetValueText(floatValue, FieldType.Float);
                         if (valueText1.Contains(searchText, StringComparison.OrdinalIgnoreCase))
                             return true;
                     }
@@ -105,7 +105,7 @@ namespace CfgBinEditor.Forms
                     var shortValues = (short[])value;
                     foreach (short shortValue in shortValues)
                     {
-                        string valueText1 = RdbnValueComponent.GetValueText(shortValue, fieldType);
+                        string valueText1 = RdbnValueComponent.GetValueText(shortValue, FieldType.Short);
                         if (valueText1.Contains(searchText, StringComparison.OrdinalIgnoreCase))
                             return true;
                     }
