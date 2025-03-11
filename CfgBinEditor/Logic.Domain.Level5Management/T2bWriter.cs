@@ -280,17 +280,15 @@ namespace Logic.Domain.Level5Management
 
         private void CacheStrings(long position, string value, Encoding encoding, IDictionary<string, long> writtenNames)
         {
-            do
+            while (value.Length > 0)
             {
-                if (!writtenNames.ContainsKey(value))
-                    writtenNames[value] = position;
+                writtenNames.TryAdd(value, position);
 
                 position += encoding.GetByteCount(value[..1]);
                 value = value.Length > 1 ? value[1..] : string.Empty;
-            } while (value.Length > 0);
+            }
 
-            if (!writtenNames.ContainsKey(value))
-                writtenNames[value] = position;
+            writtenNames.TryAdd(value, position);
         }
 
         private IChecksum<uint> GetChecksum(HashType hashType)
