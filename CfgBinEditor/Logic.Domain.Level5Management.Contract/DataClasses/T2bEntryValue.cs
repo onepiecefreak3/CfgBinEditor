@@ -3,6 +3,6 @@
     public class T2bEntryValue
     {
         public ValueType Type { get; set; }
-        public object Value { get; set; }
+        public object? Value { get; set; }
     }
 }

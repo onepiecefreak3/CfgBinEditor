@@ -85,8 +85,9 @@
   // Cfg Entry Export
   "CfgBin.Entry.Export.Caption": "Export",
 
-  // Randomize number
+  // Cfg Entry Value tooltips
   "CfgBin.Entry.Random.Tooltip": "Randomize",
+  "CfgBin.Entry.Empty.Tooltip": "Remove value",
 
   // RDBN Add List
   "Rdbn.List.Add.Caption": "Add list",

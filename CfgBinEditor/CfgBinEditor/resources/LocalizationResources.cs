@@ -80,6 +80,7 @@ namespace CfgBinEditor.resources
         public static LocalizedString RdbnListAddNameErrorCaption => new("Rdbn.List.Add.Name.Error.Caption");
 
         public static LocalizedString CfgBinEntryRandomTooltip => new("CfgBin.Entry.Random.Tooltip");
+        public static LocalizedString CfgBinEntryEmptyTooltip => new("CfgBin.Entry.Empty.Tooltip");
 
         public static LocalizedString CfgBinTagsLoadErrorCaption(string error) =>
             new("CfgBin.Tags.Load.Error.Caption", () => error);

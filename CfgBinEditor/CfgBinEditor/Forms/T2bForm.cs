@@ -149,15 +149,7 @@ namespace CfgBinEditor.Forms
 
             SetValueText(valueTextBox, entryValue, settingEntry.IsHex);
 
-            var randomButton = new ImageButton
-            {
-                Image = ImageResources.Random,
-                ImageSize = new Vector2(17, 17),
-                Padding = Vector2.One,
-                Tooltip = LocalizationResources.CfgBinEntryRandomTooltip,
-                Enabled = entryValue.Type is not ValueType.String
-            };
-            randomButton.Clicked += RandomButton_Clicked;
+            var actionButton = CreateValueActionButton(entryValue);
 
             var valueIsHexCheckbox = new CheckBox { Checked = settingEntry.IsHex, Enabled = currentGame != LocalizationResources.GameNoneCaption };
             valueIsHexCheckbox.CheckChanged += ValueIsHexCheckbox_CheckChanged;
@@ -169,10 +161,44 @@ namespace CfgBinEditor.Forms
                     new TableCell(valueNameTextBox) { Size = new Size(SizeValue.Absolute(200), SizeValue.Content) },
                     typeComboBox,
                     valueTextBox,
-                    randomButton,
+                    actionButton,
                     new TableCell(valueIsHexCheckbox){HorizontalAlignment = HorizontalAlignment.Center}
                 }
             };
+        }
+
+        private Component CreateValueActionButton(T2bEntryValue entryValue)
+        {
+            switch (entryValue.Type)
+            {
+                case ValueType.Integer:
+                case ValueType.FloatingPoint:
+                    var randomButton = new ImageButton
+                    {
+                        Image = ImageResources.Random,
+                        ImageSize = new Vector2(17, 17),
+                        Padding = Vector2.One,
+                        Tooltip = LocalizationResources.CfgBinEntryRandomTooltip
+                    };
+                    randomButton.Clicked += RandomButton_Clicked;
+
+                    return randomButton;
+
+                case ValueType.String:
+                    var actionButton = new ImageButton
+                    {
+                        Image = ImageResources.Close,
+                        ImageSize = new Vector2(17, 17),
+                        Padding = Vector2.One,
+                        Tooltip = LocalizationResources.CfgBinEntryEmptyTooltip
+                    };
+                    actionButton.Clicked += EmptyButton_Clicked;
+
+                    return actionButton;
+
+                default:
+                    throw new InvalidOperationException($"Unknown value type {entryValue.Type}.");
+            }
         }
 
         private void ChangeGame(LocalizedString gameName)
@@ -353,14 +379,14 @@ namespace CfgBinEditor.Forms
             var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Name, rowIndex - 1);
 
             ValueType newValueType = comboBox.SelectedItem.Content;
-            object newValue = ConvertValue(configEntry.Values[rowIndex - 1].Value, configEntry.Values[rowIndex - 1].Type, newValueType);
-
-            randomBtn.Enabled = newValueType is not ValueType.String;
+            object? newValue = ConvertValue(configEntry.Values[rowIndex - 1].Value, configEntry.Values[rowIndex - 1].Type, newValueType);
 
             SetEntryType(configEntry, rowIndex - 1, newValueType);
             SetEntryValue(configEntry, rowIndex - 1, newValue);
 
             SetValueText(valueTextBox, newValueType, newValue, settingsEntry.IsHex);
+
+            row.Cells[3] = CreateValueActionButton(configEntry.Values[rowIndex - 1]);
         }
 
         private void ValueTextBox_TextChanged(object sender, EventArgs e)
@@ -411,8 +437,6 @@ namespace CfgBinEditor.Forms
 
             var configEntry = _treeViewForm.SelectedEntry;
             ValueType valueType = configEntry.Values[rowIndex - 1].Type;
-            if (valueType is ValueType.String)
-                return;
 
             var random = new Random();
             object randomValue;
@@ -458,6 +482,31 @@ namespace CfgBinEditor.Forms
             SetValueText(valueTextBox, configEntry.Values[rowIndex - 1], checkBox.Checked);
         }
 
+        private void EmptyButton_Clicked(object? sender, EventArgs e)
+        {
+            var emptyBtn = sender as ImageButton;
+            if (emptyBtn == null)
+                return;
+
+            var layout = _configContent.Content as TableLayout;
+            if (layout == null)
+                return;
+
+            var row = layout.Rows.FirstOrDefault(r => r.Cells[3].Content == emptyBtn);
+            var rowIndex = layout.Rows.IndexOf(row);
+            if (rowIndex < 0)
+                return;
+
+            var valueTextBox = row.Cells[2].Content as TextBox;
+            if (valueTextBox == null)
+                return;
+
+            var configEntry = _treeViewForm.SelectedEntry;
+
+            SetEntryValue(configEntry, rowIndex - 1, null);
+            SetValueText(valueTextBox, configEntry.Values[rowIndex - 1], false);
+        }
+
         private void ValueIsHexCheckbox_CheckChanged(object sender, EventArgs e)
         {
             var checkBox = sender as CheckBox;
@@ -498,7 +547,7 @@ namespace CfgBinEditor.Forms
             SetValueText(valueTextBox, value.Type, value.Value, isHex);
         }
 
-        private void SetValueText(TextBox valueTextBox, ValueType type, object value, bool isHex)
+        private void SetValueText(TextBox valueTextBox, ValueType type, object? value, bool isHex)
         {
             valueTextBox.TextChanged -= ValueTextBox_TextChanged;
             valueTextBox.Text = GetValueString(value, type, isHex);
@@ -518,7 +567,7 @@ namespace CfgBinEditor.Forms
             RaiseFileChanged();
         }
 
-        private void SetEntryValue(T2bEntry entry, int index, object value)
+        private void SetEntryValue(T2bEntry entry, int index, object? value)
         {
             entry.Values[index].Value = value;
             RaiseFileChanged();
@@ -587,7 +636,7 @@ namespace CfgBinEditor.Forms
             }
         }
 
-        private object ConvertValue(object value, ValueType sourceType, ValueType targetType)
+        private object? ConvertValue(object? value, ValueType sourceType, ValueType targetType)
         {
             if (sourceType == targetType)
                 return value;
@@ -595,7 +644,7 @@ namespace CfgBinEditor.Forms
             switch (sourceType)
             {
                 case ValueType.String:
-                    var sValue = (string)value;
+                    var sValue = (string?)value;
                     switch (targetType)
                     {
                         case ValueType.Integer:
@@ -656,10 +705,10 @@ namespace CfgBinEditor.Forms
                             switch (_config.ValueLength)
                             {
                                 case ValueLength.Int:
-                                    return (float)(int)value;
+                                    return (float)(int)value!;
 
                                 case ValueLength.Long:
-                                    return (double)(long)value;
+                                    return (double)(long)value!;
 
                                 default:
                                     throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
@@ -679,10 +728,10 @@ namespace CfgBinEditor.Forms
                             switch (_config.ValueLength)
                             {
                                 case ValueLength.Int:
-                                    return (int)Math.Round((float)value);
+                                    return (int)Math.Round((float)value!);
 
                                 case ValueLength.Long:
-                                    return (long)Math.Round((double)value);
+                                    return (long)Math.Round((double)value!);
 
                                 default:
                                     throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
@@ -735,7 +784,7 @@ namespace CfgBinEditor.Forms
             }
         }
 
-        private string GetValueString(object value, ValueType type, bool isHex)
+        private string GetValueString(object? value, ValueType type, bool isHex)
         {
             switch (type)
             {
@@ -765,11 +814,11 @@ namespace CfgBinEditor.Forms
                     switch (_config.ValueLength)
                     {
                         case ValueLength.Int:
-                            int iValue = BitConverter.SingleToInt32Bits((float)value);
+                            int iValue = BitConverter.SingleToInt32Bits((float)value!);
                             return $"0x{iValue:X8}";
 
                         case ValueLength.Long:
-                            long lValue = BitConverter.DoubleToInt64Bits((double)value);
+                            long lValue = BitConverter.DoubleToInt64Bits((double)value!);
                             return $"0x{lValue:X16}";
 
                         default:

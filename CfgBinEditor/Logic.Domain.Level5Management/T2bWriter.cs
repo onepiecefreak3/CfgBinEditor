@@ -80,7 +80,7 @@ namespace Logic.Domain.Level5Management
             return header;
         }
 
-        private void WriteEntry(IBinaryWriterX bw, Contract.DataClasses.T2bEntry configEntry, Encoding encoding, IChecksum<uint> checksum, ValueLength valueLength, uint stringOffsetBase, 
+        private void WriteEntry(IBinaryWriterX bw, Contract.DataClasses.T2bEntry configEntry, Encoding encoding, IChecksum<uint> checksum, ValueLength valueLength, uint stringOffsetBase,
             IDictionary<string, long> writtenStrings, ref uint stringOffset, ref uint stringCount)
         {
             bw.Write(checksum.ComputeValue(configEntry.Name, encoding));
@@ -112,18 +112,18 @@ namespace Logic.Domain.Level5Management
                 switch (value.Type)
                 {
                     case ValueType.String:
-                        WriteString(bw, (string)value.Value, encoding, valueLength, stringOffsetBase, writtenStrings, ref stringOffset, ref stringCount);
+                        WriteString(bw, (string?)value.Value, encoding, valueLength, stringOffsetBase, writtenStrings, ref stringOffset, ref stringCount);
                         break;
 
                     case ValueType.Integer:
                         switch (valueLength)
                         {
                             case ValueLength.Int:
-                                bw.Write((int)value.Value);
+                                bw.Write((int)value.Value!);
                                 break;
 
                             case ValueLength.Long:
-                                bw.Write((long)value.Value);
+                                bw.Write((long)value.Value!);
                                 break;
 
                             default:
@@ -135,11 +135,11 @@ namespace Logic.Domain.Level5Management
                         switch (valueLength)
                         {
                             case ValueLength.Int:
-                                bw.Write((float)value.Value);
+                                bw.Write((float)value.Value!);
                                 break;
 
                             case ValueLength.Long:
-                                bw.Write((double)value.Value);
+                                bw.Write((double)value.Value!);
                                 break;
 
                             default:
@@ -239,9 +239,15 @@ namespace Logic.Domain.Level5Management
             }
         }
 
-        private void WriteString(IBinaryWriterX bw, string value, Encoding encoding, ValueLength valueLength, uint stringOffsetBase, IDictionary<string, long> writtenNames,
+        private void WriteString(IBinaryWriterX bw, string? value, Encoding encoding, ValueLength valueLength, uint stringOffsetBase, IDictionary<string, long> writtenNames,
             ref uint stringOffset, ref uint stringCount)
         {
+            if (value == null)
+            {
+                bw.Write(-1);
+                return;
+            }
+
             if (writtenNames.TryGetValue(value, out long nameOffset))
             {
                 WriteValue(bw, nameOffset - stringOffsetBase, valueLength);

@@ -352,13 +352,13 @@ namespace Logic.Domain.Level5Management
                     ValueType entryType = entrySection.Entries[i].entryTypes[j];
                     long entryValue = entrySection.Entries[i].entryValues[j];
 
-                    object value;
+                    object? value;
                     switch (entryType)
                     {
                         case ValueType.String:
                             if (entryValue < 0)
                             {
-                                value = string.Empty;
+                                value = null;
                                 break;
                             }
 
