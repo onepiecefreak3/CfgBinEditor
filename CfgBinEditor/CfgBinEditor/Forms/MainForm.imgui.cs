@@ -101,7 +101,7 @@ namespace CfgBinEditor.Forms
             Icon = ImageResources.Icon;
 
             Content = _contentLayout;
-            MainMenuBar = _mainMenuBar;
+            MenuBar = _mainMenuBar;
         }
 
         private void InitializeLanguages(ILocalizer localizer)

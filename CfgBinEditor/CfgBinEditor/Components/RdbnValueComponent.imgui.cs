@@ -3,6 +3,7 @@ using ImGui.Forms.Controls;
 using ImGui.Forms.Controls.Base;
 using Logic.Domain.Level5Management.Contract.DataClasses;
 using ImGui.Forms.Controls.Layouts;
+using ImGui.Forms.Controls.Text;
 using ImGui.Forms.Models;
 using Veldrid;
 
@@ -42,14 +43,14 @@ namespace CfgBinEditor.Components
             _valueLayout.SetTabInactive();
         }
 
-        protected override int GetContentHeight(int parentHeight, float layoutCorrection = 1)
+        protected override int GetContentHeight(int parentWidth, int parentHeight, float layoutCorrection = 1)
         {
-            return _valueLayout.GetHeight(parentHeight, layoutCorrection);
+            return _valueLayout.GetHeight(parentWidth, parentHeight, layoutCorrection);
         }
 
-        protected override int GetContentWidth(int parentWidth, float layoutCorrection = 1)
+        protected override int GetContentWidth(int parentWidth, int parentHeight, float layoutCorrection = 1)
         {
-            return _valueLayout.GetWidth(parentWidth, layoutCorrection);
+            return _valueLayout.GetWidth(parentWidth, parentHeight, layoutCorrection);
         }
 
         private Component GetValueComponent(object[] values, int index, RdbnFieldDeclaration fieldDeclaration)

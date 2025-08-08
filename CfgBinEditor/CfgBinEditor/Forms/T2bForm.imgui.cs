@@ -77,7 +77,7 @@ namespace CfgBinEditor.Forms
             _gameComboBox.SelectedItem = _gameComboBox.Items[0];
 
             foreach (string game in settingsProvider.GetGames())
-                _gameComboBox.Items.Add(new ComboBoxItem<LocalizedString>(game));
+                _gameComboBox.Items.Add(new DropDownItem<LocalizedString>(game));
         }
     }
 }

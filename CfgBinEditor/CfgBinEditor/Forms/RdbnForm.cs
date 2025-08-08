@@ -84,11 +84,13 @@ namespace CfgBinEditor.Forms
 
         private void ChangeEntry(object? obj)
         {
-            var list = new List
+            var list = new List<RdbnValueComponent>
             {
                 Alignment = Alignment.Vertical,
                 ItemSpacing = 5
             };
+
+            _contentPanel.ShowBorder = false;
 
             if (obj is not (RdbnTypeDeclaration type, object[][] values))
             {

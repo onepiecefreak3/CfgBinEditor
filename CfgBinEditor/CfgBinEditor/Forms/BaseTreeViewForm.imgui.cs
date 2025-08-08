@@ -4,10 +4,11 @@ using ImGui.Forms.Controls.Menu;
 using ImGui.Forms.Controls.Tree;
 using ImGui.Forms.Controls;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Numerics;
+using ImGui.Forms.Controls.Text;
 using ImGui.Forms.Localization;
 using ImGui.Forms.Models;
+using SixLabors.ImageSharp;
 using Rectangle = Veldrid.Rectangle;
 using Size = ImGui.Forms.Models.Size;
 
@@ -157,7 +158,7 @@ namespace CfgBinEditor.Forms
         {
             foreach (TreeNode node in nodes)
             {
-                node.TextColor = Color.Empty;
+                node.TextColor = ColorResources.TextDefault;
 
                 IEnumerable<TreeNode> childNodes = node.EnumerateNodes();
                 ResetNodesChangeState(childNodes);

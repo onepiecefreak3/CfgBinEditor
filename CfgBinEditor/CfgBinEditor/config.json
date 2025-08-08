@@ -48,5 +48,14 @@
         "Value": "MyIDs.txt"
       }
     ]
+  },
+  {
+    "Name": "UI.CfgBinEditor.Resources",
+    "Entries": [
+      {
+        "Key": "DefaultLocale",
+        "Value": "en"
+      }
+    ]
   }
 ]

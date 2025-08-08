@@ -10,6 +10,7 @@ using CrossCutting.Core.Contract.EventBrokerage;
 using ImGui.Forms.Controls;
 using ImGui.Forms.Controls.Base;
 using ImGui.Forms.Controls.Layouts;
+using ImGui.Forms.Controls.Text;
 using ImGui.Forms.Localization;
 using ImGui.Forms.Modals.IO;
 using ImGui.Forms.Models;
@@ -136,9 +137,9 @@ namespace CfgBinEditor.Forms
             {
                 Items =
                 {
-                    new ComboBoxItem<ValueType>(ValueType.String, LocalizationResources.CfgBinEntryTypeStringCaption),
-                    new ComboBoxItem<ValueType>(ValueType.Integer, LocalizationResources.CfgBinEntryTypeIntCaption),
-                    new ComboBoxItem<ValueType>(ValueType.FloatingPoint, LocalizationResources.CfgBinEntryTypeFloatCaption)
+                    new DropDownItem<ValueType>(ValueType.String, LocalizationResources.CfgBinEntryTypeStringCaption),
+                    new DropDownItem<ValueType>(ValueType.Integer, LocalizationResources.CfgBinEntryTypeIntCaption),
+                    new DropDownItem<ValueType>(ValueType.FloatingPoint, LocalizationResources.CfgBinEntryTypeFloatCaption)
                 }
             };
             typeComboBox.SelectedItem = typeComboBox.Items.FirstOrDefault(x => x.Content == entryValue.Type);
@@ -269,7 +270,7 @@ namespace CfgBinEditor.Forms
 
         private void AddGame(GameAddedMessage msg)
         {
-            _gameComboBox.Items.Add(new ComboBoxItem<LocalizedString>(msg.Game));
+            _gameComboBox.Items.Add(new DropDownItem<LocalizedString>(msg.Game));
 
             if (msg.Sender != this)
                 return;

@@ -1,10 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+    <OutputType>WinExe</OutputType>
     <AssemblyName>CfgBinEditor</AssemblyName>
     <RootNamespace>CfgBinEditor</RootNamespace>
-    <Version>1.0.0</Version>
     <Nullable>enable</Nullable>
+    <ApplicationIcon>Resources\Images\logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="resources\fonts\notojp.ttf" />
@@ -20,20 +21,9 @@
     <ProjectReference Include="..\Mappings.CfgBinEditor\Mappings.CfgBinEditor.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Update="config.json">
+    <None Update="config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Update="resources\langs\de.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Update="resources\langs\en.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Update="resources\langs\fr.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
+    </None>
     <None Update="MyIDs.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -61,11 +51,20 @@
     <None Update="resources\images\save_all_1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="resources\langs\de.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resources\langs\en.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resources\langs\fr.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Dialogs\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Imgui.Forms" Version="1.0.60" />
+    <PackageReference Include="Imgui.Forms" Version="1.5.7" />
   </ItemGroup>
 </Project>
