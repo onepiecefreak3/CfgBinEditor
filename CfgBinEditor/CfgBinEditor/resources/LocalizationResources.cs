@@ -24,6 +24,7 @@ namespace CfgBinEditor.resources
 
         public static LocalizedString FileOpenCaption => LocalizedString.FromId("File.Open.Caption");
         public static LocalizedString FileOpenCfgBinFilterCaption => LocalizedString.FromId("File.Open.CfgBinFilter.Caption");
+        public static LocalizedString FileOpenJsonFilterCaption => LocalizedString.FromId("File.Open.JsonFilter.Caption");
         public static LocalizedString FileOpenCancel => LocalizedString.FromId("File.Open.Cancel");
         public static LocalizedString FileOpenErrorCaption(string fileName, Func<string> message) =>
             LocalizedString.FromId("File.Open.Error.Caption", () => fileName, message);

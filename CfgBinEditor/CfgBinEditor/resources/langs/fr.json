@@ -24,6 +24,7 @@
   // Open File
   "File.Open.Caption": "Choisir un fichier à ouvrir...",
   "File.Open.CfgBinFilter.Caption": "Fichier de configuration",
+  "File.Open.JsonFilter.Caption": "Fichier de json",
   "File.Open.Cancel": "Aucun fichier selectionné",
   "File.Open.Error.Caption": "Une erreur est survenue en chargeant {0}: {1}",
   "File.Open.Error.Type.Caption": "Ce fichier n'est pas un cfg.bin valide.",

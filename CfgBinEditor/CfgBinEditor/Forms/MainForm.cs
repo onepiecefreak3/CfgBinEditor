@@ -16,6 +16,7 @@ using ImGui.Forms.Controls.Menu;
 using ImGui.Forms.Localization;
 using ImGui.Forms.Modals;
 using ImGui.Forms.Modals.IO;
+using ImGui.Forms.Modals.IO.Windows;
 using ImGui.Forms.Models;
 using Logic.Business.CfgBinEditorManagement.Contract;
 using Logic.Domain.Level5Management.Contract;
@@ -217,11 +218,11 @@ namespace CfgBinEditor.Forms
 
         private async void OpenFile()
         {
-            var ofd = new OpenFileDialog
+            var ofd = new WindowsOpenFileDialog
             {
-                Caption = LocalizationResources.FileOpenCaption,
+                Title = LocalizationResources.FileOpenCaption,
                 InitialDirectory = GetLoadDirectory(_settingsProvider),
-                FileFilters =
+                Filters = 
                 {
                     new FileFilter(LocalizationResources.FileOpenCfgBinFilterCaption, "cfg.bin")
                 }
@@ -234,9 +235,9 @@ namespace CfgBinEditor.Forms
                 return;
             }
 
-            SetLoadDirectory(Path.GetDirectoryName(ofd.SelectedPath), _settingsProvider);
+            SetLoadDirectory(Path.GetDirectoryName(ofd.Files[0]), _settingsProvider);
 
-            bool wasOpened = OpenFile(ofd.SelectedPath);
+            bool wasOpened = OpenFile(ofd.Files[0]);
             if (wasOpened)
                 SetStatus(string.Empty, LabelStatus.None);
         }

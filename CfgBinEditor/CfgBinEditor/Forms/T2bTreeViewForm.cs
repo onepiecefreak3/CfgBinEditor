@@ -11,6 +11,7 @@ using ImGui.Forms.Controls.Tree;
 using ImGui.Forms.Localization;
 using ImGui.Forms.Modals;
 using ImGui.Forms.Modals.IO;
+using ImGui.Forms.Modals.IO.Windows;
 using Logic.Business.CfgBinEditorManagement.Contract;
 using Logic.Domain.Level5Management.Contract.DataClasses;
 using Microsoft.VisualBasic.FileIO;
@@ -205,14 +206,21 @@ namespace CfgBinEditor.Forms
         protected override async void Import(TreeNode<T2bEntry>? parentNode)
         {
             // Select json file
-            var ofd = new OpenFileDialog { InitialDirectory = GetImportDirectory() };
+            var ofd = new WindowsOpenFileDialog
+            {
+                InitialDirectory = GetImportDirectory(),
+                Filters =
+                {
+                    new FileFilter(LocalizationResources.FileOpenJsonFilterCaption, "json")
+                }
+            };
 
             DialogResult result = await ofd.ShowAsync();
             if (result != DialogResult.Ok)
                 return;
 
             // Read entries from file
-            await using Stream importStream = File.OpenRead(ofd.SelectedPath);
+            await using Stream importStream = File.OpenRead(ofd.Files[0]);
             using StreamReader reader = new StreamReader(importStream);
 
             string importJson = await reader.ReadToEndAsync();
@@ -289,22 +297,29 @@ namespace CfgBinEditor.Forms
         protected override async void Export(TreeNode<T2bEntry>? node)
         {
             // Select save path
-            var sfd = new SaveFileDialog { InitialDirectory = GetExportDirectory() };
+            var sfd = new WindowsSaveFileDialog
+            {
+                InitialDirectory = GetExportDirectory(),
+                Filters =
+                {
+                    new FileFilter(LocalizationResources.FileOpenJsonFilterCaption, "json")
+                }
+            };
 
             DialogResult result = await sfd.ShowAsync();
             if (result != DialogResult.Ok)
                 return;
 
-            SetExportDirectory(Path.GetDirectoryName(sfd.SelectedPath)!);
+            SetExportDirectory(Path.GetDirectoryName(sfd.Files[0])!);
 
             // Choose entries to export
             int entryIndex = node == null ? 0 : Array.IndexOf(_config.Entries, node.Data);
             int entryCount = node == null ? _config.Entries.Length : CountEntries(node);
 
-            string entryJson = _serializer.Serialize(_config.Entries[entryIndex..entryCount]);
+            string entryJson = _serializer.Serialize(_config.Entries[entryIndex..(entryIndex + entryCount)]);
 
             // Write entries to file
-            await using Stream exportStream = File.Create(sfd.SelectedPath);
+            await using Stream exportStream = File.Create(sfd.Files[0]);
             await using StreamWriter writer = new StreamWriter(exportStream);
 
             await writer.WriteAsync(entryJson);
