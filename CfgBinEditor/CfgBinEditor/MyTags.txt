@@ -1,6 +1,6 @@
-YKW1 [
-	CHARA_BASE_YOKAI_INFO (
-		BaseID|True
+YW1  [
+	CHARA_BASE_YOKAI_INFO  (
+		BaseID|False
 		FileNamePrefix|False
 		FileNameNumber|False
 		FileNameVariant|False
@@ -10,7 +10,7 @@ YKW1 [
 		Unk3|False
 		Unk4|False
 		Unk5|False
-		DescriptionID|True
+		DescriptionID|False
 		Unk6|False
 		Unk7|False
 		Unk8|False
@@ -26,9 +26,9 @@ YKW1 [
 		Unk14|False
 	)
 
-	CHARA_PARAM_INFO (
-		ParamID|True
-		BaseID|True
+	CHARA_PARAM_INFO  (
+		ParamID|False
+		BaseID|False
 		Tribe|False
 		MinHP|False
 		MinStrength|False
@@ -36,11 +36,11 @@ YKW1 [
 		MinDefense|False
 		MinSpeed|False
 		Unk1|False
-		AttackID|True
+		AttackID|False
 		Unk2|False
-		TechniqueID|True
+		TechniqueID|False
 		Unk3|False
-		InspiritID|True
+		InspiritID|False
 		Unk4|False
 		Unk5|False
 		Unk6|False
@@ -51,16 +51,16 @@ YKW1 [
 		AttributeDamageLigthning|False
 		AttributeDamageWater|False
 		AttributeDamageWind|False
-		SoultimateID|True
+		SoultimateID|False
 		Unk8|False
 		Unk9|False
 		Unk10|False
-		SkillID|True
+		SkillID|False
 		Money|False
 		Experience|False
-		Drop1ID|True
+		Drop1ID|False
 		Drop1Rate|False
-		Drop2ID|True
+		Drop2ID|False
 		Drop2Rate|False
 		Unk11|False
 		Unk12|False
@@ -74,13 +74,13 @@ YKW1 [
 		Unk19|False
 		Unk20|False
 		Unk21|False
-		Unk22|False
-		Unk23|False
+		IsFusable|False
+		EvolveIndex|False
 		MedaliumOffset|False
 		Unk24|False
 	)
 
-	CHARA_SCALE_INFO (
+	CHARA_SCALE_INFO  (
 		BaseID|True
 		Unk1|False
 		Unk2|False
@@ -89,7 +89,7 @@ YKW1 [
 		Unk5|False
 	)
 
-	ENCOUNT_CHARA (
+	ENCOUNT_CHARA  (
 		YokaiParamID|True
 		Level|False
 		Unk1|False
@@ -98,21 +98,512 @@ YKW1 [
 		Unk4|False
 		Unk5|False
 	)
+
+	ITABLE_DATA_MORE  (
+		ItemID|True
+		Quantity|False
+		Percentage|False
+		Unk1|False
+		Unk2|False
+	)
+
+	ITEM_CONSUME  (
+		ItemID|False
+		NameID|False
+		InventorySort|False
+		ItemType|False
+		Offset1|False
+		Offset2|False
+		CarryCap|False
+		IsBuyable|False
+		IsSellable|False
+		IsFusable|False
+		SellPrice|False
+		PurchasePrice|False
+		IconPosX|False
+		IconPosY|False
+		DescriptionID|True
+		AllyEffectTextID|True
+		FoeEffectTextID|True
+		Unk17|False
+		EffectValue|False
+		Unk19|False
+		Unk20|True
+		Unk21|False
+		Unk22|True
+	)
+
+	ITEM_EQUIPMENT  (
+		ItemID|True
+		NameID|True
+		InventorySort|False
+		ItemType|False
+		Unk5|False
+		Unk6|False
+		CarryCap|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		SellPrice|False
+		BuyPrice|False
+		IconPosX|False
+		IconPosY|False
+		DescriptionID|True
+		BuffTextID|False
+		DebuffTextID|False
+		Unk17|False
+		Unk18|False
+		Unk19|False
+		Unk20|False
+		Unk21|False
+		Unk22|False
+		Unk23|False
+		Unk24|True
+	)
+
+	ITEM_IMPORTANT  (
+		ItemID|True
+		NameID|True
+		InventorySort|False
+		ItemType|False
+		Unk5|False
+		Unk6|False
+		CarryCap|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		IconPosX|False
+		IconPosY|False
+		Unk14|True
+		Unk15|False
+		Unk16|False
+		Unk17|True
+	)
+
+	ITEM_INDEX  (
+		ItemID|True
+		InventorySort|False
+		ItemOffset|False
+	)
+
+	SHOP_CONFIG_INFO  (
+		SlotID|True
+		ItemID|True
+		Price|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+	)
+
+	ITEM_CREATURE  (
+		Unk0|True
+	)
+
+	ITABLE_DATA  (
+		TboxID|True
+		TreasureDataOffset|False
+	)
+
+	OP_SEARCH_POINT  (
+		Unk0|False
+	)
+
+	LEGEND_DATA_CONFIG  (
+		Unk0|False
+		LegendaryParamID|False
+		RequiredParamID1|False
+		Revealed|False
+		RequiredParamID2|False
+		Revealed|False
+		RequiredParamID3|False
+		Revealed|False
+		RequiredParamID4|False
+		Revealed|False
+		RequiredParamID5|False
+		Revealed|False
+		RequiredParamID6|False
+		Revealed|False
+		RequiredParamID7|False
+		Revealed|False
+		RequiredParamID8|False
+		Revealed|False
+	)
+
+	NPC_BASE  (
+		Unk0|False
+		Unk1|False
+		BaseID|False
+	)
+
+	CHARA_ABILITY_CONFIG_INFO  (
+		Unk0|True
+		Unk1|True
+		Unk2|True
+		Unk3|True
+	)
+
+	TEXT_INFO  (
+		Unk0|True
+	)
+
+	CHARA_BASE_INFO  (
+		Unk0|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+	)
 ]
 
-YKW2 [
-	CHARA_BASE_YOKAI_INFO (
-		BaseID|True
-		FileNamePrefix|False
-		FileNameNumber|False
-		FileNameVariant|False
-		NameID|True
+YW2  [
+	WANTED_MAP_ACT  (
+		Index|False
+		X|False
+		Y|False
+		Z|False
+	)
+
+	QUEST_CONFIG  (
+		QuestID|True
+		QuestType|False
+		MainIndex|False
+		InverseIndex|False
+		UnkID|False
+		QuestTitleID|True
+		Unk2|False
+		T_A|False
+		XP|False
+		Money-UsedForFavors|False
+		Unk6|False
+		T_B|False
+		DescriptionID|False
+		RecommendedLevel|False
+		Unk10|False
+		Cond|False
+		UnkType|False
+	)
+
+	TROPHY_INFO  (
+		TrophyID|True
+		TrophyTextID|True
+		Unk1|False
+		Rarity|False
+		CondSomeAreHardcoded|False
+		ValueOfCond|False
+	)
+
+	WEATHER_FORECAST_INFO  (
+		IsPast|False
+	)
+
+	WEATHER_FORECAST_INFO_DATA  (
+		UnkID|False
+		UnkBool|False
+	)
+
+	WEATHER_FORECAST_INFO_DATA_RATE  (
+		Weight|False
+		Cond|False
+	)
+
+	WEATHER_FORECAST_INFO_DATA_RATE_LIST  (
+		Length|False
+	)
+
+	WEATHER_FORECAST_INFO_DATA_LIST  (
+		Length|False
+	)
+
+	WEATHER_SCHEDULE_INFO_LIST  (
+		Length|False
+	)
+
+	WEATHER_SCHEDULE_INFO  (
+		IsPast|False
+	)
+
+	WEATHER_SCHEDULE_INFO_DATA_LIST  (
+		Length|False
+	)
+
+	WEATHER_SCHEDULE_INFO_DATA  (
+		WeatherID|False
+		Unk0|False
 		Unk1|False
 		Unk2|False
 		Unk3|False
 		Unk4|False
 		Unk5|False
-		DescriptionID|True
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		Unk16|False
+		Unk17|False
+		Unk18|False
+		Unk19|False
+		Unk20|False
+		Unk21|False
+		Unk22|False
+		Unk23|False
+		Unk24|False
+		sum45Weight|False
+	)
+
+	QR_INFO  (
+		StartTypeDec|False
+		EndTypeDec|False
+		TypeItemID|False
+	)
+
+	QR0_INFO  (
+		StartTypeDec|False
+		EndTypeDec|False
+		TypeItemID|False
+	)
+
+	QR1_INFO  (
+		StartTypeDec|False
+		EndTypeDec|False
+		TypeItemID|False
+	)
+
+	QR2_INFO  (
+		StartTypeDec|False
+		EndTypeDec|False
+		TypeItemID|False
+	)
+
+	QR_RAND_INFO  (
+		ItemID|False
+		IsRand|False
+	)
+
+	QR0_RAND_INFO  (
+		ItemID|False
+		IsRand|False
+	)
+
+	QR1_RAND_INFO  (
+		ItemID|False
+		IsRand-AlwaysMakeThisWrong!|False
+	)
+
+	QR2_RAND_INFO  (
+		ItemID|False
+		IsRand-AlwaysMakeThis1!|False
+	)
+
+	ITEM_IMPORTANT  (
+		ItemID|True
+		NounTextID|True
+		InventorySort|False
+		ItemType|False
+		ItemNum|False
+		GlobalItemIndex|False
+		CarryCap?|False
+		CanBeBought?|False
+		CanBeSold?|False
+		IsFusable?|False
+		BuyPrice?|False
+		SellPrice?|False
+		IconPosX|False
+		IconPosY|False
+		DescTextID|True
+		Unk15-AlwaysZero|False
+		Unk16-AlwaysZero|False
+		InvMenuTextID|True
+	)
+
+	ITEM_SOUL  (
+		ItemID|True
+		MaybeNounTextID|True
+		InventorySort|False
+		ItemType|False
+		ItemNum|False
+		GlobalItemIndex|False
+		CarryCap?|False
+		CanBeBought|False
+		CanBeSold|False
+		IsFusable|False
+		SellPrice|False
+		BuyPrice|False
+		IconPosX|False
+		IconPosY|False
+		DescriptionTextID|True
+		Unk15|False
+		Unk16|False
+		Unk17|False
+		Unk18|False
+		Unk19|False
+		Unk20|False
+		SoulEffectIDA|True
+		Unk22|False
+		Unk23|False
+		InvMenuTextID|True
+	)
+
+	ITEM_CREATURE  (
+		ItemID|True
+		NounTextID|True
+		InventorySort|False
+		ItemType|False
+		ItemNum|False
+		GlobalItemIndex|False
+		CarryCap|False
+		CanBeBought?|False
+		CanBeSold?|False
+		IsFusable?|False
+		ExchangePrice|False
+		ExchangePrice|False
+		IconPosX|False
+		IconPosY|False
+		DescTextID|True
+		Unk15-AlwaysZero|False
+		Unk16-AlwaysZero|False
+		UnkID|True
+		InvMenuTextID|True
+	)
+
+	ITEM_EQUIPMENT  (
+		ItemID|True
+		MaybeNounTextID|True
+		InventorySort|False
+		ItemType|False
+		ItemNum|False
+		GlobalItemIndex|False
+		CarryCap|False
+		CanBeBought|False
+		CanBeSold|False
+		IsFusable|False
+		SellPrice|False
+		BuyPrice|False
+		IconPosX|False
+		IconPosY|False
+		DescriptionTextID|True
+		BuffTextID|True
+		DebuffTextID|True
+		STRBuff|False
+		SPRBuff|False
+		DEFBuff|False
+		SPDBuff|False
+		SkillIDA-(EffectA)|True
+		SkillIDB-(EffectB)|True
+		EquipRequirement|False
+		InvMenuTextID|True
+	)
+
+	ITEM_INDEX  (
+		ItemID|False
+		InventorySort|False
+		Index|False
+	)
+
+	ITEM_EQUIP_COND  (
+		RankRequirement|False
+		StartBoundary|False
+		BoundaryLength|False
+		AllianceRequirement|False
+	)
+
+	SCRATCH_RATE_LIST  (
+		Length|False
+	)
+
+	SCRATCH_INFO_LIST  (
+		Length|False
+	)
+
+	SCRATCH_SHOP_LIST  (
+		Length|False
+	)
+
+	SCRATCH_SHOP_DATA_LIST  (
+		Length|False
+	)
+
+	SCRATCH_SHOP  (
+		ShopSlotID?|True
+	)
+
+	DATA_COUNT  (
+		ChildCount|False
+	)
+
+	CREATURE_BONUS_ITEM  (
+		Milestone|False
+		ItemID|True
+		Count|False
+		ProbShopSlotID|True
+	)
+
+	CREATURE_BONUS_ITEM_LIST  (
+		Length|False
+	)
+
+	CREATURE_BONUS_LIST  (
+		Length|False
+	)
+
+	CREATURE_BONUS  (
+		FishOrInsect|False
+	)
+
+	CAMPAIGN_ITEM_LIST  (
+		Length|False
+	)
+
+	CAMPAIGN_ITEM  (
+		InsectType|False
+		ItemID|True
+		AlwaysThreeUnk|False
+	)
+
+	SHOP_LIST  (
+		Length|False
+	)
+
+	SHOP_LIST_INFO  (
+		ShopID|True
+	)
+
+	CAPSULE_ITEM_INFO_LIST  (
+		Length|False
+	)
+
+	ITABLE_DATA_MORE  (
+		ItemID|True
+		Quantity|False
+		Percentage|False
+		Unk1|False
+		Unk2|False
+	)
+
+	CHARA_BASE_YOKAI_INFO  (
+		BaseID|True
+		FileNamePrefix|False
+		FileNameNumber|False
+		FileNameVariant|False
+		NameID|True
+		UnkNum|False
+		Unk2|False
+		UnkBool|False
+		Unk4|False
+		Unk5|False
+		DescriptionID|False
 		MedalPosX|False
 		MedalPosY|False
 		Unk6|False
@@ -121,39 +612,64 @@ YKW2 [
 		IsLegendary|False
 		FavFood|False
 		HatedFood|False
-		Unk7|False
-		Unk8|False
+		UnkBitmask|True
+		UnkID|True
 		Unk9|False
 		Unk10|False
-		Unk11|False
+		LegalAlliances|False
 		Tribe|False
 		IsClassic|False
-		Unk12|False
+		HasNoCharaparam??|False
 	)
 
-	CHARA_PARAM_INFO (
+	SOUL_RARE_CONFIG_INFO  (
+		ItemID|False
+		Unk0|False
+		Unk1|False
+		Unk2|False
+	)
+
+	SOUL_RARE_CONFIG_INFO_LIST  (
+		Length|False
+	)
+
+	CHARA_FRIEND_RATE_INFO  (
+		BaseXOR|False
+		DecayScaleA|False
+		DecayScaleB|False
+		DecayScaleC|False
+		DecayScaleD|False
+		DecayScaleE|False
+		DecayingPenaltyUnpopularity?|False
+		ConstA|False
+		ConstB|False
+		ConstC|False
+		ConstD|False
+	)
+
+	CHARA_PARAM_INFO  (
 		ParamID|True
 		BaseID|True
-		MinHP|False
-		MinStrength|False
-		MinSpirit|False
-		MinDefense|False
-		MinSpeed|False
-		MaxHP|False
-		MaxStrength|False
-		MaxSpirit|False
-		MaxDefense|False
-		MaxSpeed|False
-		FavoriteDonut|False
+		baseA_HP|False
+		baseA_Strength|False
+		baseA_Spirit|False
+		baseA_Defense|False
+		baseA_Speed|False
+		baseB_HP|False
+		baseB_Strength|False
+		baseB_Spirit|False
+		baseB_Defense|False
+		baseB_Speed|False
+		CharaRandomActType|False
 		AttackID|True
-		Unk1|False
+		BaseAttack%|False
 		TechniqueID|True
-		Unk2|False
+		BaseTechnique%|False
 		InspiritID|True
-		Unk3|False
-		Unk4|False
-		Unk5|False
-		Unk6|False
+		BaseInspirit%|False
+		GuardID|True
+		BaseGuard%|False
+		BaseLoafAttitude|False
 		AttributeDamageFire|False
 		AttributeDamageIce|False
 		AttributeDamageEarth|False
@@ -161,38 +677,38 @@ YKW2 [
 		AttributeDamageWater|False
 		AttributeDamageWind|False
 		SoultimateID|True
-		Unk7|False
-		Unk8|False
+		IsNotBoss?|False
+		LoafQuoteID|True
 		ScoutableID|True
 		SkillID|True
 		Money|False
 		Experience|False
-		EquipmentSlotsAmount|False
+		ItemSlots|False
 		Drop1ID|True
 		Drop1Rate|False
 		Drop2ID|True
 		Drop2Rate|False
-		Unk10|False
-		Unk11|False
+		InspiritBtleTxtPersonality|False
+		EnemyInspiritHit%|False
 		ExperienceCurve|False
 		Quote1ID|True
 		Quote2ID|True
 		Quote3ID|True
 		Quote4ID|True
-		Unk12|False
+		IsFusable|False
 		EvolveOffset|False
 		MedaliumOffset|False
-		Unk13|False
-		Unk14|False
-		Unk15|False
+		InMedallium?|False
+		CharaSameKind|False
+		IsNotTypeRare?|True
 	)
 
-	CHARA_EVOLVE_INFO (
+	CHARA_EVOLVE_INFO  (
 		Level|False
 		ParamID|True
 	)
 
-	LEGEND_DATA_CONFIG (
+	LEGEND_DATA_CONFIG  (
 		LegendID|True
 		LegendYokaiParamID|True
 		Seal1YokaiParamID|True
@@ -215,7 +731,7 @@ YKW2 [
 		Page|False
 	)
 
-	COMBINE_INFO (
+	COMBINE_INFO  (
 		BaseIsItem|False
 		BaseID|True
 		MaterialIsItem|False
@@ -226,7 +742,7 @@ YKW2 [
 		FusionIsItem|False
 	)
 
-	ENCOUNT_CHARA (
+	ENCOUNT_CHARA  (
 		YokaiParamID|True
 		Level|False
 		Unk1|False
@@ -236,7 +752,7 @@ YKW2 [
 		Unk5|False
 	)
 
-	ENCOUNT_TABLE (
+	ENCOUNT_TABLE  (
 		EncountID|True
 		EncountCharaOffset1|False
 		EncountCharaOffset2|False
@@ -259,7 +775,7 @@ YKW2 [
 		unk11|False
 		unk12|False
 		unk13|False
-		BattleRuleID|False
+		BtlRuleID|True
 		unk14|False
 		unk15|False
 		unk16|False
@@ -269,21 +785,39 @@ YKW2 [
 		unk20|False
 	)
 
-	SHOP_CONFIG_INFO (
+	SHOP_CONFIG_INFO  (
 		ShopSlotID|True
 		ItemID|True
 		Price|False
-		Unk1|False
+		Stock|False
 		Unk2|False
 		Unk3|False
 		Unk4|False
 		Unk5|False
 		Unk6|False
 		Unk7|False
-		Unk8|False
+		Cond|False
 	)
 
-	PASSWORD_INFO (
+	SHOP_VALID_CONDITION  (
+		AltPrice|False
+		Cond|False
+	)
+
+	SHOP_ITEM_LIST  (
+		Length|False
+	)
+
+	SHOP_ITEM  (
+		BicycleorBellID|False
+		BicycleorBellID|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Cond|False
+	)
+
+	PASSWORD_INFO  (
 		TextID|True
 		Unk1|False
 		ItemID|True
@@ -293,27 +827,27 @@ YKW2 [
 		Unk4|False
 	)
 
-	FLAG_INFO (
-		FlagNumber|False
+	FLAG_INFO  (
+		FlagSlot|False
 		FlagID|True
 	)
 
-	KEY_BOARD_STR (
+	KEY_BOARD_STR  (
 		KeyID|True
 		Unk1|False
 		Unk2|False
 		Unk3|False
-		Character|False
+		Character|True
 	)
 
-	TEXT_INFO (
+	TEXT_INFO  (
 		TextID|True
 		Number|False
 		Text|False
 		Unk|False
 	)
 
-	CHARA_SCALE_INFO (
+	CHARA_SCALE_INFO  (
 		YokaiBaseID|True
 		WorldMapSize|False
 		Unk1|False
@@ -323,74 +857,74 @@ YKW2 [
 		Unk3|False
 	)
 
-	SKILL_CONFIG_INFO (
+	SKILL_CONFIG_INFO  (
 		SkillConfigID|True
 		Unk1|False
-		NounID|True
-		TextID|True
-		Unk3|False
+		TextID|False
+		DescID|False
+		SkillGrowth|False
 		Power|False
 		Element|False
-		Unk5|False
-		Unk6|False
+		SoultChargeTier|False
+		ToritukuInfo|False
 	)
 
-	BATTLE_COMMAND_INFO (
+	BATTLE_COMMAND_INFO  (
 		BattleCommandID|True
 		TextID|True
 		unk1|False
 		unk2|False
 		unk3|False
-		PowerMultiplicator|False
+		NHits|False
 		unk4|False
 		unk5|False
 		unk6|False
 		TextureID|False
-		SkillConfigID|True
+		SkillConfigID|False
 		unk7|False
 		unk8|False
 		unk9|False
-		unk10|False
-		unk11|False
-		unk12|False
-		unk13|False
-		unk14|False
+		BattleCommandCond|False
+		Steff1|False
+		Steff2|False
+		Steff3|False
+		Steff4|False
 	)
 
-	BATTLE_COMMAND_LINK_INFO (
+	BATTLE_COMMAND_LINK_INFO  (
 		BattleCommandID|True
 		SkillConfigID|True
 	)
 
-	ITEM_CONSUME (
+	ITEM_CONSUME  (
 		ItemID|True
 		NounTextID|True
 		InventorySort|False
 		ItemType|False
-		Unk1|False
-		Unk2|False
+		ItemNum|False
+		GlobalItemIndex|False
 		CarryCap|False
-		Unk3|False
-		Unk4|False
-		Unk5|False
+		CanBeBought|False
+		CanBeSold|False
+		IsFusable|False
 		SellPrice|False
-		ShopPrice|False
+		BuyPrice|False
 		IconPosX|False
 		IconPosY|False
 		DescTextID|True
 		OnAllyTextID|True
 		OnFoeTextID|True
-		Unk6|False
-		Effect|False
-		Unk7|False
-		Unk8|False
-		Unk9|False
+		EffectA|False
+		EffectValueA\BtlCommandIDA|True
+		EffectB|False
+		EffectValueB\BtlCommandIDB|True
+		OnConsumptionTextID|True
 		InvMenuTextID|True
 	)
 
-	NPC_BASE (
+	NPC_BASE  (
 		NPCID|True
-		Unk1|False
+		Unk1|True
 		BaseID|True
 		Unk2|False
 		NPCType|False
@@ -402,27 +936,654 @@ YKW2 [
 		Unk8|False
 	)
 
-	NPC_PRESET (
+	NPC_PRESET  (
 		NPCID|True
 		NPCAppearStartOffset|False
 		NPCAppearCount|False
 	)
 
-	NPC_APPEAR (
+	NPC_APPEAR  (
 		NPCName|False
 		Unk1|False
 		Unk2|False
-		PhaseAppear|False
+		Cond|False
 		Unk3|False
 		Unk4|False
 		Unk5|False
 	)
 
-	CAPSULE_ITEM_INFO (
+	CAPSULE_ITEM_INFO  (
 		RewardID|True
-		Unk1|False
-		ParamIDORItemID|True
+		IsOniCrank|True
+		ParamID\ItemID|True
 		CapsuleBefriendID|True
+		AlwaysZero?|True
+		AlwaysZero?|True
+		ColorPercentageA?|False
+		ColorPercentageB?|False
+		ColorPercentageC?|False
+		ColorPercentageD?|False
+		ColorPercentageE?|False
+	)
+
+	SKILL_GROWTH_INFO  (
+		BaseGrowth|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		Unk16|False
+		Unk17|False
+		Unk18|False
+		Unk19|False
+		Unk20|False
+		Unk21|False
+		Unk22|False
+		Unk23|False
+		Unk24|False
+		Unk25|False
+		Unk26|False
+		Unk27|False
+		Unk28|False
+		Unk29|False
+		Unk30|False
+	)
+
+	CAPSULE_RATE_INFO_DATA  (
+		RewardID|True
+		Percentage\IsChoice|False
+		Unk2|True
+		Unk3|True
+	)
+
+	CAPSULE_RATE_INFO  (
+		MachineConfigID|True
+		EntryNumber|False
+	)
+
+	CAPSULE_MACHINE_CONFIG_INFO_DATA  (
+		CoinID|True
+		PlaycoinCount|False
+		MachineConfigID|True
+		AlwaysZero?|True
+	)
+
+	MEDAL_LOAD_CFG  (
+		Unk0|True
+	)
+
+	YOUKAI_SUMMON_INFO  (
+		BaseID|True
+		UsesModelZero?|False
+	)
+
+	NOUN_INFO  (
+		NameID|True
+		Number|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Text|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+	)
+
+	GYM_BOSS_SINGLE_INFO  (
+		RoundID|True
+		TournamentName|False
+		RoundNameID|True
+		Unk2|False
+		GPReward?|False
+		RewardID|True
+		Unk4|False
+		Cond|False
+	)
+
+	GYM_BOSS_SINGLE_ENC_INFO  (
+		RoundID|True
+	)
+
+	GYM_BOSS_SINGLE_ENC_INFO_DATA  (
+		EncountID|True
+		BattleMapID|True
+	)
+
+	GYM_BOSS_RUSH_INFO  (
+		RoundID|True
+		TournamentName|False
+		RoundNameID|True
+		Unk2|False
+		Unk3|False
+		RewardID|True
+		Unk4|False
+		Cond|False
+	)
+
+	GYM_BOSS_RUSH_ENC_INFO  (
+		RoundID|True
+	)
+
+	GYM_BOSS_RUSH_ENC_INFO_DATA  (
+		EncountID|True
+		BattleMapID|True
+	)
+
+	GYM_MISSION_BATTLE_INFO  (
+		MissionID|True
+		TournamentName|False
+		MissionNameID|True
+		GPReward?|False
+		RewardID|True
+		Unk3|False
+		Unk4|False
+	)
+
+	GYM_MISSION_BATTLE_ENC_INFO  (
+		MissionID|True
+	)
+
+	GYM_MISSION_BATTLE_ENC_INFO_DATA  (
+		EncountID|True
+		BattleMapID|True
+	)
+
+	GYM_TOURNAMENT_INFO  (
+		Unk0|False
+		TournamentID|True
+		TournamentName|False
+		TournamentNameID|True
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		RewardID|True
+		Unk5|False
+		Cond|False
+	)
+
+	GYM_TOURNAMENT_ENC_INFO  (
+		TournamentID|True
+	)
+
+	GYM_TOURNAMENT_ENC_INFO_DATA  (
+		EncountID|True
+		BattleMapID|True
+	)
+
+	ORGE_CHARA_PARAM  (
+		YokaiBaseID|True
+		Role|False
+		unk6|False
+		HPOffset|False
+		AttackOffset|False
+		SpiritOffset|False
+		SpeedOffset|False
+		unk1|False
+		unk2|False
+		unk3|False
+		unk4|False
+		unk5|False
+	)
+
+	BOSS_PARTS_INFO_BEGIN  (
+		BossParamID|True
+		ChildCount|False
+	)
+
+	BOSS_PARTS_INFO  (
+		BossParamID|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		BattleCommand1ID|True
+		BattleCommand2ID|True
+		BattleCommand3ID|True
+		BattleCommand4ID|True
+		BattleCommand5ID|True
+		BattleCommand6ID|True
+		BattleCommand7ID|True
+		BattleCommand8ID|True
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		Unk16|False
+		Unk17|False
+		Unk18|False
+		Unk19|False
+		Unk20|False
+		Unk21|False
+		Unk22|False
+		Unk23|False
+		Unk24|False
+		Unk25|False
+		Unk26|False
+		Unk27|False
+		Unk28|False
+	)
+
+	PURPOSE_TEXT_ITEM  (
+		PurposeTextID|False
+	)
+
+	PURPOSE_POS_ITEM  (
+		WorldmapPositionID|True
+		Unk1|False
+		Cond|False
+	)
+
+	WMAP_POS  (
+		PositionID|True
+	)
+
+	PURPOSE_TEXT_COUNT  (
+		objectiveTextCount|False
+	)
+
+	DATA_ITEM  (
+		Thesecannotbetaggedbymytagsduetobeinggeneraltags|False
+		Unk1|True
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+	)
+
+	OP_SEARCH_POINT  (
+		SearchID|True
+		PositionID|True
+		Cond|False
+	)
+
+	SHAPE_DATA_ITEM  (
+		PositionID|True
+		Xcord|False
+		Unk2|False
+		Ycord|False
+		ROT?|False
+		Unk5|False
+		Area|False
+		Unk7|False
+		Unk8|False
+	)
+
+	TEXT_WASHA_MAP  (
+		KeyID|True
+		TextOffset|False
+		TalkerBaseID|True
+		Unk4|False
+		Unk5|False
+		Unk6|False
+	)
+
+	POINT  (
+		X|False
+		Z|False
+		Y|False
+		Rot|False
+	)
+
+	SAFE_POS_INFO  (
+		Unk0|False
+		Unk1|False
+		CondOfSomeKind|False
+		HashedMapID|True
+		X|False
+		Z|False
+		Y|False
+		Unk7|True
+	)
+
+	EVENT_SET_CONFIG  (
+		EventID|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		IsUnskippable|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Audio|False
+	)
+
+	CHARA_SAME_KIND_INFO  (
+		ParamID1|True
+		ParamID2|True
+		UnkID|True
+		Cond|False
+	)
+
+	WM_YOKAI_APPEAR  (
+		YokaiBaseID|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+	)
+
+	ITABLE_DATA  (
+		Unk0|True
+	)
+
+	BONUS_ITEM_INFO  (
+		Index|False
+		ItemID|False
+		Unk2|False
+		Unk3|False
+		IsEndOfLootTable|False
+		Probability|False
+	)
+
+	BONUS_MOVIE_CONFIG  (
+		BonusMovieID|False
+		File|False
+		Unk2-Either0or30whichisJackpot|False
+		Boo\Bingo\Jackpot|False
+	)
+
+	QUEST_BONUS_CONFIG  (
+		BonusTableID|True
+		Index|False
+		Unk2|False
+		Unk3|False
+	)
+
+	CPSL_LOT_EFF_INFO_DATA  (
+		IsRarer?SumisBool|False
+		Probability?Sumis100|False
+	)
+
+	HELP_ORDER_CONFIG  (
+		UnkID|False
+		Help|False
+	)
+
+	LOTTERY_INFO_RANK  (
+		Rarity|False
+	)
+
+	LOTTERY_INFO  (
+		LotteryID|False
+	)
+
+	LOTTERY_INFO_RANK_PRIZE  (
+		ItemID|False
+		QuantityA|False
+		ItemIDB|False
+		QuantityB|False
+		Unk-AlwaysZero|False
+	)
+
+	CAMPAIGN_ITEM_COND  (
+		Cond|False
+	)
+
+	LAST_UPDATE_DATE_TIME  (
+		LAST_UPDATE_DATE_TIME|False
+	)
+
+	LAST_UPDATE_USER  (
+		LAST_UPDATE_USER|False
+	)
+
+	LAST_UPDATE_MACHINE  (
+		LAST_UPDATE_MACHINE|False
+	)
+
+	FLAG_INFO_BEGIN  (
+		F-Index?|False
+		ChildCount|False
+	)
+
+	CHARA_ABILITY_EFFECT_INFO  (
+		EffectID|False
+	)
+
+	QR_RAND_TABLE_INFO_DATA  (
+		ItemID|False
+		IsRand?|False
+	)
+
+	QR_RAND_TABLE_INFO  (
+		RandomQRTable|False
+	)
+
+	QR_RAND_TABLE_INFO_DATA_LIST_BEG  (
+		ChildCount|False
+	)
+
+	SCRATCH_SHOP_DATA  (
+		ScratchID|True
+		Percentage?|False
+		UnkBool?|False
+	)
+
+	SCRATCH_RATE_DATA  (
+		Index|False
+		ProbabilityAsWeights?|False
+	)
+
+	SCRATCH_RATE_DATA_LIST_BEG  (
+		ChildCount|False
+	)
+
+	SCRATCH_RATE  (
+		ScratchID|True
+	)
+
+	SCRATCH_INFO_RANK_LIST_BEG  (
+		ChildCount|False
+	)
+
+	SCRATCH_INFO  (
+		ScratchID|True
+	)
+
+	SCRATCH_INFO_RANK  (
+		Index\Rank|False
+	)
+
+	SCRATCH_INFO_RANK_PRIZE_LIST_BEG  (
+		ChildCount|False
+	)
+
+	SCRATCH_INFO_RANK_PRIZE  (
+		ItemID|True
+		PrizeCond|False
+	)
+
+	SCRATCH_SHOP_DATA_LIST_BEG  (
+		ChildCount|False
+	)
+
+	BOSS_CHARA_INFO_BEGIN  (
+		ChildCount|False
+		Unk0|False
+	)
+
+	CHARA_EVOLVE_INFO_BEGIN  (
+		ChildCount|False
+	)
+
+	CHARA_FRIEND_RATE_INFO_BEGIN  (
+		ChildCount|False
+	)
+
+	CHARA_RANDOM_ACT_INFO_BEGIN  (
+		ChildCount|False
+	)
+
+	CHARA_ACT_TYPE_OFFSET_INFO_BEGIN  (
+		ChildCount|False
+	)
+
+	CHARA_SAME_KIND_INFO_BEGIN  (
+		ChildCount|False
+	)
+
+	CAPSULE_MACHINE_CONFIG_INFO_DATA_LIST_BEG  (
+		ChildCount|False
+	)
+
+	CAPSULE_MACHINE_CONFIG_INFO  (
+		MachineID|True
+	)
+
+	CAPSULE_ITEM_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	CAPSULE_RATE_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	CPSL_LOT_EFF_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	CPSL_ORGE_CALC_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	CPSL_ORGE_CALC_INFO  (
+		SomethingOrgreID|True
+	)
+
+	CPSL_ORGE_CALC_INFO_DATA  (
+		UnkFloat|False
+		Always0\2\3\10|False
+	)
+
+	CAPSULE_RATE_INFO_DATA_LIST_BEG  (
+		ChildCount|False
+	)
+
+	CPSL_LOT_EFF_INFO  (
+		Index?|False
+	)
+
+	CPSL_LOT_EFF_INFO_DATA_LIST_BEG  (
+		ChildCount|False
+	)
+
+	CPSL_ORGE_CALC_INFO_DATA_LIST_BEG  (
+		ChildCount|False
+	)
+
+	PTVAL  (
+		Unk0|False
+	)
+
+	BTL_AI_GAMBIT_INFO_BEGIN  (
+		ChildCount|False
+	)
+
+	BTL_AI_GAMBIT_DATA_BEGIN  (
+		ChildCount|False
+	)
+
+	BTL_AI_CHANGE_CHARA_INFO_BEGIN  (
+		ChildCount|False
+	)
+
+	BTL_AI_CHANGE_CHARA_DATA_BEGIN  (
+		ChildCount|False
+	)
+
+	BTL_AI_SP_RATE_INFO_BEGIN  (
+		ChildCount|False
+	)
+
+	BTL_AI_PURIFY_RATE_INFO_BEGIN  (
+		ChildCount|False
+	)
+
+	BTL_AI_GAMBIT_DATA  (
+		UnkID|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		UnkBool|False
+	)
+
+	BTL_AI_GAMBIT_INFO  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+	)
+
+	BTL_AI_CHANGE_CHARA_INFO  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+		UnkID|True
+	)
+
+	BTL_AI_CHANGE_CHARA_DATA  (
+		Unk0|False
+		Unk1|False
+	)
+
+	BTL_AI_SP_RATE_INFO  (
+		WeightA|False
+		WeightB|False
+		WeightC|False
+		WeightD|False
+	)
+
+	BTL_AI_PURIFY_RATE_INFO  (
+		WeightA|False
+		WeightB|False
+		WeightC|False
+		WeightD|False
+		WeightE|False
+		WeightF|False
+		WeightG|False
+	)
+
+	BATTLE_COMMAND_INFO_BEGIN  (
+		ChildCount|False
+	)
+
+	BATTLE_COMMAND_STEFF_INFO_BEGIN  (
+		ChildCount|False
+	)
+
+	BATTLE_COMMAND_STEFF_INFO  (
+		SteffID?|True
+		Unk1|False
 		Unk2|False
 		Unk3|False
 		Unk4|False
@@ -432,127 +1593,1729 @@ YKW2 [
 		Unk8|False
 	)
 
-	CAPSULE_RATE_INFO_DATA (
-		RewardID|True
+	BATTLE_COMMAND_COND_INFO_BEGIN  (
+		ChildCount|False
+	)
+
+	BATTLE_COMMAND_COND_INFO  (
+		UnkID|True
+		Unk1|False
+		Unk2|False
+	)
+
+	BATTLE_AI_ACT_CONDITION_BEGIN  (
+		ChildCount|False
+	)
+
+	BATTLE_AI_ACT_CONDITION  (
+		UnkID|True
+		Cond|False
+	)
+
+	BATTLE_COMMAND_LINK_INFO_BEGIN  (
+		ChildCount|False
+	)
+
+	BTL_FRIEND_BONUS_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	BTL_TURN_WAIT_TIME_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	BTL_SPIRIT_APPEAR_LV_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	BTL_SPIRIT_APPEAR_TIME_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	BTL_PURIFY_EXP_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	BTL_BGM_INFO  (
+		UnkIDA|True
+		MusicNameA|False
+		UnkIDB|True
+		MusicNameB|False
+		Unk4-AlwaysZero?|False
+		Unk5-AlwaysZero?|False
+		Unk6-AlwaysZero?|False
+	)
+
+	BTL_BGM_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	BTL_YOKAI_FAMILY_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	BTL_YOKAI_FAMILY_INFO  (
+		IsFirstEntry-Bool|False
+		ParamIDofOni-FlamuriceFSskill|False
+	)
+
+	BTL_DROP_TABLE_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	BTL_DROP_TABLE_INFO  (
+		IsFirstEntry|False
+		ItemID|False
+	)
+
+	BTL_WATCH_ZERO_SPECIAL_CHANGE_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	BTL_WATCH_ZERO_SPECIAL_CHANGE_INFO  (
+		BtlCommandIDA|True
+		BtlCommandIDB|True
+	)
+
+	BTL_ONLINE_BGM_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	BTL_ONLINE_BGM_INFO  (
+		UnkIDA|True
+		UnkIDB|True
+	)
+
+	BTL_RULE_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	BTL_RULE_INFO_RULE_DATA_LIST_BEG  (
+		ChildCount|False
+	)
+
+	BTL_RULE_INFO  (
+		BtlRuleID|True
+	)
+
+	BTL_RULE_INFO_RULE_DATA  (
+		UnkNumA|False
 		Unk1|False
 		Unk2|False
 		Unk3|False
-	)
-
-	CAPSULE_RATE_INFO (
-		MachineConfigID|True
-		EntryNumber|False
-	)
-
-	CAPSULE_MACHINE_CONFIG_INFO_DATA (
-		ItemID|True
-		Unk1|False
-		MachineConfigID|True
-		Unk2|False
-	)
-
-	MEDAL_LOAD_CFG (
-		Unk0|True
-	)
-
-	YOUKAI_SUMMON_INFO (
-		BaseID|True
-		SummonWithModelZero|False
-	)
-
-	NOUN_INFO (
-		Unk0|True
-	)
-
-	GYM_BOSS_SINGLE_INFO (
-		RoundID|True
-		Unk1|False
-		RoundNameID|True
-		Unk2|False
-		Unk3|False
-		RewardID|True
 		Unk4|False
-		Unk5|False
+		UnkNumB|False
+		Unk6|False
+		Unk7|False
+		UnkID|True
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		UnkNumC|False
+		UnkBool?|False
+		Unk14|False
+		Unk15|False
 	)
 
-	GYM_BOSS_SINGLE_ENC_INFO (
-		RoundID|True	
+	BTLSTEFF_INFO_LIST_BEG  (
+		ChildCount|False
 	)
 
-	GYM_BOSS_SINGLE_ENC_INFO_DATA (
-		EncountID|True
-		BattleMapID|True	
-	)
-
-	GYM_BOSS_RUSH_INFO (
-		RoundID|True
-		Unk1|False
-		RoundNameID|True
-		Unk2|False
-		Unk3|False
-		RewardID|True
-		Unk4|False
-		Unk5|False
-	)
-
-	GYM_BOSS_RUSH_ENC_INFO (
-		RoundID|True	
-	)
-
-	GYM_BOSS_RUSH_ENC_INFO_DATA (
-		EncountID|True
-		BattleMapID|True	
-	)
-
-	GYM_MISSION_BATTLE_INFO (
-		MissionID|True
-		Unk1|False
-		MissionNameID|True
-		Unk2|False
-		RewardID|True
-		Unk3|False
-		Unk4|False
-	)
-
-	GYM_MISSION_BATTLE_ENC_INFO (
-		MissionID|True	
-	)
-
-	GYM_MISSION_BATTLE_ENC_INFO_DATA (
-		EncountID|True
-		BattleMapID|True	
-	)
-
-	GYM_TOURNAMENT_INFO (
+	BTLSTEFF_INFO  (
 		Unk0|False
-		TournamentID|True
+		SteffID?|True
+		Unk2|False
+		Unk3|False
+		UnkBool|False
+	)
+
+	VALUE_INFO_BEGIN  (
+		ChildCount|False
+	)
+
+	VALUE_INFO  (
+		UnkID|False
+		UnkFloat|False
+	)
+
+	BTL_VIEW_CONFIG_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	BTL_VIEW_CONFIG_INFO  (
+		UnkID|False
 		Unk1|False
-		TournamentNameID|True
+	)
+
+	BTL_VIEW_CONFIG_INFO_HIT_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	BTL_VIEW_CONFIG_INFO_HIT_INFO  (
+		Unk0|False
+		Unk1|False
 		Unk2|False
 		Unk3|False
 		Unk4|False
-		RewardID|True
 		Unk5|False
 		Unk6|False
 	)
 
-	GYM_TOURNAMENT_ENC_INFO (
-		TournamentID|True	
+	BTL_VIEW_CONFIG_INFO_HIT_INFO_HIT_DATA_LIST_BEG  (
+		ChildCount|False
 	)
 
-	GYM_TOURNAMENT_ENC_INFO_DATA (
-		EncountID|True
-		BattleMapID|True	
+	BTL_VIEW_CONFIG_INFO_HIT_INFO_HIT_DATA  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		UnkFloat|False
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		Unk16|False
+		Unk17|False
+		Unk18|False
+	)
+
+	BATTLE_CHARA_COMMAND_INFO_BEGIN  (
+		ChildCount|False
+	)
+
+	BATTLE_CHARA_COMMAND_INFO  (
+		BtlCommandID|True
+		UnkIDB|True
+		Unk2|False
+		Unk3|False
+	)
+
+	ENCOUNT_TABLE_BEGIN  (
+		ChildCount|False
+	)
+
+	ENCOUNT_CHARA_BEGIN  (
+		ChildCount|False
+	)
+
+	ENC_ACT_PARAM_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	ENC_ACT_PARAM_INFO  (
+		UnkID|False
+		UnkFloatA|False
+		UnkFloatB|False
+		UnkInt|False
+	)
+
+	ENEN_TUNNEL_EVENT_PARAM_LIST_BEG  (
+		ChildCount|False
+	)
+
+	ENEN_TUNNEL_EVENT_PARAM  (
+		UnkIDA|False
+		UnkFloat|False
+		Cond|False
+		UnkIDB|False
+	)
+
+	ENEN_TUNNEL_EVENT_PARAM_PATTERN_LIST_BEG  (
+		ChildCount|False
+	)
+
+	ENEN_TUNNEL_EVENT_PARAM_PATTERN  (
+		UnkIDA|False
+		UnkIDB|False
+	)
+
+	ENEN_TUNNEL_GOAL_PARAM_LIST_BEG  (
+		ChildCount|False
+	)
+
+	ENEN_TUNNEL_GOAL_PARAM  (
+		UnkID|False
+		Cond|False
+		UnkFloat|False
+		Unk3|False
+		Unk4|False
+	)
+
+	ENEN_TUNNEL_LENGTH_PARAM_LIST_BEG  (
+		ChildCount|False
+	)
+
+	ENEN_TUNNEL_LENGTH_PARAM  (
+		Cond|False
+		UnkBool|False
+		DistA|False
+		DistB|False
+	)
+
+	FACE_FEATURE_BEGIN  (
+		ChildCount|False
+	)
+
+	FACE_FEATURE  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+	)
+
+	FACE_YOKAI_BEGIN  (
+		ChildCount|False
+	)
+
+	FACE_YOKAI  (
+		Index|False
+		ParamID|True
+	)
+
+	FACE_PRESENT_BEGIN  (
+		ChildCount|False
+	)
+
+	FACE_PRESENT  (
+		Unk0|False
+		UnkID|True
+		Unk2|False
+	)
+
+	FACE_SAMPLE_BEGIN  (
+		ChildCount|False
+	)
+
+	FACE_SAMPLE  (
+		UnkIDA|False
+		UnkIDB|False
+		RevIndex|False
+	)
+
+	FACE_MISSION_BEGIN  (
+		ChildCount|False
+	)
+
+	FACE_MISSION  (
+		Unk0|False
+		UnkIDA|False
+		Unk2-AlwaysZero?|False
+		UnkIDB|False
+		Unk4|False
+	)
+
+	FACE_YOKAI_OFS_BEGIN  (
+		ChildCount|False
+	)
+
+	FACE_YOKAI_OFS  (
+		UnkIDA|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		U|False
+	)
+
+	FRIENDBOOK_MYPAGE_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	FRIENDBOOK_MYPAGE_INFO  (
+		ID|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Cond|False
+	)
+
+	FRIENDBOOK_ICON_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	FRIENDBOOK_ICON_INFO  (
+		UnkIDA|False
+		UnkIDB|False
+		Cond|False
+	)
+
+	FRIENDBOOK_ADDRESS_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	FRIENDBOOK_ADDRESS_INFO  (
+		TextID|False
+	)
+
+	FRIENDBOOK_JOB_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	FRIENDBOOK_JOB_INFO  (
+		TextID|False
+	)
+
+	FRIENDBOOK_HOBBY_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	FRIENDBOOK_HOBBY_INFO  (
+		TextID|False
+	)
+
+	FRIENDBOOK_DREAM_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	FRIENDBOOK_DREAM_INFO  (
+		TextID|False
+	)
+
+	GYM_TOURNAMENT_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	GYM_TOURNAMENT_ENC_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	GYM_TOURNAMENT_ENC_INFO_DATA_LIST_BEG  (
+		ChildCount|False
+	)
+
+	GYM_BOSS_RUSH_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	GYM_BOSS_RUSH_ENC_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	GYM_BOSS_RUSH_ENC_INFO_DATA_LIST_BEG  (
+		ChildCount|False
+	)
+
+	GYM_BOSS_SINGLE_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	GYM_BOSS_SINGLE_ENC_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	GYM_BOSS_SINGLE_ENC_INFO_DATA_LIST_BEG  (
+		ChildCount|False
+	)
+
+	GYM_MISSION_BATTLE_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	GYM_MISSION_BATTLE_ENC_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	GYM_MISSION_BATTLE_ENC_INFO_DATA_LIST_BEG  (
+		ChildCount|False
+	)
+
+	GYM_TRAINING_COURSE_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	GYM_TRAINING_COURSE_INFO  (
+		SpreadA?|False
+		SpreadB?|False
+		SpreadC?|False
+	)
+
+	GYM_PARAM_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	GYM_PARAM_INFO  (
+		UnkID|True
+		GPCount?|False
+	)
+
+	HELP_ORDER_CONFIG_LIST_BEG  (
+		ChildCount|False
+	)
+
+	CREATURE_DICTIONARY_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	CREATURE_DICTIONARY_INFO  (
+		ItemID|True
+		CreatureIndex|False
+		UnkIDA|True
+		UnkIDB|True
+		Cond|False
+	)
+
+	ITEM_EQUIPMENT_BEGIN  (
+		ChildCount|False
+	)
+
+	ITEM_EQUIP_COND_CHARA  (
+		BaseID|True
+	)
+
+	ITEM_SOUL_BEGIN  (
+		ChildCount|False
+	)
+
+	ITEM_CONSUME_BEGIN  (
+		ChildCount|False
+	)
+
+	ITEM_IMPORTANT_BEGIN  (
+		ChildCount|False
+	)
+
+	ITEM_CREATURE_BEGIN  (
+		ChildCount|False
+	)
+
+	ITEM_INDEX_BEGIN  (
+		ChildCount|False
+	)
+
+	ITEM_EQUIP_COND_BEGIN  (
+		ChildCount|False
+	)
+
+	ITEM_EQUIP_COND_CHARA_BEGIN  (
+		ChildCount|False
+	)
+
+	LOTTERY_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	LOTTERY_INFO_RANK_LIST_BEG  (
+		ChildCount|False
+	)
+
+	LOTTERY_INFO_RANK_PRIZE_LIST_BEG  (
+		ChildCount|False
+	)
+
+	MUSIC_GAME_REWARD_LIST_BEG  (
+		ChildCount|False
+	)
+
+	MUSIC_GAME_REWARD  (
+		UnkID|False
+		NPCIndex|False
+		IsHardMode?|False
+	)
+
+	MUSIC_GAME_REWARD_ITEM_LIST_BEG  (
+		ChildCount|False
+	)
+
+	MUSIC_GAME_REWARD_ITEM  (
+		ItemID|True
+		Difficulty??|False
+		Unk2|False
+		Cond|False
+	)
+
+	PASSWORD_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	QR2_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	QR2_RAND_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	QR1_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	QR1_RAND_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	QUEST_BONUS_CONFIG_BEGIN  (
+		ChildCount|False
+	)
+
+	BONUS_ITEM_INFO_BEGIN  (
+		ChildCount|False
+	)
+
+	BONUS_MOVIE_CONFIG_BEGIN  (
+		ChildCount|False
+	)
+
+	QUEST_CONFIG_BEGIN  (
+		ChildCount|False
+	)
+
+	QUEST_PHASE_BEGIN  (
+		ChildCount|False
+	)
+
+	QUEST_PHASE  (
+		Unk0AlwaysInRange2-7|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		UnkID|True
+		UnkIndex|False
+		UnkBool|False
+	)
+
+	QUEST_PURPOSE_POS_BEGIN  (
+		ChildCount|False
+	)
+
+	QUEST_PURPOSE_POS  (
+		UnkIDA|True
+		UnkIDB|True
+		UnkIDC|True
+		Cond|False
+	)
+
+	QUEST_NECESSARY_CONDITION_BEGIN  (
+		ChildCount|False
+	)
+
+	QUEST_NECESSARY_CONDITION  (
+		Unk0|False
+		UnkID|True
+		UnkNum|False
+	)
+
+	QUEST_PURPOSE_DETAIL_BEGIN  (
+		ChildCount|False
+	)
+
+	QUEST_PURPOSE_DETAIL  (
+		UnkID-MaybeTextID??|True
+		Unk-AlwaysZero|False
+	)
+
+	QUEST_RSLT_ITEM_BEGIN  (
+		ChildCount|False
+	)
+
+	QUEST_RSLT_ITEM  (
+		UnkID|True
+		UnkNum-NotBool|False
+	)
+
+	WANTED_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	WANTED_INFO  (
+		UnkID0|False
+		UnkID1|False
+		UnkID2|False
+		UnkID3|False
+		UnkID4|False
+		UnkID5|False
+		UnkID6|False
+		UnkID7|False
+		UnkNum|False
+	)
+
+	WANTED_MAP_LIST_BEG  (
+		ChildCount|False
+	)
+
+	WANTED_MAP  (
+		UnkID|False
+		Unk-AlwaysZero|False
+	)
+
+	WANTED_MAP_ACT_LIST_BEG  (
+		ChildCount|False
+	)
+
+	WANTED_BONUS_LIST_BEG  (
+		ChildCount|False
+	)
+
+	WANTED_BONUS  (
+		UnkID|False
+	)
+
+	WANTED_BONUS_ITEM_LIST_BEG  (
+		ChildCount|False
+	)
+
+	WANTED_BONUS_ITEM  (
+		UnkID|False
+		UnkNum|False
+	)
+
+	RACER_PARAM_LIST_BEG  (
+		ChildCount|False
+	)
+
+	RACER_PARAM  (
+		RacerID-MaybeBaseID??|False
+		FloatA|False
+		FloatB|False
+		FloatC|False
+		FloatD|False
+	)
+
+	RACE_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	RACE_INFO  (
+		UnkID|True
+	)
+
+	RACE_INFO_DATA_LIST_BEG  (
+		ChildCount|False
+	)
+
+	RACE_INFO_DATA  (
+		UnkIDA|True
+		UnkIDB|True
+		RevIndex??|False
+		UnkBool?|False
+		UnkNum|False
+		UnkIDC|True
+	)
+
+	RACE_ITEM_PARAM_LIST_BEG  (
+		ChildCount|False
+	)
+
+	RACE_ITEM_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	RACE_ITEM_PARAM  (
+		RaceItemID|True
+		Index??|False
+		Duration?|False
+		Amplifier?|False
+	)
+
+	RACE_ITEM_INFO_DATA_LIST_BEG  (
+		ChildCount|False
+	)
+
+	RACE_ITEM_INFO  (
+		MapID?|True
+	)
+
+	RACE_ITEM_INFO_DATA  (
+		RaceItemID|True
+		Probability|False
+	)
+
+	RACE_COL_NUM  (
+		ChildCount|False
+	)
+
+	RACE_COL_BOX  (
+		FloatA|False
+		FloatB|False
+		FloatC|False
+		FloatD|False
+		FloatE|False
+		FloatF|False
+		FloatG|False
+	)
+
+	OP_TBOX_POINT_BEGIN  (
+		ChildCount|False
+	)
+
+	OP_FUNC_POINT_BEGIN  (
+		ChildCount|False
+	)
+
+	OP_TBOX_POINT  (
+		UnkIDA|False
+		UnkIDB|False
+		Unk-AlwaysZero|False
+		Unk3|False
+		UnkIDC|False
+		Unk5|False
+		Unk6|False
+	)
+
+	OP_REST_POINT_BEGIN  (
+		ChildCount|False
+	)
+
+	OP_SEARCH_POINT_BEGIN  (
+		ChildCount|False
+	)
+
+	OP_FUNC_POINT  (
+		UnkIDA|False
+		UnkIDB|False
+		Unk2|False
+		Unk3|False
+	)
+
+	OP_COL_POINT_BEGIN  (
+		ChildCount|False
+	)
+
+	OP_WATCH_POINT_BEGIN  (
+		ChildCount|False
+	)
+
+	OP_MINIMAP_POINT_BEGIN  (
+		ChildCount|False
+	)
+
+	OP_WATCHLOCK_POINT_BEGIN  (
+		ChildCount|False
+	)
+
+	OP_ORGEDOOR_POINT_BEGIN  (
+		ChildCount|False
+	)
+
+	OP_VENDING_POINT_BEGIN  (
+		ChildCount|False
+	)
+
+	OP_SOUND_POINT_BEGIN  (
+		ChildCount|False
+	)
+
+	OP_SOUND_POS_LIST_BEGIN  (
+		ChildCount|False
+	)
+
+	OP_TERRITORY_POINT_BEGIN  (
+		ChildCount|False
+	)
+
+	POINT_DATA_COUNT  (
+		POINT_DATA_COUNT|False
+	)
+
+	POINT_DATA_ITEM  (
+		UnkID|True
+		X?|False
+		Y?|False
+		Z?|False
+		ROT?|False
+	)
+
+	RACE_BARRIER_PARAM_LIST_BEG  (
+		ChildCount|False
+	)
+
+	RACE_BARRIER_PARAM  (
+		UnkIDA|False
+		UnkIDB|False
+		Unk-AlwaysZero??|False
+		UnkNum|False
+		X?|False
+		Y?|False
+		Z?|False
+		ROT?|False
+		X?|False
+		Y?|False
+		Z?|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		Unk16|False
+	)
+
+	ROUTE_POINT_NUM  (
+		ChildCount|False
+	)
+
+	ROUTE_POINT_DATA  (
+		FloatA|False
+		FloatB|False
+		FloatC|False
+		FloatD|False
+		FloatE|False
+		FloatF|False
+		FloatG|False
+		FloatH|False
+		FloatI|False
+		FloatJ|False
+		FloatK|False
+	)
+
+	BTL_RWD_TITLE_LIST_BEG  (
+		ChildCount|False
+	)
+
+	BTL_RWD_TITLE  (
+		UnkIndex|False
+		UnkIDA|False
+		UnkNum|False
+		UnkIDB|False
+		UnkIDC|False
+	)
+
+	BTL_RWD_ARMY_LIST_BEG  (
+		ChildCount|False
+	)
+
+	BTL_RWD_ARMY_ITEM_LIST_BEG  (
+		ChildCount|False
+	)
+
+	BTL_RWD_ARMY  (
+		UnkIndexOrBool???|False
+	)
+
+	BTL_RWD_ARMY_ITEM  (
+		UnkIndex?|False
+		UnkID|False
+		UnkNum|False
+	)
+
+	BTL_RWD_RANKER_LIST_BEG  (
+		ChildCount|False
+	)
+
+	BTL_RWD_RANKER  (
+		UnkIndex?|False
+		UnkID|False
+		UnkNum|False
+	)
+
+	SCRATCH_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	SCRATCH_RATE_LIST_BEG  (
+		ChildCount|False
+	)
+
+	SCRATCH_SHOP_LIST_BEG  (
+		ChildCount|False
+	)
+
+	YOUKAI_SUMMON_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	PURPOSE_MSG_PARAM_LIST_BEG  (
+		ChildCount|False
+	)
+
+	PURPOSE_MSG_PARAM_PRESET_LIST_BEG  (
+		ChildCount|False
+	)
+
+	PURPOSE_MSG_PARAM  (
+		UnkIndex??|False
+	)
+
+	PURPOSE_MSG_PARAM_PRESET  (
+		UnkID|False
+	)
+
+	PURPOSE_MSG_PARAM_PRESET_DATA_LIST_BEG  (
+		ChildCount|False
+	)
+
+	PURPOSE_MSG_PARAM_PRESET_DATA  (
+		Unk0-AlwaysZero?|False
+		UnkID|False
+	)
+
+	AREA_PRESET_PARAM_LIST_BEG  (
+		ChildCount|False
+	)
+
+	AREA_PRESET_PARAM  (
+		UnkID|False
+	)
+
+	AREA_PRESET_PARAM_PRESET_LIST_BEG  (
+		ChildCount|False
+	)
+
+	AREA_PRESET_PARAM_PRESET  (
+		UnkIndex??|False
+		Unk1|False
+		Unk2|False
+	)
+
+	RUBY_CONFIG_BEGIN  (
+		ChildCount|False
+	)
+
+	RUBY_TEXT  (
+		RubyTextEntry|False
+		UnkNumA|False
+		UnkNumB|False
+	)
+
+	RUBY_TEXT_BEGIN  (
+		ChildCount|False
+	)
+
+	RUBY_COND_BEGIN  (
+		ChildCount|False
+	)
+
+	RUBY_COND  (
+		Unk0|False
+		Unk1|False
+	)
+
+	RUBY_CONFIG  (
+		UnkID|False
+		Unk1|False
+		Unk2|False
+	)
+
+	TITLE_CONFIG_LIST_BEG  (
+		ChildCount|False
+	)
+
+	TITLE_CONFIG  (
+		TitleIndex|False
+		TitleImgNum?|False
+		PointRequirement|False
+	)
+
+	TRAIN_DATA_LIST_BEG  (
+		ChildCount|False
+	)
+
+	TRAIN_DATA  (
+		UnkID|False
+		UnkBool|False
+		Unk2|False
+		Unk3|False
+		UnkID|False
+		Cond|False
+		UnkID|False
+		UnkID|False
+		Unk8|False
+		UnkNumA|False
+		UnkNumB|False
+	)
+
+	TRAIN_STATION_LIST_BEG  (
+		ChildCount|False
+	)
+
+	TRAIN_EVENT_LIST_BEG  (
+		ChildCount|False
+	)
+
+	TRAIN_EVENT  (
+		UnkID|False
+		UnkNum|False
+	)
+
+	TRAIN_EVENT_DATA_LIST_BEG  (
+		ChildCount|False
+	)
+
+	TRAIN_EVENT_DATA  (
+		EventName|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		UnkNum|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Cond|False
+		RankRequirement???|False
+		UnkID|False
+	)
+
+	TRAIN_FRAME_DEF  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+	)
+
+	FILM_APP_CHARA_TMB_LIST_BEG  (
+		ChildCount|False
+	)
+
+	FILM_APP_CHARA_TMB  (
+		IconFileName|False
+		UnkID|True
+		UnkBool-AlwaysZero|False
+	)
+
+	FILM_APP_CHARA_TMB_IMG_LIST_BEG  (
+		ChildCount|False
+	)
+
+	FILM_APP_CHARA_TMB_IMG  (
+		FileName|False
+	)
+
+	FILM_APP_IMAGE_TMB_LIST_BEG  (
+		ChildCount|False
+	)
+
+	FILM_APP_IMAGE_TMB  (
+		FileName|False
+		UnkID|True
+		UnkBool?-AlwaysZero?|False
+	)
+
+	FILM_APP_IMAGE_TMB_IMG_LIST_BEG  (
+		ChildCount|False
+	)
+
+	FILM_APP_IMAGE_TMB_IMG  (
+		FileName|False
+	)
+
+	FILM_APP_CONTINUITY_TMB_LIST_BEG  (
+		ChildCount|False
+	)
+
+	FILM_APP_CONTINUITY_TMB  (
+		FileName|False
+		UnkID|False
+		UnkBool?-AlwaysZero|False
+	)
+
+	FILM_APP_CONTINUITY_TMB_IMG_LIST_BEG  (
+		ChildCount|False
+	)
+
+	FILM_APP_CONTINUITY_TMB_IMG  (
+		FileName|False
+	)
+
+	MOVIE_APP_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	MOVIE_APP_INFO_ITEM  (
+		IconFileName|False
+		SceneFileName|False
+		Unk2-AlwaysZero?|False
+		Unk3-AlwaysZero?|False
+		UnkID|True
+		Cond|False
+	)
+
+	MOVIE_APP_INFO  (
+		IsStory|False
+	)
+
+	MOVIE_APP_INFO_ITEM_LIST_BEG  (
+		ChildCount|False
+	)
+
+	MOVIE_APP_ANIME_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	MOVIE_APP_ANIME_INFO  (
+		UnkBool|False
+	)
+
+	MOVIE_APP_ANIME_INFO_ITEM_LIST_BEG  (
+		ChildCount|False
+	)
+
+	MOVIE_APP_ANIME_INFO_ITEM  (
+		IconFileName|False
+		EventFileName|False
+		Unk2|False
+		Unk3|False
+		UnkID|False
+		Cond|False
+	)
+
+	MOVIE_APP_EVENT_INFO  (
+		UnkBool|False
+	)
+
+	CHARA_ACT_TYPE_OFFSET_INFO  (
+		ActTypeOffsetIndex|False
+		Offset?|False
+	)
+
+	CHARA_RANDOM_ACT_INFO  (
+		RandomActIndex|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+	)
+
+	LEGEND_DATA_CONFIG_LIST_BEG  (
+		ChildCount|False
+	)
+
+	TEXT_INFO_BEGIN  (
+		ChildCount|False
+	)
+
+	NOUN_INFO_BEGIN  (
+		ChildCount|False
+	)
+
+	CHARA_BASE_INFO  (
+		BaseID?|False
+		FileNamePrefix?|False
+		FileNameNumber?|False
+		FileNameVariant?|False
+		NameID?|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+	)
+
+	BTL_FRIEND_BONUS_INFO  (
+		TribeRequired|False
+		YokaiRequired|False
+		Effect|False
+		AmplifierA|False
+		AmplifierB|False
+	)
+
+	CHARA_ABILITY_EFFECT_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	CHARA_ABILITY_CONFIG_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	CHARA_ABILITY_CONFIG_INFO  (
+		SkillID|True
+		NameID|True
+		DescTextID|True
+		EffectID?A|True
+		EffectID?B|True
+	)
+
+	BTL_TURN_WAIT_TIME_INFO  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+	)
+
+	BTL_SPIRIT_APPEAR_TIME_INFO  (
+		Time?|False
+		UnkIncreasesin5s|False
+	)
+
+	BTL_SPIRIT_APPEAR_LV_INFO  (
+		Unk0|False
+		Level?|False
+	)
+
+	CHARA_COLLISION_INFO_BEGIN  (
+		ChildCount|False
+	)
+
+	CHARA_COLLISION_INFO  (
+		BaseID|True
+	)
+
+	CHARA_COLLISION_PARTS_INFO  (
+		UnkIndex|False
+		UnkID|True
+		UnkNumA|False
+		BOX_X1|False
+		BOX_Y1|False
+		BOX_Z1|False
+		BOX_X2|False
+		BOX_Y2|False
+		BOX_Z2|False
+		UnkNumB|False
+	)
+
+	CHARA_PARAM_INFO_BEGIN  (
+		ChildCount|False
+	)
+
+	COMBINE_INFO_BEGIN  (
+		ChildCount|False
+	)
+
+	SHAPE_DATA_COUNT  (
+		SHAPE_DATA_COUNT|False
+	)
+
+	CHARA_ABILITY_CONFIG_INFO_EFF_DATA_LIST_BEG  (
+		ChildCount|False
+	)
+
+	CHARA_ABILITY_CONFIG_INFO_EFF_DATA  (
+		EffectID|True
+		UnkNum(Bool?)|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		UnkNumA|False
+		C1|False
+		C2|False
+		C3|False
+		C4|False
+		C5|False
+		C6|False
+		C7|False
+		C8|False
+		C9|False
+		C10|False
+	)
+
+	SOUL_NORMAL_CONFIG_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	SOUL_RARE_CONFIG_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	SOUL_NORMAL_CONFIG_INFO  (
+		SoulEffectID|True
+		SkillID|True
+	)
+
+	SOUL_NORMAL_CONFIG_INFO_DATA_LIST_BEG  (
+		ChildCount|False
+	)
+
+	SOUL_NORMAL_CONFIG_INFO_DATA  (
+		UnkID|True
+	)
+
+	TEXT_INFO_BEGIN (
+		ChildCount|False
+	)
+
+	TEXT_INFO (
+		TextID|True
+		Unk1|False
+		Password|False
 	)
 ]
 
-YKW3 [
-	CHARA_BASE_YOKAI_INFO (
+YWB  [
+	CHARA_BASE_YOKAI_INFO  (
 		BaseID|True
 		FileNamePrefix|False
 		FileNameNumber|False
 		FileNameVariant|False
-		NameID|False
+		NameID|True
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		DescriptionID|True
+		MedalPosX|False
+		MedalPosY|False
+		Unk13|False
+		Rank|False
+		IsRare|False
+		IsLegendary|False
+		Unk17|False
+		Unk18|False
+		Tribe|False
+		IsClassic|False
+		Role|False
+		Unk22|False
+	)
+
+	CHARA_PARAM_INFO  (
+		ParamID|True
+		BaseID|False
+		ShowInMedallium|False
+		MedalliumOffset|False
+		MinHP|False
+		MinStrenght|False
+		MinSpirit|False
+		MinDef|False
+		MaxHP|False
+		MaxStrenght|False
+		MaxSpirit|False
+		MaxDefence|False
+		Speed|False
+		Unk13|False
+		Unk14|False
+		ElementIsStrongTo|False
+		ElementIsWeakTo|False
+		SkillID|False
+		A-MoveID|False
+		SoultimateID|False
+		SpecialMove1|False
+		SpecialMove1UnlockLevel|False
+		SpecialMove2|False
+		SpecialMove2UnlockLevel|False
+		SpecialMove3|False
+		SpecialMove3UnlockLevel|False
+		SpecialMove4|False
+		SpecialMove4UnlockLevel|False
+		Unk28|False
+		Unk29|False
+		Unk30|False
+		Unk31|False
+		Unk32|False
+		Unk33|False
+		Unk34|False
+		Unk35|False
+		Unk36|False
+		Unk37|False
+		Unk38|False
+		Unk39|False
+		Unk40|False
+		Unk41|False
+		Unk42|False
+		Unk43|False
+		Unk44|False
+		Unk45|False
+		Unk46|False
+		Unk47|False
+		Unk48|False
+		Drop1ID|True
+		Drop2ID|True
+		Drop1Rate|False
+		Drop2Rate|False
+		Unk53|False
+		Unk54|False
+		Unk55|False
+		Unk56|False
+		IsFusable|False
+		EvolveIndex|False
+	)
+
+	CHARA_SCALE_INFO  (
+		BaseID|True
+		HouseSize|False
+		MissionSize|False
+		MenuSize|False
+		MenuHeight|False
+	)
+
+	TEXT_INFO  (
+		TextID|False
+		Unk1|False
+		Text|False
+	)
+
+	NOUN_INFO  (
+		TextID|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Noun|False
+	)
+
+	LEGEND_DATA_CONFIG  (
+		LegendID|False
+		LegendYokaiParamID|False
+		Seal1YokaiParamID|False
+		SpoilSeal1|False
+		Seal2YokaiParamID|False
+		SpoilSeal2|False
+		Seal3YokaiParamID|False
+		SpoilSeal3|False
+		Seal4YokaiParamID|False
+		SpoilSeal4|False
+		Seal5YokaiParamID|False
+		SpoilSeal5|False
+		Seal6YokaiParamID|False
+		SpoilSeal6|False
+		Seal7YokaiParamID|False
+		SpoilSeal7|False
+		Seal8YokaiParamID|False
+		SpoilSeal8|False
+		SealsNumber|False
+		PageNumber|False
+	)
+
+	PASSWORD_INFO  (
+		TextID|True
+		Unk1|False
+		GivenItemID|True
+		Unk3|False
+		Unk4|False
+		FlagID|True
+		Unk5|False
+	)
+
+	COMBINE_INFO  (
+		BaseIsItem|False
+		BaseID|False
+		MaterialIsItem|False
+		MaterialID|False
+		EvolveToIsItem|False
+		EvolveToID|False
+		FusionID|False
+		FusionIsItem|False
+	)
+
+	MISSION_CONFIG_INFO  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		Unk16|False
+		Unk17|False
+		NameTextID|False
+		ObjectiveTextID|False
+		InfoTextID|False
+	)
+
+	CHARA_PARAM_INFO_LIST_BEG  (
+		Unk0|False
+	)
+
+	BOSS_CHARA_PARAM_INFO_LIST_BEG  (
+		Unk0|True
+	)
+
+	ITEM_AURA  (
+		Unk0|False
+		NounID|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+		TextID|False
+		TextID|False
+		Unk16|False
+		Unk17|False
+		Unk18|False
+		Unk19|False
+		SkillID|False
+	)
+
+	CHARA_ABILITY_CONFIG_INFO  (
+		SkillID|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		EffectID|False
+		Multipliers|False
+		AoE|False
+	)
+
+	CHARA_ABILITY_EFFECT_INFO  (
+		EffectID|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Effects|False
+		AoE|False
+		AoE|False
+	)
+
+	CHARA_ABLITY_BUFF_EFFECT_INFO  (
+		EffectID|False
+	)
+
+	MAP_ENV_INFO_CNF  (
+		ActivationCond|False
+		MapEffectMORNING_DAY?|False
+		MapEffectEVENING?|False
+		MapEffectNIGHT?|False
+		MapEffectRAIN?|False
+		MapEffectFORCE???|False
+		MMScroll|False
+		MMModelPos-X?|False
+		MMModelPos-Y?|False
+		MMModelPos-Z?|False
+		MMModelPos-ROT?|False
+		MMMaskPos-X??|False
+		MMMaskPos-Y??|False
+		MMMaskPos-Z??|False
+		MMMaskPos-ROT??|False
+		MMViewSize-PixelsX|False
+		MMViewSize-PixelsY|False
+		CameraFOV|False
+		CameraDist|False
+		CameraRotH|False
+		CameraRotV|False
+		CameraRotUnk|False
+		CameraRotAlsoUnk|False
+		DptRngRate|False
+		DptLvl|False
+		Near|False
+		Far|False
+		LIGHTMapLight|False
+		LIGHTBGColorNormalisedR|False
+		LIGHTBGColorNormalisedG|False
+		LIGHTBGColorNormalisedB|False
+		ShadowColsdw01-NormalisedR|False
+		ShadowColsdw01-NormalisedG|False
+		ShadowColsdw01-NormalisedB|False
+		ShadowColsdw02-NormalisedR|False
+		ShadowColsdw02-NormalisedG|False
+		ShadowColsdw02-NormalisedB|False
+		ShadowColsdw03-NormalisedR|False
+		ShadowColsdw03-NormalisedG|False
+		ShadowColsdw03-NormalisedB|False
+		ShadowColsdw04-NormalisedR|False
+		ShadowColsdw04-NormalisedG|False
+		ShadowColsdw04-NormalisedB|False
+		ShadowColsdw05-NormalisedR|False
+		ShadowColsdw05-NormalisedG|False
+		ShadowColsdw05-NormalisedB|False
+		DEF_POSX?|False
+		DEF_POSY?|False
+		DEF_POSZ?|False
+		DEF_POSROT?|False
+		UnkBoolMaybeINDOOR-BooleanIsIndoors?????|False
+		WEATHERSUN_MCLR-NormalisedR|False
+		WEATHERSUN_MCLR-NormalisedG|False
+		WEATHERSUN_MCLR-NormalisedB|False
+		WEATHERSUN_DCLR-NormalisedR|False
+		WEATHERSUN_DCLR-NormalisedG|False
+		WEATHERSUN_DCLR-NormalisedB|False
+		WEATHERSUN_ECLR-NormalisedR|False
+		WEATHERSUN_ECLR-NormalisedG|False
+		WEATHERSUN_ECLR-NormalisedB|False
+		WEATHERSUN_N_EARLYCLR-NormalisedR|False
+		WEATHERSUN_N_EARLYCLR-NormalisedG|False
+		WEATHERSUN_N_EARLYCLR-NormalisedB|False
+		WEATHERSUN_NCLR-NormalisedR|False
+		WEATHERSUN_NCLR-NormalisedG|False
+		WEATHERSUN_NCLR-NormalisedB|False
+		WEATHERSUN_N_LATECLR-NormalisedR|False
+		WEATHERSUN_N_LATECLR-NormalisedG|False
+		WEATHERSUN_N_LATECLR-NormalisedB|False
+		WEATHERRAIN_MCLR-NormalisedR|False
+		WEATHERRAIN_MCLR-NormalisedG|False
+		WEATHERRAIN_MCLR-NormalisedB|False
+		WEATHERRAIN_DCLR-NormalisedR|False
+		WEATHERRAIN_DCLR-NormalisedG|False
+		WEATHERRAIN_DCLR-NormalisedB|False
+		WEATHERRAIN_ECLR-NormalisedR|False
+		WEATHERRAIN_ECLR-NormalisedG|False
+		WEATHERRAIN_ECLR-NormalisedB|False
+		WEATHERRAIN_N_EARLYCLR-NormalisedR|False
+		WEATHERRAIN_N_EARLYCLR-NormalisedG|False
+		WEATHERRAIN_N_EARLYCLR-NormalisedB|False
+		WEATHERRAIN_NCLR-NormalisedR|False
+		WEATHERRAIN_NCLR-NormalisedG|False
+		WEATHERRAIN_NCLR-NormalisedB|False
+		WEATHERRAIN_N_LATECLR-NormalisedR|False
+		WEATHERRAIN_N_LATECLR-NormalisedG|False
+		WEATHERRAIN_N_LATECLR-NormalisedB|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		CHARA_LGT_E_CLR-NormalisedR|False
+		CHARA_LGT_E_CLR-NormalisedG|False
+		CHARA_LGT_E_CLR-NormalisedB|False
+		CHARA_LGT_CLR-NormalisedR|False
+		CHARA_LGT_CLR-NormalisedG|False
+		CHARA_LGT_CLR-NormalisedB|False
+		UnkFloat?1?|False
+		UnkFloat?2?|False
+		UnkFloat?3?|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7-Greyscale?????|False
+		BgImgA?|False
+		BgImgB?|False
+		BgImgC?|False
+		BgImgD?|False
+		BgImgE?|False
+		BgImgF?|False
+		BgImgG??|False
+		BgImgH??|False
+		BgImgI??|False
+		BgImgJ??|False
+		BgImgK??|False
+		BgImgL??|False
+	)
+]
+
+YW3  [
+	CHARA_BASE_YOKAI_INFO  (
+		BaseID|True
+		FileNamePrefix|False
+		FileNameNumber|False
+		FileNameVariant|False
+		NameID|True
 		Unk1|False
 		Unk2|False
 		Unk3|False
@@ -581,7 +3344,2634 @@ YKW3 [
 		IsTreasure|False
 	)
 
-	CHARA_PARAM_INFO (
+	CHARA_PARAM_INFO  (
+		ParamID|True
+		BaseID|True
+		ShowInMedallium|False
+		MedalliumOffset|False
+		Unk1|False
+		MinHP|False
+		MinStrength|False
+		MinSpririt|False
+		MinDefense|False
+		MinSpeed|False
+		MaxHP|False
+		MaxStrength|False
+		MaxSpirit|False
+		MaxDefense|False
+		MaxSpeed|False
+		ExperienceCurve|False
+		Strongest|False
+		Weakness|False
+		Unk2|False
+		AttackID|True
+		Attack%|False
+		TechniqueID|True
+		Technique%|False
+		InspiritID|True
+		Inspirit%|False
+		GuardID|True
+		Guard%|False
+		SoulimateID|True
+		SkillID|True
+		Unk8|False
+		BattleType|False
+		CanIStillBecomeBefriend|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Addmember&TradeTextID|True
+		IsFusable|False
+		EvolveOffset|False
+		EquipSlots|False
+		WaitTime|False
+	)
+
+	CHARA_SCALE_INFO  (
+		YokaiBaseID|True
+		WorldMapSize|False
+		FollowMapSize|False
+		BattleOwnSize|False
+		BattleFoeSize|False
+		MenuSize|False
+		BlastersTSize|False
+		BottomScreenSize|False
+	)
+
+	TEXT_INFO  (
+		TextID|True
+		Unk1|False
+		Text|False
+	)
+
+	SKILL_CONFIG_INFO  (
+		SkillConfigID|True
+		SkillType|False
+		EffectID|True
+		NameID|True
+		DescID|True
+		SkillGrowth|False
+		Power|False
+		nºHits|False
+		Element|False
+		SoultChargeSpeed|False
+		BattleAnimation|True
+		SoultimateRange|False
+		SkillAbility|False
+	)
+
+	HACKSLASH_CHARA_PARAM_INFO  (
+		ParamID|True
+		Unk1|False
+		Unk2|False
+		SkillID|True
+		A-attackID|True
+		SoulimateID|True
+		Y-attackID|True
+		X-Attack|True
+		BossCommandAttackID1|True
+		BossCommandAttackID2|True
+		BossCommandAttackID3|True
+		BossCommandAttackID4|True
+		BossCommandAttackID5|True
+		BossCommandAttackID6|True
+		BossCommandAttackID7|True
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+		Unk14|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+		Unk14|False
+	)
+
+	YOKAI_CIRCLE_INFO  (
+		CircleID|True
+		NameID|True
+		QuoteID|True
+		PageNumber|False
+		Unk1|False
+		IsYokai|False
+		ItemOrParamID|True
+		SpoilGroupName|False
+	)
+
+	YOKAI_CIRCLE_INFO_DATA  (
+		ParamID|True
+		SpoilYo-kaiName|False
+	)
+
+	YOKAI_CIRCLE_INFO_LIST_BEG  (
+		NumberOfCircles|False
+	)
+
+	YOKAI_CIRCLE_INFO_DATA_LIST_BEG  (
+		NumberOfYokai|False
+	)
+
+	BOSS_PARTS_INFO  (
+		ParamID|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|True
+		Unk6|True
+		Unk7|True
+		Unk8|True
+		Unk9|True
+		Unk10|True
+		Unk11|True
+		Unk12|True
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		Unk16|False
+		Unk17|False
+		Unk18|False
+		Unk19|False
+		Unk20|False
+		Unk21|True
+		Unk22|True
+		Unk23|False
+	)
+
+	BATTLE_CHARA_PARAM_INFO  (
+		ParamID|True
+		Unk1|False
+		Unk2|False
+		Money|False
+		Experience|False
+		Item1|True
+		Item1DropRate|False
+		Item2|True
+		Item2DropRate|False
+		Unk9|True
+	)
+
+	HACKSLASH_TECHNIC_INFO  (
+		TechnicConfigID|True
+		NameID|True
+		CmdMenuID|True
+		Unk1|False
+		Unk2|False
+	)
+
+	HACKSLASH_TECHNIC_MENU_INFO  (
+		TechnicConfigID|True
+		DescID|True
+		Unk1|False
+	)
+
+	HS_CMD_MENU_PARAM  (
+		CmdMenuID|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		DamageValue|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+	)
+
+	HS_ENCOUNT_TABLE  (
+		MissionID|True
+		Unk1|False
+		ParamID1|True
+		YokaiPercentage1|False
+		Unk4|False
+		ParamID2|True
+		YokaiPercentage2|False
+		Unk7|False
+		ParamID3|True
+		YokaiPercentage3|False
+		Unk10|False
+		ParamID4|True
+		YokaiPercentage4|False
+		Unk13|False
+		ParamID5|True
+		YokaiPercentage5|False
+		Unk16|False
+		ParamID6|True
+		YokaiPercentage6|False
+		Unk19|False
+		ParamID7|True
+		YokaiPercentage7|False
+		Unk22|False
+		ParamID8|True
+		YokaiPercentage8|False
+		Unk25|False
+		ParamID9|True
+		YokaiPercentage9|False
+		Unk28|False
+		ParamID10|True
+		YokaiPercentage19|False
+		Unk31|False
+		ParamID11|True
+		YokaiPercentage11|False
+		Unk34|False
+		ParamID12|True
+		YokaiPercentage12|False
+		Unk37|False
+		ParamID13|True
+		YokaiPercentage13|False
+		Unk40|False
+		ParamID14|True
+		YokaiPercentage14|False
+		Unk43|False
+		ParamID15|True
+		YokaiPercentage15|False
+		Unk46|False
+	)
+
+	CHARA_ABILITY_CONFIG_INFO  (
+		SkillID|True
+		NameID|True
+		DescID|True
+		TriggeredTextID|True
+		EffectID|True
+		Multipliers|False
+		AoE|False
+		AoE|False
+		AoE|False
+		AoE|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		Unk16|False
+		Unk17|False
+		Unk18|False
+	)
+
+	MENU_APP_INFO  (
+		Unk0|True
+	)
+
+	MEDAL_LOAD_VALID  (
+		Unk0|False
+		Unk1|False
+		Cond|False
+	)
+
+	MEDAL_LOAD_CFG  (
+		Yo-kai_ID|True
+		Unk0|False
+	)
+
+	MEDAL_LOAD_CFG_REF_VALID  (
+		MedalLoadValueEntryNumber|False
+	)
+
+	GYM_BOSS_SINGLE_INFO  (
+		RoundID|True
+		Unk1|False
+		RoundNameID|True
+		RecommendLv|False
+		Unk2|False
+		GymPointsPrize|False
+		Unk6|True
+		Unk7|False
+		Cond|False
+		Unk9|False
+	)
+
+	GYM_BOSS_SINGLE_ENC_INFO  (
+		RoundID|True
+	)
+
+	GYM_BOSS_SINGLE_ENC_INFO_DATA  (
+		EncountID|True
+		BattleMapID|True
+	)
+
+	GYM_BOSS_RUSH_INFO  (
+		RoundID|True
+		Unk1|False
+		RoundNameID|True
+		Unk2|False
+		Unk3|False
+		RewardID|True
+		Unk4|False
+		Unk5|False
+	)
+
+	GYM_BOSS_RUSH_ENC_INFO  (
+		RoundID|True
+	)
+
+	GYM_BOSS_RUSH_ENC_INFO_DATA  (
+		EncountID|True
+		BattleMapID|True
+	)
+
+	GYM_MISSION_BATTLE_INFO  (
+		MissionID|True
+		Unk1|False
+		MissionNameID|True
+		Unk2|False
+		RewardID|True
+		Unk3|False
+		Unk4|False
+	)
+
+	GYM_MISSION_BATTLE_ENC_INFO  (
+		MissionID|True
+	)
+
+	GYM_MISSION_BATTLE_ENC_INFO_DATA  (
+		EncountID|True
+		BattleMapID|True
+	)
+
+	GYM_TOURNAMENT_INFO  (
+		Unk0|False
+		TournamentID|True
+		Unk1|False
+		TournamentNameID|True
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		RewardID|True
+		Unk5|False
+		Unk6|False
+	)
+
+	GYM_TOURNAMENT_ENC_INFO  (
+		TournamentID|True
+	)
+
+	GYM_TOURNAMENT_ENC_INFO_DATA  (
+		EncountID|True
+		BattleMapID|True
+	)
+
+	MISSION_MENU_INFO  (
+		MissionID|True
+		EnemyBaseID1|True
+		EnemyBaseID2|True
+		EnemyBaseID3|True
+		EnemyBaseID4|True
+		Unk6|False
+		BossBaseID|True
+	)
+
+	ENEMY_PLACEMENT  (
+		Enemy1ParamID|True
+		Unk1|True
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+	)
+
+	ENEMY_PLACEMENT_DATA  (
+		Enemy2ParamID|True
+		BossParamID|True
+		Enemy3ParamID|True
+		Unk3|False
+		Enemy4ParamID|True
+		Unk5|False
+	)
+
+	MISSION_CONFIG_INFO  (
+		MissionID|True
+		MissionNumber|False
+		Unk0|False
+		Unk3|True
+		Unk4|True
+		MissionType|False
+		Unk6|False
+		Unk7|False
+		NumberOfFloor|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		MissionMenuNumber|False
+		MissionCond|False
+		MissionTextID|True
+		BtMapID|True
+		Unk20|False
+		Unk21|False
+		Unk22|False
+		Unk23|False
+		ItemUnlock|True
+		Unk25|False
+	)
+
+	BATTLE_AURA_REWARD_INFO  (
+		Unk0|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+	)
+
+	BATTLE_AURA_REWARD_INFO_DATA  (
+		Unk0|True
+	)
+
+	GOKUDAMA_REWARD_INFO  (
+		Unk0|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+	)
+
+	GOKUDAMA_REWARD_INFO_DATA  (
+		Unk0|True
+		Unk1|True
+		Unk2|False
+	)
+
+	BADGE_REWARD_INFO  (
+		Unk0|True
+		Unk1|False
+		Unk2|True
+	)
+
+	REWARD_INFO  (
+		MissionID|True
+	)
+
+	REWARD_INFO_DATA  (
+		IsItem|False
+		RewardID|True
+		IsYokai|False
+		Quantity|False
+		Percentage|False
+		Condition|False
+	)
+
+	NOUN_INFO  (
+		TextID|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Text|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+	)
+
+	ITEM_CONSUME  (
+		ItemID|True
+		NounTextID|True
+		InventorySort|False
+		ItemType|False
+		Unk4|False
+		Unk5|False
+		CarryCap|False
+		IsBuyable|False
+		IsSellable|False
+		IsFusable|False
+		SellPrice|False
+		ShopPrice|False
+		IconPosX|False
+		IconPosY|False
+		DescTextID|True
+		OnAllyTextID|True
+		OnFoeTextID|True
+		Unk17|False
+		EffectValue|False
+		Unk19|False
+		Unk20|False
+		Unk21|False
+	)
+
+	ITEM_CREATURE  (
+		ItemID|True
+		NounTextID|True
+		InventorySort|False
+		ItemType|False
+		Unk4|False
+		IconPosX|False
+		IconPosY|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+		DescTextID|True
+		Unk15|False
+		Unk16|False
+		CreatureDictTextId|True
+	)
+
+	ITEM_EQUIPMENT  (
+		ItemID|True
+		NameID|True
+		InventorySort|False
+		ItemType|False
+		Unk5|False
+		Unk6|False
+		CarryCap|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		SellPrice|False
+		BuyPrice|False
+		IconPosX|False
+		IconPosY|False
+		DescriptionID|True
+		BuffTextID|False
+		DebuffTextID|False
+		Unk17|False
+		Unk18|False
+		Unk19|False
+		Unk20|False
+		Unk21|False
+		Unk22|False
+		Unk23|False
+		Unk24|True
+	)
+
+	BGM_INFO  (
+		Unk0|True
+	)
+
+	SIGHTING_INFO_GROUP  (
+		Unk0|False
+		Unk1|False
+	)
+
+	SIGHTING_INFO_GROUP_DATA  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+	)
+
+	HACKSLASH_CHARA_PARAM_AI_INFO  (
+		Unk0|True
+		Unk1|False
+		Unk2|False
+	)
+
+	HACKSLASH_BOSS_CHARA_PARAM_INFO  (
+		ParamID|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|True
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+	)
+
+	ENCOUNT_CHARA  (
+		ParamID|True
+		Level|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+	)
+
+	ENCOUNT_TABLE  (
+		Unk0|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|True
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		Unk16|False
+		Unk17|False
+		Unk18|False
+		Unk19|False
+		Unk20|False
+		Unk21|False
+		Unk22|True
+		Unk23|False
+		Unk24|False
+		Unk25|False
+		Unk26|False
+		Unk27|False
+		Unk28|False
+		Unk29|False
+	)
+
+	CREATURE_DICTIONARY_INFO  (
+		Unk0|True
+		Unk1|False
+		Unk2|True
+		Unk3|True
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+	)
+
+	DICTIONARY_PARAM  (
+		ParamID|True
+		HabitatID|True
+		ImageDisplays|False
+		NameDisplays|False
+		Unk4|False
+	)
+
+	LEGEND_DATA_CONFIG  (
+		Unk0|True
+		Unk1|True
+		Unk2|True
+		Unk3|False
+		Unk4|True
+		Unk5|False
+		Unk6|True
+		Unk7|False
+		Unk8|True
+		Unk9|False
+		Unk10|True
+		Unk11|False
+		Unk12|True
+		Unk13|False
+		Unk14|True
+		Unk15|False
+		Unk16|True
+		Unk17|False
+		Unk18|False
+		Unk19|False
+		Unk20|False
+		Unk21|False
+	)
+
+	COMBINE_INFO  (
+		BaseIsItem|False
+		BaseID|True
+		MaterialIsItem|False
+		MaterialID|True
+		EvolveToIsItem|False
+		EvolveToID|True
+		FusionID|True
+		FusionIsYokai|False
+	)
+
+	WM_YOKAI_WATCHMAP  (
+		Unk0|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+	)
+
+	WM_YOKAI_APPEAR  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+		YokaiBaseID|True
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		Unk16|False
+		Unk17|False
+		Unk18|False
+		Unk19|False
+		Unk20|False
+		Unk21|False
+		Unk22|False
+		Unk23|False
+		Unk24|False
+		Unk25|False
+		Unk26|False
+	)
+
+	WM_YOKAI_ENCOUNT  (
+		Unk0|True
+		Unk1|False
+	)
+
+	WM_INSECT_WATCHMAP  (
+		Unk0|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+	)
+
+	WM_INSECT_APPEAR  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+		Unk3|True
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		Unk16|False
+		Unk17|False
+		Unk18|False
+		Unk19|False
+		Unk20|False
+		Unk21|False
+		Unk22|False
+		Unk23|False
+		Unk24|False
+		Unk25|False
+		Unk26|False
+	)
+
+	WM_FISH_WATCHMAP  (
+		Unk0|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+	)
+
+	WM_FISH_APPEAR  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+		Unk3|True
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		Unk16|False
+		Unk17|False
+		Unk18|False
+		Unk19|False
+		Unk20|False
+		Unk21|False
+		Unk22|False
+		Unk23|False
+		Unk24|False
+	)
+
+	WM_ITEM_WATCHMAP  (
+		Unk0|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+	)
+
+	WM_ITEM_APPEAR  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+		Unk3|True
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		Unk16|False
+		Unk17|False
+		Unk18|False
+		Unk19|False
+		Unk20|False
+		Unk21|False
+		Unk22|False
+		Unk23|False
+		Unk24|False
+	)
+
+	DATA_ITEM  (
+		Unk0|False
+		Unk1|True
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+	)
+
+	SHAPE_DATA_ITEM  (
+		Unk0|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+	)
+
+	POINT_DATA_ITEM  (
+		Unk0|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+	)
+
+	OP_WATCH_POINT  (
+		Unk0|True
+		Unk1|True
+		Unk2|False
+		Unk3|False
+		Unk4|True
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+	)
+
+	AVATAR_LEARN_SKILL_INFO  (
+		Entry|False
+		TaughtSkillID|True
+	)
+
+	AVATAR_LEARN_MAGIC_INFO  (
+		Entry|False
+		TaughtTechniqueID|True
+	)
+
+	AVATAR_BUILD_INFO  (
+		TeacherParamID|True
+		Unk1|False
+		STRStats|False
+		SPRStats|False
+		DEFStats|False
+		HPStats|False
+	)
+
+	AVATAR_BUILD_SPECIAL  (
+		SoultimateID|True
+	)
+
+	AVATAR_BUILD_MAGIC  (
+		TechniqueID|True
+	)
+
+	AVATAR_LEARN_SPECIAL_INFO  (
+		Entry|False
+		TaughtSoulitmateID|True
+	)
+
+	AVATAR_BUILD_INFO_REF_SKILL  (
+		TaughtEntry|False
+		Unk1|False
+	)
+
+	AVATAR_BUILD_INFO_REF_SPECIAL  (
+		TaughtEntry|False
+		Unk1|False
+	)
+
+	AVATAR_BUILD_INFO_REF_MAGIC  (
+		TaughtEntry|False
+		Unk1|False
+	)
+
+	AVATAR_BUILD_SKILL  (
+		SkillID|True
+	)
+
+	LEGEND_DATA_CONFIG_LIST_BEG  (
+		Unk1|False
+	)
+
+	DICTIONARY_PARAM_LIST_BEG  (
+		Unk1|False
+	)
+
+	BATTLE_CHARA_PARAM_INFO_LIST_BEG  (
+		Unk1|False
+	)
+
+	CPSL_MACHINE_INFO  (
+		Unk0|True
+		Unk1|False
+	)
+
+	CPSL_MACHINE_INFO_DATA  (
+		ItemID|True
+		Unk1|False
+		LotRateInfoID|True
+		Unk3|True
+		FreeGiftTableID|True
+		3rdPrizeTableID|True
+		2ndPrizeTableID|True
+		1stPrizeTableID|True
+		Unk8|False
+		Unk9|False
+	)
+
+	CPSL_ROULETTE_PATTERN_INFO  (
+		Unk0|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		Unk16|False
+		Unk17|False
+		Unk18|False
+		Unk19|False
+		Unk20|False
+		Unk21|False
+		Unk22|False
+		Unk23|False
+		Unk24|False
+	)
+
+	CPSL_GET_AURA_DATA  (
+		Unk0|True
+		Unk1|False
+		Unk2|False
+	)
+
+	CPSL_PRIZE_INFO  (
+		PrizeID|True
+		IsItem|False
+		ParamID|True
+		CapsuleTextID|True
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+	)
+
+	CPSL_PRIZE_TABLE_INFO  (
+		TableInfoID|True
+	)
+
+	CPSL_PRIZE_TABLE_INFO_DATA  (
+		PrizeID|True
+		Drop%|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+	)
+
+	CPSL_LOT_RANK_RATE_INFO  (
+		Unk0|True
+	)
+
+	CPSL_LOT_RANK_RATE_INFO_DATA  (
+		Unk0|False
+		Unk1|False
+	)
+
+	HS_CMD_CHAIN_MENU_PARAM  (
+		Unk0|True
+		Unk1|False
+	)
+
+	HS_CMD_CHAIN_MENU_PARAM_DATA  (
+		Unk0|False
+	)
+
+	AVATAR_COLOR_DATA  (
+		Unk0|True
+		RGBRed|False
+		RGBBlue|False
+		RGBGreen|False
+	)
+
+	YOUKAI_SUMMON_INFO  (
+		Unk0|True
+	)
+
+	SUMMON_SND_U_NAME  (
+		SongFile|False
+		Yo-kaiBaseID|True
+	)
+
+	SUMMON_SND_D_NAME  (
+		SongFile|False
+		Yo-kaiBaseID|False
+	)
+
+	QUEST_CONFIG  (
+		QuestID|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|True
+		QuestTitleID|True
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|True
+		Unk10|False
+		Unk11|False
+		Unk12|True
+		RecommendedLevel|False
+		Unk14|False
+		PhaseAppear|False
+		Unk16|False
+	)
+
+	CHARA_EVOLVE_INFO  (
+		Unk0|True
+	)
+
+	SET_PATH_POP  (
+		EncountID|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		PositionDataFilePath|False
+		Cond|False
+	)
+
+	AURA_INFO  (
+		NameID|True
+		TelopNumber|False
+		EntryNumber|False
+		Unk3|False
+		MapID|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		SkillID|True
+	)
+
+	CHARA_ABILITY_EFFECT_INFO  (
+		EffectID|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Effects|False
+		AoE|False
+		AoE|False
+		AoE|False
+		AoE|False
+	)
+
+	SHOP_ITEM  (
+		shpTUBID|False
+		Unk1|False
+		NounID|False
+	)
+
+	SET_PATH  (
+		Unk0|True
+	)
+
+	SHOP_CONFIG_INFO  (
+		shpTUBID|True
+		ItemID|True
+		ItemsLeft|False
+		ItemHaveALimitOrNot|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		ConfigInfoNumber|False
+		Unk10|False
+	)
+
+	ITEM_IMPORTANT  (
+		ItemID|True
+		NameID|True
+		InventorySort|False
+		ItemType|False
+		Unk4|False
+		Unk5|False
+		CarryCap|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		IconPosX|False
+		IconPosY|False
+		Unk14|True
+	)
+
+	BATTLE_COMMAND_INFO  (
+		BattleCommandID|False
+		Unk1|False
+		Unk2|False
+		BattleViewID|False
+		Unk4|True
+		CharaAbilityEffectID|False
+		BattleNextCommand|False
+		BattleCommandCond|False
+		Effect1|False
+		Effect2|False
+		Effect3|False
+		Effect4|False
+	)
+
+	BATTLE_COMMAND_STEFF_INFO  (
+		Unk0|False
+		Unk1|False
+	)
+
+	BTL_AI_CHANGE_CHARA_INFO  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+		Unk3|True
+	)
+
+	TALK_INFO  (
+		NpcID|True
+		ConfigOffset|False
+		ConfigCount|False
+	)
+
+	TALK_PAGE  (
+		TextID|True
+		Unk1|False
+	)
+
+	SET_FLAG  (
+		Unk0|True
+	)
+
+	BASE_TALK_INFO  (
+		Unk0|True
+	)
+
+	BASE_TALK_CONFIG  (
+		Unk0|True
+	)
+
+	TALK_CONFIG  (
+		Unk0|False
+		Unk1|False
+		TalkPage|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Cond|False
+		Unk8|False
+	)
+
+	AVATAR_COLOR  (
+		Unk0|True
+	)
+
+	MAP_INFO  (
+		MapID|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|True
+		MapFolderName|False
+		Unk10|False
+		Unk11|True
+	)
+
+	QR2_INFO  (
+		StartTypeDec|False
+		EndTypeDec|False
+		Item1ID|True
+		Item2ID|True
+		Flag1ID|True
+		Flag2ID|True
+		Unk6|False
+		UnkBoolean|False
+		Item1Quantity|False
+		Item2Quantity|False
+		RandomQRTable|True
+	)
+
+	EFFECT_CONFIG  (
+		Unk0|False
+		Unk1|True
+		Unk2|False
+		Unk3|False
+		Unk4|True
+		Unk5|True
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		Unk16|False
+		Unk17|False
+		Unk18|False
+	)
+
+	EFFECT_PLACING_CONFIG_PARTS_NODE  (
+		Unk0|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|True
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|True
+		Unk11|False
+		Unk12|False
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		Unk16|False
+		Unk17|False
+		Unk18|False
+		Unk19|False
+		Unk20|False
+		Unk21|False
+		Unk22|False
+		Unk23|False
+		Unk24|False
+		Unk25|True
+	)
+
+	CHARA_COLLISION_PARTS_INFO  (
+		Unk0|False
+		Unk1|True
+	)
+
+	EFFECT_LOAD_CONFIG  (
+		Unk0|True
+		Unk1|False
+		Unk2|True
+	)
+
+	EFFECT_LOAD_CONFIG_BEGIN  (
+		Unk0|True
+	)
+
+	COMMAND_EFFECT_CONFIG  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+		Unk3|True
+		Unk4|False
+		Unk5|True
+		Unk6|True
+		Unk7|True
+		Unk8|False
+		Unk9|True
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		Unk16|False
+		Unk17|False
+		Unk18|False
+		Unk19|False
+		Unk20|False
+		Unk21|False
+		Unk22|False
+		Unk23|False
+		Unk24|False
+		Unk25|False
+		Unk26|False
+		Unk27|False
+		Unk28|False
+		Unk29|True
+		Unk30|False
+		Unk31|True
+	)
+
+	COMMAND_EFFECT_CONFIG_EXT  (
+		Unk0|False
+		Unk1|True
+	)
+
+	EFFECT_PLACING_CONFIG_PARTS_NODE_MAPPING  (
+		Unk0|False
+		Unk1|True
+	)
+
+	EFFECT_PLACING_CONFIG  (
+		Unk0|False
+		Unk1|True
+		Unk2|True
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|True
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		Unk16|False
+		Unk17|False
+		Unk18|False
+		Unk19|False
+		Unk20|False
+		Unk21|False
+		Unk22|False
+		Unk23|False
+		Unk24|False
+		Unk25|False
+		Unk26|False
+		Unk27|False
+		Unk28|False
+		Unk29|False
+		Unk30|False
+		Unk31|False
+		Unk32|True
+	)
+
+	DICTIONARY_DISABLE_PARAM_DATA  (
+		ParamID|True
+	)
+
+	HABITAT_INFO  (
+		HabitatID|True
+		Unk1|True
+		SystemTextID|True
+		Unk3|False
+	)
+
+	CHARA_ABILITY_CONFIG_INFO_EFF_DATA  (
+		EffectID|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		Unk16|False
+		Unk17|False
+		Unk18|False
+		Unk19|False
+	)
+
+	SKILL_CONFIG_BTL_INFO  (
+		SkillConfigID|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		BattleTextID|True
+		InspiritedDialogueID|True
+		InspiritedDialogueID2|True
+		Unk11|False
+		Unk12|False
+		_|False
+	)
+
+	FLAG_INFO  (
+		Unk0|False
+		Unk1|True
+	)
+
+	MAP_ENV_INFO_CNF  (
+		ActivationCond|False
+		BtlMapID|False
+		MapEffectMORNING_DAY?|False
+		MapEffectEVENING?|False
+		MapEffectNIGHT?|False
+		MapEffectRAIN?|False
+		MapEffectFORCE?|False
+		MMScroll|False
+		MMModelPos-X?|False
+		MMModelPos-Y?|False
+		MMModelPos-Z?|False
+		MMModelPos-ROT?|False
+		MMMaskPos-X?|False
+		MMMaskPos-Y?|False
+		MMMaskPos-Z?|False
+		MMMaskPos-ROT?|False
+		MMViewSize-PixelsX|False
+		MMViewSize-PixelsY|False
+		CameraFOV|False
+		CameraDist|False
+		CameraRotH|False
+		CameraRotV|False
+		CameraRotUnk|False
+		CameraRotAlsoUnk|False
+		DptRngRate|False
+		DptLvl|False
+		Near|False
+		Far|False
+		LIGHTMapLight|False
+		LIGHTBGColorNormalisedR|False
+		LIGHTBGColorNormalisedG|False
+		LIGHTBGColorNormalisedB|False
+		ShadowColsdw01-NormalisedR|False
+		ShadowColsdw01-NormalisedG|False
+		ShadowColsdw01-NormalisedB|False
+		ShadowColsdw02-NormalisedR|False
+		ShadowColsdw02-NormalisedG|False
+		ShadowColsdw02-NormalisedB|False
+		ShadowColsdw03-NormalisedR|False
+		ShadowColsdw03-NormalisedG|False
+		ShadowColsdw03-NormalisedB|False
+		ShadowColsdw04-NormalisedR|False
+		ShadowColsdw04-NormalisedG|False
+		ShadowColsdw04-NormalisedB|False
+		ShadowColsdw05-NormalisedR|False
+		ShadowColsdw05-NormalisedG|False
+		ShadowColsdw05-NormalisedB|False
+		DEF_POSX?|False
+		DEF_POSY?|False
+		DEF_POSZ?|False
+		DEF_POSROT?|False
+		INDOOR-BooleanIsIndoors|False
+		WEATHERSUN_MCLR-NormalisedR|False
+		WEATHERSUN_MCLR-NormalisedG|False
+		WEATHERSUN_MCLR-NormalisedB|False
+		WEATHERSUN_DCLR-NormalisedR|False
+		WEATHERSUN_DCLR-NormalisedG|False
+		WEATHERSUN_DCLR-NormalisedB|False
+		WEATHERSUN_ECLR-NormalisedR|False
+		WEATHERSUN_ECLR-NormalisedG|False
+		WEATHERSUN_ECLR-NormalisedB|False
+		WEATHERSUN_N_EARLYCLR-NormalisedR|False
+		WEATHERSUN_N_EARLYCLR-NormalisedG|False
+		WEATHERSUN_N_EARLYCLR-NormalisedB|False
+		WEATHERSUN_NCLR-NormalisedR|False
+		WEATHERSUN_NCLR-NormalisedG|False
+		WEATHERSUN_NCLR-NormalisedB|False
+		WEATHERSUN_N_LATECLR-NormalisedR|False
+		WEATHERSUN_N_LATECLR-NormalisedG|False
+		WEATHERSUN_N_LATECLR-NormalisedB|False
+		WEATHERRAIN_MCLR-NormalisedR|False
+		WEATHERRAIN_MCLR-NormalisedG|False
+		WEATHERRAIN_MCLR-NormalisedB|False
+		WEATHERRAIN_DCLR-NormalisedR|False
+		WEATHERRAIN_DCLR-NormalisedG|False
+		WEATHERRAIN_DCLR-NormalisedB|False
+		WEATHERRAIN_ECLR-NormalisedR|False
+		WEATHERRAIN_ECLR-NormalisedG|False
+		WEATHERRAIN_ECLR-NormalisedB|False
+		WEATHERRAIN_N_EARLYCLR-NormalisedR|False
+		WEATHERRAIN_N_EARLYCLR-NormalisedG|False
+		WEATHERRAIN_N_EARLYCLR-NormalisedB|False
+		WEATHERRAIN_NCLR-NormalisedR|False
+		WEATHERRAIN_NCLR-NormalisedG|False
+		WEATHERRAIN_NCLR-NormalisedB|False
+		WEATHERRAIN_N_LATECLR-NormalisedR|False
+		WEATHERRAIN_N_LATECLR-NormalisedG|False
+		WEATHERRAIN_N_LATECLR-NormalisedB|False
+		PTREE_4\10\PTVALS1Clone|False
+		PTREE_4\10\PTVALS2Clone|False
+		PTREE_4\10\PTVALS3Clone|False
+		CHARA_LGT_E_CLR-NormalisedR|False
+		CHARA_LGT_E_CLR-NormalisedG|False
+		CHARA_LGT_E_CLR-NormalisedB|False
+		CHARA_LGT_CLR-NormalisedR|False
+		CHARA_LGT_CLR-NormalisedG|False
+		CHARA_LGT_CLR-NormalisedB|False
+		UnkFloat97|False
+		UnkFloat98|False
+		UnkFloat99|False
+		PTREE_4\13\PTVALS1|False
+		PTREE_4\13\PTVALS2|False
+		PTREE_4\13\PTVALS3|False
+		Unk103Greyscale??|False
+		BgImgA|False
+		BgImgB|False
+		BgImgC|False
+		BgImgD|False
+		BgImgE|False
+		BgImgF|False
+		BgImgF_2?|False
+		BgImgG|False
+		BgImgH|False
+		BgImgI|False
+		BgImgJ|False
+		BgImgK|False
+		BgImgL|False
+		BgImgL_2?|False
+		Fog??|False
+		Unk119|False
+		Unk120|False
+		Unk121|False
+		Unk122|False
+		Unk123|False
+		Unk124|False
+		Unk125|False
+		MaybeCameraRelated?|False
+		Unk127|False
+		Unk128|False
+		Unk129|False
+		Unk130|False
+		Unk131|False
+	)
+
+	QR_RAND_TABLE_INFO  (
+		RandomQRTable|True
+	)
+
+	QR2_RAND_INFO  (
+		ItemID|True
+		IsRand|False
+	)
+
+	QR1_INFO  (
+		StartTypeDec|False
+		EndTypeDec|False
+		TypeItem1ID|True
+		TypeItem2ID|True
+		Flag1ID|True
+		Flag2ID|True
+		Unk6|False
+		Unk7|False
+		Item1Quantity|False
+		Item2Quantity|False
+		RandomQRTable|False
+	)
+
+	QR_RAND_TABLE_INFO_DATA_LIST_BEG  (
+		ChildCount|False
+	)
+
+	QR_RAND_TABLE_INFO_DATA  (
+		ItemID|False
+		IsRand?|False
+	)
+
+	MAP_ENV_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	MAP_ENV_INFO  (
+		HashedMapIDCRC32|True
+	)
+
+	MAP_ENV_INFO_CNF_LIST_BEG  (
+		ChildCount|False
+	)
+]
+
+YW4  [
+	CHARA_PARAM_INFO  (
+		ParamID|False
+		BaseID|False
+		MinHP|False
+		MinStr|False
+		MinSpr|False
+		MinDef|False
+		MinRes|False
+		MaxHP|False
+		MaxStr|False
+		MaxSpr|False
+		MaxDef|False
+		MaxRes|False
+		ElementResist|False
+		ElementWeak|False
+		Speed|False
+		Unk15|False
+		Unk16|False
+		CharaType|False
+		Unk18|False
+		Unk19|False
+		Unk20|False
+		Unk21|False
+		Unk22|False
+		Unk23|False
+		Unk24|False
+		Unk25|False
+		Unk26|False
+		Unk27|False
+		Unk28|False
+		Unk29|False
+		Unk30|False
+		Unk31|False
+		Unk32|False
+		TransformsInto|False
+		Unk34|False
+		MinYP|False
+		MaxYP|False
+		Unk37|False
+		Unk38|False
+		Unk39|False
+		Unk40|False
+		Unk41|False
+		Unk42|False
+		120HP|False
+		120YP|False
+		120Str|False
+		120Spr|False
+		120Def|False
+		120Res|False
+	)
+
+	CHARA_BASE_INFO  (
+		BaseID|False
+		ModelID|False
+		Unk2|False
+		NameNounID|False
+		CharaModelID|False
+		CharaMotionID|False
+		CharaMotionID|False
+	)
+
+	CPSL_PRIZE_INFO  (
+		CapsuleID|True
+		TypeID|False
+		ParamID|False
+	)
+
+	ITEM_IMPORTANT_INFO  (
+		ParamID|False
+		CategoryID|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		ItemID|False
+		Unk12|False
+		Unk13|False
+		Unk14|False
+		Cond|False
+		Unk16|False
+	)
+
+	ITBL_ITEMS  (
+		ParamID|False
+		NumberObtained|False
+		ObtainRate|False
+		Cond|False
+		Unk4|False
+	)
+
+	CPSL_LOT_RANK_RATE_INFO  (
+		CoinCorrelation|False
+	)
+
+	ITBL_BASE  (
+		TableID|False
+	)
+
+	ITEM_CONSUME_INFO  (
+		ParamID|False
+		CategoryID|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		ItemID|False
+		Unk12|False
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		Unk16|False
+		Unk17|False
+	)
+
+	CPSL_LOT_RANK_RATE_INFO_DATA_LIST_BEG  (
+		Unk0|False
+	)
+
+	ITEM_EQUIP_INFO  (
+		ParamID|False
+		CategoryID|False
+		NounID|False
+		DescID|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		ItemID|False
+		Rarity|False
+		Unk13|False
+		Unk14|False
+		SkillID|False
+		ExclusivityID|False
+		Unk17|False
+		Unk18|False
+		StrStat|False
+		SprStat|False
+		DefStat|False
+		ResStat|False
+		Unk23|False
+	)
+
+	ITEM_SOUL_INFO  (
+		ParamID|False
+		CategoryID|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		ItemID|False
+		Unk12|False
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		Unk16|False
+	)
+
+	ITEM_EQUIP_COND_CHARA  (
+		Unk0|False
+	)
+
+	ITEM_EQUIP_COND  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+	)
+
+	ITEM_EQUIP_COND_REF_COND_CHARA  (
+		Unk0|False
+		Unk1|False
+	)
+
+	ITBL_BASE_REF_ITEMS  (
+		ITEMS_LISTRef|False
+		EntriesReferenced|False
+	)
+
+	CPSL_PRIZE_TABLE_INFO_DATA  (
+		CapsuleID|True
+		DailyPrizeChance|False
+		Unk2|False
+		Unk3|False
+		Cond|False
+	)
+
+	CPSL_PRIZE_TABLE_INFO  (
+		PoolCorrelation|False
+	)
+
+	CPSL_CONFIG_INFO  (
+		Unk0|False
+	)
+
+	CPSL_LOT_RANK_RATE_INFO_DATA  (
+		Prize|False
+		PrizeChance|False
+	)
+
+	CPSL_CONFIG_INFO_DATA  (
+		Coin|False
+		PossibleFirstPrizes|False
+		CoinCorrelation|False
+		FreeGiftPoolCorrelation|False
+		3rdPrizePoolCorrelation|False
+		2ndPrizePoolCorrelation|False
+		1stPrizePoolCorrelation|False
+	)
+
+	ENEMY_PARAM_INFO  (
+		ParamID|False
+		Unk1|False
+		Unk2|False
+		TableID|False
+		TableID|False
+	)
+
+	YOKAI_PARAM_INFO  (
+		ParamID|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		SkillID|False
+		YMoveID|False
+		SoultimateID|False
+		XMove1ID|False
+		XMove1Unlock|False
+		XMove2ID|False
+		XMove2Unlock|False
+		XMove3ID|False
+		XMove3Unlock|False
+		XMove4ID|False
+		XMove4Unlock|False
+		Unk15|False
+		Unk16|False
+		Unk17|False
+		Unk18|False
+		Unk19|False
+		Unk20|False
+		Unk21|False
+	)
+
+	DELIVERY_INFO_DATA  (
+		ParamID|False
+		NumberReceived|False
+		Unk2|False
+	)
+
+	CHARA_EXT_PARAM_INFO  (
+		ParamID|False
+	)
+
+	PASSWORD_INFO  (
+		Password|False
+		ParamID|False
+		Unk2|False
+		FlagID|False
+		Unk4|False
+		NumberReceived|False
+	)
+
+	BTL_TECHNIC_INFO  (
+		ParamID|False
+		Unk1|False
+		Unk2|False
+		NounID|False
+		TextID|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		NumberOfHits|False
+		Unk10|False
+	)
+
+	BTL_PASSIVE_SKILL_INFO  (
+		ParamID|False
+		SkillID|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		NounID|False
+		TextID|False
+	)
+
+	BTL_SPECIAL_DATA  (
+		ParamID|False
+	)
+
+	MISSION_CONFIG_INFO  (
+		Unk0|False
+		MissionID|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Rank|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		RecommendedLevel|False
+		TimeLimit|False
+		TableID|False
+		ClearReward|False
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		Cond|False
+		Cond2|False
+		NameTextID|False
+		ObjectiveTextID|False
+		DescriptionTextID|False
+		Unk21|False
+		LevelLimit|False
+		Unk23|False
+		UltraOrbsRequired|False
+		LocationID|False
+		IconID|False
+	)
+
+	MISSION_CONFIG_INFO_DATA  (
+		ParamID|False
+	)
+
+	SKILL_TREE_LV_INFO  (
+		Unk0|False
+		RequiredPoints|False
+		Unk2|False
+		ParamID|False
+	)
+
+	HELP_LIST_IMAGE  (
+		FileName|False
+		Unk1|True
+	)
+
+	TEXT_INFO  (
+		ParamID|False
+		TypeID|False
+		Text|False
+	)
+
+	HELP_LIST_INFO  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+		HelpTextID|False
+		TextID|False
+		TextID|False
+		Unk6|False
+		PS4TextID|False
+	)
+
+	SHOP_INFO_ITEM  (
+		Unk0|False
+		ParamID|False
+	)
+
+	SHOP_INFO  (
+		Unk0|False
+		ShopNameID|False
+		Unk2|False
+		TextID|False
+	)
+
+	QUEST_DATA_PPS_INFO  (
+		Unk0|False
+		Cond|False
+	)
+
+	QUEST_DATA_PHASE  (
+		Unk0|False
+		TextID|False
+		ObjectiveTextID|False
+	)
+
+	QUEST_DATA_REWARD_ITEM  (
+		ParamID|False
+		NumberReceived|False
+	)
+
+	QUEST_DATA_CFG  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+		TextID|False
+		Unk4|False
+		Cond|False
+	)
+
+	DATA_COUNT  (
+		Unk0|False
+	)
+
+	DATA_ITEM  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+	)
+
+	DELIVERY_INFO  (
+		Unk0|False
+		TextID|False
+		Unk2|False
+		TextID|False
+	)
+
+	CONVENTION_INFO_CFG  (
+		Unk0|False
+		Cond|False
+		Unk2|False
+		NameTextID|False
+		RecommendedLevel|False
+		ClearRewardTableID|False
+		GPReward|False
+		SumoEXPReward|False
+		TableID|False
+	)
+
+	NOUN_INFO  (
+		NounID|False
+	)
+
+	CHARA_BASE_INFO_REF_BATTLE  (
+		BATTLE_LISTRef|False
+		EntriesReferenced|False
+	)
+
+	CHARA_BASE_BATTLE  (
+		Role|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Tribe|False
+		Rank|False
+	)
+
+	CHARA_BASE_INFO_LIST_BEG  (
+		EntryCount|False
+	)
+
+	CHARA_PARAM_INFO_LIST_BEG  (
+		EntryCount|False
+	)
+
+	YOKAI_PARAM_INFO_LIST_BEG  (
+		EntryCount|False
+	)
+
+	TEXT_INFO_BEGIN  (
+		EntryCount|False
+	)
+
+	CHARA_MENU_RESOURCE_INFO  (
+		BaseID|False
+	)
+
+	NOUN_INFO_BEGIN  (
+		EntryCount|False
+	)
+
+	CHARA_MODEL_INFO  (
+		CharaModelID|False
+		Filepath|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+	)
+
+	CHARA_BASE_BATTLE_LIST_BEG  (
+		EntryCount|False
+	)
+
+	NPC_BASE  (
+		Unk0|False
+		BaseID|False
+	)
+
+	NPC_PRESET  (
+		NpcID|False
+	)
+
+	TALK_INFO  (
+		NpcID|False
+	)
+
+	TALK_INFO_REF_TALK  (
+		TALK_LISTRef|False
+		EntriesReferenced|False
+	)
+
+	CHARA_MDL_PRESET_DATA  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+	)
+
+	CHARA_MDL_PRESET_INFO  (
+		Unk0|False
+	)
+
+	CHARA_MDL_CHANGE_DATA  (
+		Unk0|False
+		Cond|False
+		Unk2|False
+		Unk3|False
+	)
+
+	CHARA_MDL_CHANGE_INFO  (
+		Unk0|False
+	)
+
+	BTL_CMD_DATA_STEFF  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+		ParamID|False
+	)
+
+	CHARA_MOTION_INFO  (
+		CharaMotionID|False
+		Filepath|False
+	)
+
+	UPGRADE_INFO_CFG  (
+		Unk0|False
+		PromotionPoints|False
+	)
+
+	FINISH_ATTACK_TEX  (
+		Filename|False
+	)
+
+	FINISH_ATTACK_BASE_PATH  (
+		Filepath|False
+	)
+
+	CONVENTION_INFO_CFG_CLEAR_CND  (
+		ClearConditionType|False
+	)
+
+	CPK_ITEM  (
+		Filepath|False
+		CPKpath|False
+	)
+
+	NEWS_LIST_IMAGE  (
+		Filename|False
+	)
+
+	NEWS_LIST_INFO  (
+		Unk0|False
+		Unk1|False
+		NewsNameTextID|False
+		Unk3|False
+		SystemTextID|False
+	)
+
+	TROPHY_INFO  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+		TextNameID|False
+		TrophyName|False
+		TextDescriptionID|False
+		Unk6|False
+		Unk7|False
+		Cond|False
+		TrophyObtainAoE|False
+	)
+
+	GENERAL_LIMIT_INFO_DATA  (
+		Unk0|False
+		Cond|False
+	)
+
+	SETTING_INFO  (
+		Unk0|False
+		Unk1|False
+		TextNameID|False
+		TextDescriptionID|False
+	)
+
+	BTL_PASSIVE_EFFECT_INFO  (
+		PassiveEffectGroupInfoEffectParamListID|False
+	)
+
+	BTL_PASSIVE_EFFECT_GROUP_INFO  (
+		SkillID|False
+	)
+
+	ENCOUNT_CONFIG_INFO_PARAM3  (
+		ParamID|False
+	)
+
+	NFC_INFO  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		ParamID|False
+	)
+
+	CPSL_PRIZE_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	CPSL_PRIZE_TABLE_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+]
+
+YSH  [
+	CHARA_PARAM_COMMON_INFO  (
+		ParamID|False
+		BaseID|False
+		HP|False
+		Strength|False
+		Spirit|False
+		Defense|False
+		Mentality|False
+		Unk7|False
+		Unk8|False
+		Category|False
+	)
+
+	CHARA_PARAM_INFO  (
+		Unk0|False
+		Unk1|False
+	)
+
+	PLAYABLE_CHARA_INFO  (
+		Unk0|False
+		BaseID|False
+	)
+
+	CHARA_BASE_INFO  (
+		BaseID|False
+		ModelID|False
+		Unk2|False
+		NounID|False
+	)
+
+	CHARA_PARAM_COMMON_INFO_LIST_BEG  (
+		EntryCount|False
+	)
+
+	CHARA_EXT_PARAM_COMMON_INFO_LIST_BEG  (
+		EntryCount|False
+	)
+
+	CTRL_CHARA_EXT_PARAM_COMMON_INFO_LIST_BEG  (
+		EntryCount|False
+	)
+
+	CHARA_PARAM_ADD_INFO_LIST_BEG  (
+		EntryCount|False
+	)
+
+	CHARA_EXT_PARAM_ADD_INFO_LIST_BEG  (
+		EntryCount|False
+	)
+
+	CTRL_CHARA_EXT_PARAM_ADD_INFO_LIST_BEG  (
+		EntryCount|False
+	)
+
+	ENEMY_PARAM_INFO_LIST_BEG  (
+		EntryCount|False
+	)
+
+	PLAYABLE_CHARA_INFO_LIST_BEG  (
+		EntryCount|False
+	)
+
+	CHARA_BASE_BATTLE_LIST_BEG  (
+		EntryCount|False
+	)
+
+	CHARA_BASE_INFO_LIST_BEG  (
+		EntryCount|False
+	)
+
+	PASSWORD_OTHER  (
+		Unk0|True
+	)
+
+	PASSWORD_INFO  (
+		Password|True
+		ParamID|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		NumberReceived|False
+	)
+
+	DELIVERY_INFO  (
+		Unk0|False
+		NounID|False
+		TextID|False
+		Cond|False
+	)
+
+	ITEM_IMPORTANT_INFO  (
+		ParamID|False
+		Unk1|False
+		NounID|False
+		TextID|False
+	)
+
+	ITEM_TECHNIC_MEDAL_INFO  (
+		ParamID|False
+		Unk1|False
+		NounID|False
+		TextID|False
+	)
+
+	ITBL_ITEMS  (
+		ParamID|False
+	)
+
+	ITBL_BASE  (
+		Unk0|False
+	)
+
+	ITEM_WEAPON_INFO  (
+		ParamID|False
+		Unk1|False
+		NounID|False
+	)
+
+	ENEMY_PARAM_INFO  (
+		ParamID|False
+	)
+
+	CPSL_PRIZE_INFO  (
+		PrizeID|False
+		ParamID|False
+	)
+
+	CPSL_PRIZE_TABLE_INFO_DATA  (
+		PrizeID|False
+	)
+
+	ITEM_CONSUME_INFO  (
+		ParamID|False
+		Unk1|False
+		NounID|False
+		TextID|False
+	)
+
+	W_EVENT_DATA_CFG  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		TextID|False
+		Filename|False
+	)
+
+	QUEST_DATA_CFG  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+		NounID|False
+		Difficulty|False
+		Cond|False
+		Unk6|False
+		Unk7|False
+		ClearedEXP|False
+		ClearedMani|False
+		ClearedLikes|False
+	)
+
+	QUEST_DATA_PPS_INFO  (
+		Unk0|False
+		Cond|False
+	)
+
+	QUEST_DATA_PPS_TEXT_INFO  (
+		TextID|False
+		Cond|False
+	)
+
+	QUEST_DATA_REWARD_ITEM  (
+		ParamID|False
+		NumberGiven|False
+	)
+
+	QUEST_DATA_CFG_REF_REWARD_ITEM  (
+		REWARD_ITEM_LISTEntry|False
+		EntriesReferenced|False
+	)
+
+	ITEM_FOOD_INFO  (
+		ParamID|False
+		Unk1|False
+		NounID|False
+		TextID|False
+	)
+
+	ITEM_ARMOR_INFO  (
+		ParamID|False
+		Unk1|False
+		NounID|False
+	)
+
+	ITEM_WEAPON_MEDAL_INFO  (
+		ParamID|False
+		Unk1|False
+		NounID|False
+	)
+
+	ITEM_SUMMON_MEDAL_INFO  (
+		ParamID|False
+		Unk1|False
+		NounID|False
+		TextID|False
+	)
+
+	ITEM_METAMORPHOSE_MEDAL_INFO  (
+		ParamID|False
+		Unk1|False
+		NounID|False
+		TextID|False
+	)
+
+	ITEM_FASHION_INFO  (
+		ParamID|False
+		Unk1|False
+		NounID|False
+		TextID|False
+	)
+
+	HELP_LIST_INFO  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		NounID|False
+		TextID|False
+		Unk6|False
+		TextID2|False
+	)
+
+	HELP_LIST_IMAGE  (
+		Filename|False
+	)
+
+	TROPHY_INFO  (
+		Unk0|False
+		Unk1|False
+		Unk2|False
+		NounID|False
+		Unk4|False
+		TextID|False
+		Unk6|False
+		Unk7|False
+		Cond|False
+	)
+]
+
+YWB2  [
+	CHARA_BASE_YOKAI_INFO  (
+		BaseID|True
+		FileNamePrefix|False
+		FileNameNumber|False
+		FileNameVariant|False
+		NameID|True
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		DescriptionID|True
+		MedalPosX|False
+		MedalPosY|False
+		Unk6|False
+		Rank|False
+		IsRare|False
+		IsLegendary|False
+		IsPionner|False
+		IsCommandant|False
+		FavFood|False
+		HatedFood|False
+		Unk11|False
+		Unk12|False
+		Tribe|False
+		IsClassic|False
+		IsMerican|False
+		BustersTRole|False
+		Unk15|False
+		IsDeva|False
+		IsLegendaryMystery|False
+		IsTreasure|False
+		IsCrystalLegendary|False
+	)
+
+	CHARA_PARAM_INFO  (
 		ParamID|True
 		BaseID|True
 		ShowInMedallium|False
@@ -598,18 +5988,18 @@ YKW3 [
 		MaxDefense|False
 		MaxSpeed|False
 		ExperienceCurve|True
-		Strongest|False
+		Resistance|False
 		Weakness|False
-		PossibleAttitude|False
+		Unk2|False
 		AttackID|True
-		%Attack|False
+		Unk3|False
 		TechniqueID|True
-		%Technique|False
+		Unk4|False
 		InspiritID|True
-		%Inspirit|False
-		GuardID|False
-		%Guard|False
-		SoulimateID|True
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		SoultimateID|True
 		SkillID|True
 		Unk8|False
 		BattleType|False
@@ -619,63 +6009,222 @@ YKW3 [
 		Unk11|False
 		Unk12|False
 		ScoutableID|True
-		Unk13|False
+		IsFusable|False
 		EvolveOffset|False
-		EquipmentSlotsAmount|False
+		Unk14|False
 		WaitTime|False
 	)
 
-	CHARA_SCALE_INFO (
-		YokaiBaseID|True
+	HACKSLASH_CHARA_PARAM_INFO  (
+		ParamID|True
+		Unk0|False
+		Unk2|False
+		SkillID|True
+		A_AttackID|True
+		SoultimateID|True
+		Y_AttackID|True
+		Unk3|False
+		X_AttackID|True
+		Unk4|False
+		BossCommandAttackID1|True
+		Unk5|False
+		BossCommandAttackID2|True
+		Unk6|False
+		BossCommandAttackID3|True
+		Unk7|False
+		BossCommandAttackID4|True
+		Unk8|False
+		BossCommandAttackID5|True
+		Unk9|False
+		BossCommandAttackID6|True
+		Unk10|False
+		BossCommandAttackID7|True
+		Unk11|False
+		Unk12|False
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		Unk16|False
+		Unk17|False
+		Unk18|False
+		Unk19|False
+		Unk20|False
+		Unk21|False
+		Unk22|False
+		Unk23|False
+		Unk24|False
+		Unk25|False
+		Unk26|False
+		Unk27|False
+		Unk28|False
+		Unk29|False
+	)
+
+	MISSION_CONFIG_INFO  (
+		DungeonID|True
+		DungeonNumber|False
+		Unk2|False
+		DungeonCategory|False
+		Unk4|False
+		DungeonType|False
+		Unk6|False
+		Unk7|False
+		TotalFloors|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Unk12|False
+		Unk13|False
+		Unk14|False
+		Unk15|False
+		Unk16|False
+		Unk17|False
+		Unk18|False
+		Unk19|False
+		Unk20|False
+		DungeonMenuNumber|False
+		Cond|False
+		DungeonTextID|False
+		MapID|False
+		Unk25|False
+		Unk26|False
+		Unk27|False
+		Unk28|False
+		ItemUnlock|False
+		Unk30|False
+		Unk31|False
+		Unk32|False
+		Unk33|False
+		Unk34|False
+		RewardOniOrbs|False
+		Unk36|False
+		Unk37|False
+	)
+
+	REWARD_INFO  (
+		MissionID|True
+	)
+
+	REWARD_INFO_DATA  (
+		Unk0|False
+		RewardID|True
+		Level|False
+		Unk3|False
+		Rate|False
+		Unk5|False
+	)
+
+	TEXT_INFO  (
+		Unk0|True
+	)
+
+	AURA_INFO  (
+		NounID|False
 		Unk1|False
-		WorldMapSize|False
-		MenuSize|False
-		BattleSize|False
 		Unk2|False
 		Unk3|False
+		Unk4|False
+		Unk5|False
+		Price|False
+		Unk7|False
+		EffectType|False
+		DungeonNumber|False
+		EffectType|False
+		SkillID|False
+		EffectType|False
+		SkillID|False
+		EffectType|False
+		SkillID|False
+		EffectType|False
+		SkillID|False
+		EffectType|False
+		SkillID|False
+		EffectType|False
+		SkillID|False
 	)
 
-	TEXT_INFO (
-		YokaiDescID|True
-		Unk1|False
-		Desc|False
+	SHOP_ITEM  (
+		shpTUBID|False
+		Unk1|True
+		NounID|False
+		Price|False
+		AuraNum?|False
+		Cond|False
 	)
 
-	SKILL_CONFIG_INFO (
-		SkillConfigID|True
-		Unk1|False
-		DescID|True
-		NameID|True
+	MISSION_RUINS_INFO  (
+		RuinNameID|True
+		EntranceNameID|True
+		RuinNumber|False
 		Unk3|False
-		Power|False
+		Cond|False
+		Unk5|False
+		Unk6|False
+		XPosition|False
+		YPosition|False
+		Unk9|False
+	)
+
+	RANDOMMAP_DUNGEON_CONFIG  (
+		DungeonConfigID|True
+		Unk1|False
+		ItemPlacementID|True
+		TrapPlacementID|True
+		LotteryConfigID|True
+		Unk2|False
+	)
+
+	BTL_BGM_INFO  (
+		BGMID|True
+		IntroFile|False
+		Unk2|False
+		LoopFile|False
 		Unk4|False
 		Unk5|False
 		Unk6|False
-		Element|False
-		Unk8|True
-		Unk9|False
-		Unk10|False
 	)
 
-	HACKSLASH_CHARA_PARAM_INFO (
-		ParamID|True
+	NOUN_INFO  (
+		Unk0|True
+	)
+
+	KEY_BOARD_STR  (
+		Unk0|False
 		Unk1|False
 		Unk2|False
-		SkillID|True
-		A-attackID|True
-		SoulimateID|True
-		Y-attackID|True
-		X-Attack|True
-		Unk3|True
+		Alphabet|False
+		Character|False
+	)
+
+	SHOP_CONFIG_INFO  (
+		shpTUBID|False
+		ItemID|False
+		Unk2|False
+		Unk3|False
 		Unk4|False
-		ParamID|True
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Index|False
+	)
+
+	CHARA_ABILITY_CONFIG_INFO  (
+		SkillID|False
+		NounID|False
+		TextID|False
+		Unk3|False
+		EffectID|False
+		Multipliers|False
+		AoE|False
+	)
+
+	CHARA_ABILITY_EFFECT_INFO  (
+		EffectID|False
 		Unk1|False
 		Unk2|False
-		SkillID|True
-		A-attackID|True
-		SoulimateID|True
-		Y-attackID|True
-		X-Attack|True
 		Unk3|False
 		Unk4|False
 		Unk5|False
@@ -686,94 +6235,110 @@ YKW3 [
 		Unk10|False
 		Unk11|False
 		Unk12|False
-		Unk13|False
-		Unk14|False
+		Effects|False
+		AoE|False
+		AoE|False
 	)
 
-	YOKAI_CIRCLE_INFO (
-		CircleID|True
-		NameID|True
-		QuoteID|True
-		PageNumber|False
+	CAMPAIGN_ITEM_COND  (
+		Cond|False
+	)
+
+	CAMPAIGN_ITEM  (
+		Unk0|False
+		ItemID|False
+	)
+
+	SHOP_VALID_CONDITION  (
+		AltPrice|False
+		Cond|False
+	)
+
+	COMBINE_INFO  (
+		BaseIsItem|True
+		BaseID|True
+		MaterialIsItem|False
+		MaterialID|True
+		IsItemEvolution|False
+		IDOfResult|True
+		FusionID|True
+		UnkZeroOneOrThree|False
+		FusionPrice|False
+	)
+
+	SHOP_LIST_INFO  (
+		ShopID|False
+	)
+
+	PASSWORD_INFO  (
+		Password|False
 		Unk1|False
-		Unk2|False
-		ItemOrParamID|True
-		SpoilGroupName|False
+		ItemID\ParamID|True
+		NounID|False
+		Unk4|False
+		FlagID|False
 	)
 
-	YOKAI_CIRCLE_INFO_DATA (
+	QR2_INFO  (
+		StartTypeDec|False
+		EndTypeDec|False
+		Item1ID|True
+		Item2ID|False
+		Flag1ID|False
+		Flag2ID|False
+		Unk1|False
+		UnkBoolean|True
+		Item1Qty|False
+		Item2Qty|False
+		RandomQRTable|False
+		UnkBoolean2|False
+		UnkAlwaysZero?|False
+		UnkAlwaysZero?|False
+		UnkAlwaysZero?|False
+	)
+
+	QR2_RAND_INFO  (
+		ItemID|False
+		IsRand?|False
+	)
+
+	QR_RAND_TABLE_INFO  (
+		RandomQRTable|False
+	)
+
+	QR_RAND_TABLE_INFO_DATA_LIST_BEG  (
+		ChildCount|False
+	)
+
+	QR_RAND_TABLE_INFO_DATA  (
+		ItemID|False
+		IsRand?|False
+	)
+
+	COMBINE_INFO_LIST_BEG  (
+		ChildCount|False
+	)
+
+	SHOP_CONFIG_INFO_BEGIN  (
+		Unk0|False
+	)
+]
+
+NNK1  [
+	ITEM_EQUIP_PARAMETER_PLUS  (
+		Unk0|False
+		Unk1|False
+		ATK|False
+		DEF|False
+		MATK|False
+		MDEF|False
+		EVA|False
+		ACU|False
+	)
+
+	COMMON_PARAM_INFO  (
+		BaseID|True
 		ParamID|True
-		SpoilYo-kaiName|False
-	)
-
-	YOKAI_CIRCLE_INFO_LIST_BEG (
-		NumberOfCircles|False
-	)
-
-	YOKAI_CIRCLE_INFO_DATA_LIST_BEG (
-		NumberOfYokai|False
-	)
-
-	BOSS_PARTS_INFO (
-		Unk0|True
-	)
-
-	BATTLE_CHARA_PARAM_INFO (
-		Unk0|True
-		Unk1|False
-		Unk2|False
-		Unk3|False
-		Unk4|False
-		Unk5|True
-		Unk6|False
-		Unk7|True
-		Unk8|False
-		Unk9|True
-	)
-
-	HACKSLASH_TECHNIC_INFO (
-		TechnicConfigID|True
-		NameID|True
-		CmdMenuID|True
-		Unk1|False
-		Unk2|False
-	)
-
-	HACKSLASH_TECHNIC_MENU_INFO (
-		TechnicConfigID|True
-		DescID|True
-		Unk1|False
-	)
-
-	HS_CMD_MENU_PARAM (
-		CmdMenuID|True
-		Unk1|False
-		Unk2|False
-		Unk3|False
-		Unk4|False
-		Unk5|False
-		Unk6|False
-		Unk7|False
-	)
-
-	HS_ENCOUNT_TABLE (
-		Unk0|True
-		Unk1|False
-		Unk2|True
-		Unk3|False
-		Unk4|False
-		Unk5|True
-		Unk6|False
-		Unk7|False
-		Unk8|True
-	)
-
-	CHARA_ABILITY_CONFIG_INFO (
-		SkillID|True
-		NameID|True
-		DescID|True
-		TriggeredTextID|True
-		Unk1|True
 		Unk2|False
 		Unk3|False
 		Unk4|False
@@ -791,50 +6356,8 @@ YKW3 [
 		Unk16|False
 		Unk17|False
 		Unk18|False
-	)
-
-	MENU_APP_INFO (
-		Unk0|True
-	)
-
-	MEDAL_LOAD_VALID (
-		Unk0|False
-		Unk1|False
-		PhaseAppear|False
-	)
-
-	MEDAL_LOAD_CFG (
-		Yo-kai_ID|True
-		Unk0|False
-	)
-
-	MEDAL_LOAD_CFG_REF_VALID (
-		MedalLoadValueEntryNumber|False
-	)
-]
-
-YokaiWatch4++ [
-	CHARA_PARAM_INFO (
-		ParamID|True
-		BaseID|True
-		MinHP|False
-		MinStrength|False
-		MinSpirit|False
-		MinDefense|False
-		MinResist|False
-		MaxHP|False
-		MaxStrength|False
-		MaxSpirit|False
-		MaxDefense|False
-		MaxResist|False
-		ElementResist|False
-		ElementWeak|False
-		Speed|False
-		Unk16|False
-		Unk17|False
-		Unk18|False
 		Unk19|False
-		Unk20|True
+		Unk20|False
 		Unk21|False
 		Unk22|False
 		Unk23|False
@@ -850,216 +6373,250 @@ YokaiWatch4++ [
 		Unk33|False
 		Unk34|False
 		Unk35|False
-		MinYP|False
-		MaxYP|False
+		Unk36|False
+		Unk37|False
 		Unk38|False
 		Unk39|False
 		Unk40|False
 		Unk41|False
 		Unk42|False
 		Unk43|False
-		120HP|False
-		120YP|False
-		120Strength|False
-		120Spirit|False
-		120Defense|False
-		120Resist|False
-	)
-
-	CHARA_BASE_INFO (
-		Unk0|False
-		ModelID|False
-	)
-
-	CPSL_PRIZE_INFO (
-		CapsuleID|True
-		TypeID|False
-		ParamID|True
-	)
-
-	ITEM_IMPORTANT_INFO (
-		Unk0|False
-		Unk1|False
-		Unk2|False
-		Unk3|False
-		Unk4|False
-		Unk5|False
-		Unk6|False
-		Unk7|False
-		Unk8|False
-		Unk9|False
-		Unk10|False
-		Unk11|False
-		Unk12|False
-		Unk13|False
-		Unk14|False
-		Unk15|False
-		Unk16|False
-	)
-
-	ITBL_ITEMS (
-		Unk0|True
-		Unk1|True
-		Unk2|True
-		Unk3|True
-		Unk4|True
-	)
-
-	CPSL_LOT_RANK_RATE_INFO (
-		Unk0|True
-	)
-
-	ITBL_BASE (
-		Unk0|True
-	)
-
-	ITEM_CONSUME_INFO (
-		ParamID|True
-		Unk1|False
-		Unk2|False
-		Unk3|False
-		Unk4|False
-		Unk5|False
-		Unk6|False
-		Unk7|False
-		Unk8|False
-		Unk9|False
-		Unk10|False
-		Unk11|False
-		Unk12|False
-		Unk13|False
-		Unk14|False
-		Unk15|False
-		Unk16|False
-		Unk17|False
-	)
-
-	CPSL_LOT_RANK_RATE_INFO_DATA_LIST_BEG (
-		Unk0|True
-	)
-
-	ITEM_EQUIP_INFO (
-		Unk0|True
-		Unk1|True
-		Unk2|True
-		Unk3|True
-		Unk4|True
-		Unk5|True
-		Unk6|True
-		Unk7|True
-		Unk8|True
-		Unk9|True
-		Unk10|True
-		Unk11|True
-		Unk12|True
-		Unk13|True
-		Unk14|True
-		Unk15|True
-		Unk16|True
-		Unk17|True
-		Unk18|True
-		Unk19|True
-		Unk20|True
-		Unk21|True
-		Unk22|True
-		Unk23|True
-	)
-
-	ITEM_SOUL_INFO (
-		ParamID|True
-		Unk1|False
-		Unk2|False
-		Unk3|False
-		Unk4|False
-		Unk5|False
-		Unk6|False
-		Unk7|False
-		Unk8|False
-		Unk9|False
-		Unk10|False
-		Unk11|False
-		Unk12|False
-		Unk13|False
-		Unk14|False
-		Unk15|False
-		Unk16|False
-	)
-
-	ITEM_EQUIP_COND_CHARA (
-		Unk0|True
-	)
-
-	ITEM_EQUIP_COND (
-		Unk0|True
-		Unk1|True
-		Unk2|True
-		Unk3|True
-		Unk4|True
-		Unk5|True
-	)
-
-	ITEM_EQUIP_COND_REF_COND_CHARA (
-		Unk0|True
-		Unk1|True
-	)
-
-	ITBL_BASE_REF_ITEMS (
-		Unk0|True
-		Unk1|True
-	)
-
-	CPSL_PRIZE_TABLE_INFO_DATA (
-		CapsuleID|True
-		DailyPrizeChance|False
-	)
-
-	CPSL_PRIZE_TABLE_INFO (
-		Unk0|True
-	)
-
-	CPSL_CONFIG_INFO (
-		Unk0|True
-	)
-
-	CPSL_LOT_RANK_RATE_INFO_DATA (
-		Prize|False
-		PrizeChance|False
-	)
-
-	CPSL_CONFIG_INFO_DATA (
-		Unk0|True
-		Unk1|False
-		Unk2|True
-		FreeGift|True
-		3rdPrize|True
-		2ndPrize|True
-		1stPrize|True
+		Unk44|False
+		Unk45|False
+		Unk46|False
+		Unk47|False
+		Unk48|False
+		Unk49|False
+		Unk50|False
+		Unk51|False
+		Unk52|False
+		Unk53|False
+		Unk54|False
+		Unk55|False
+		Unk56|False
+		Unk57|False
+		Unk58|True
+		Unk59|False
+		Unk60|True
+		Unk61|True
 	)
 ]
 
-YSchoolHeroes [
-	CHARA_PARAM_COMMON_INFO (
+SW  [
+	CHARA_BASE_BATTLE_INFO  (
+		BaseID|True
+		Unk1|False
+		Unk2|False
+		NameID|True
+	)
+
+	CHARA_PARAM_INFO  (
 		ParamID|False
-		BaseID|True
-		HP|False
-		Strength|False
-		Spirit|False
-		Defense|False
-		Mentality|False
+		BaseID|False
+		Unk2|False
+		Unk3|False
+		Unk4|False
+		Unk5|False
+		Unk6|False
+		Unk7|False
+		Unk8|False
+		Unk9|False
+		Unk10|False
+		Unk11|False
+		Color1|False
+		Color2|False
+	)
+]
+
+IEGO  [
+	TRAINING_UD  (
+		KickUp|False
+		DribbleUp|False
+		TechniqueUp|False
+		BlockUp|False
+		SpeedUp|False
+		StaminaUp|False
+		CatchUp|False
+		LuckUp|False
 	)
 
-	CHARA_PARAM_INFO (
-		Unk0|False
-		Unk1|True
+	PHASE_INFO  (
+		PhaseInt|False
+		PhaseTextID|True
+		PhaseStr|False
 	)
 
-	PLAYABLE_CHARA_INFO (
-		ParamID|False
-		BaseID|True
+	MMM_CONFIG  (
+		Unk0|True
 	)
 
-	CHARA_BASE_INFO (
+	TEXT_INFO  (
+		Unk0|True
+	)
+
+	NPC_BASE  (
+		NPCID|True
+		HeadID|False
+		Type|False
+		Unk1|False
+		UniformID|False
+		BootsID|False
+		GlovesID|False
+		IconID|False
+	)
+
+	NPC_PRESET  (
+		Unk0|True
+	)
+
+	NOUN_INFO  (
+		Unk0|True
+	)
+
+	NPC_APPEAR  (
+		LocationX|False
+		LocationZ|False
+		LocationY|False
+		Unk1|False
+		Unk2|False
+		Rotation|False
+		StandAnimation|False
+		Unk3|False
+		TalkAnimation|False
+		UnkAnimation|False
+		Unk4|False
+		PhaseAppear|False
+		Unk5|False
+	)
+
+	TALK_INFO  (
+		NPCID|True
+		TalkOffset|False
+		TalkCount|False
+	)
+
+	TALK_CONFIG  (
+		TalkType|False
+		TalkValue|False
+		PhaseAppear|False
+		Unk1|False
+	)
+
+	SHOP_CONFIG_INFO_BEGIN  (
+		Unk0|True
+	)
+
+	COMMUNITY_INFO  (
+		ShopID|True
+		CommunityName|True
+		AreaName|True
+	)
+
+	SHOP_CONFIG_INFO  (
+		ItemID|True
+		Condition|False
+	)
+
+	ITEM_EQUIPMENT  (
+		ItemID|True
+		NameID|True
+		DescriptionID|True
+		ItemCategory|False
+		ItemCategory2|False
+		MaxQuantity|False
+		Unk1|False
+		Unk2|False
+		SalePrice|False
+		PurchasePrice|False
+		Unk3|False
+		FPBoost|False
+		TPBoost|False
+		KickBoost|False
+		DribbleBoost|False
+		TechniqueBoost|False
+		BlockBoost|False
+		SpeedBoost|False
+		StaminaBoost|False
+		CatchBoost|False
+		LuckBoost|False
+		ItemModel|False
+		ItemIconPosX|False
+		ItemIconPosY|False
+		Unk4|True
+	)
+
+	SKILL_CONFIG_INFO  (
+		SkillID|True
+		NameID|True
+		DescriptionID|True
+		Element|False
+		EvolutionType|False
+		EvolutionGrow|False
+		SkillPosition|False
+		TPCost|False
+		Number|False
+		SkillType|False
+		EffectType|False
+		PartnerNumber|False
+		Unk1|False
+		Unk2|False
+		Unk3|False
+		Fault|False
+		Power|False
+		Technique|False
+		Unk4|False
+		Boost|False
+		NameID2|True
+	)
+
+	CHARA_PARAM_INFO  (
+		ParamID|True
 		BaseID|True
-		ModelID|False
+		FP|False
+		TP|False
+		Kick|False
+		Dribble|False
+		Technique|False
+		Block|False
+		Speed|False
+		Stamina|False
+		Catch|False
+		Luck|False
+		Element|False
+		PlayerPosition|False
+		DescriptionID|True
+		Freedom|False
+		FightingSpiritID|False
+		SpecialMoveCount|False
+		SpecialMoveOffset|False
+		Unk1|False
+		Unk20|False
+		Unk21|False
+		Unk22|False
+		Unk23|False
+		Unk24|False
+		Unk25|False
+		Unk26|False
+		Unk27|False
+		Unk28|False
+		Unk29|False
+		Unk30|False
+		Unk31|False
+		Unk32|False
+		Unk33|False
+		Unk34|False
+		Unk35|False
+		Unk36|False
+		Unk37|False
+		Unk38|False
+		Unk39|False
+		Unk9|False
+		FightingSpiritMatchID|True
+	)
+
+	ITEM_REF  (
+		ItemID|True
+		ItemCategory|False
+		ItemNum|False
 	)
 ]

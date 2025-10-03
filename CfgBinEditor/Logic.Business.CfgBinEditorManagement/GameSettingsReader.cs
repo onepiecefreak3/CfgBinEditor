@@ -64,7 +64,7 @@ namespace Logic.Business.CfgBinEditorManagement
 
                 result.Append(tokens[i].Text);
 
-                if (i + 1 >= tokens.Length)
+                if (i + 1 < tokens.Length)
                     result.Append(tokens[i].TrailingTrivia?.Text ?? string.Empty);
             }
 

@@ -45,7 +45,7 @@
   "Game.Add.Dialog.Text": "Entrer le nom du nouveau jeu:",
   "Game.Add.Dialog.Placeholder": "Nom du jeu",
   "Game.Add.Dialog.InvalidCharacters.Caption": "Caractères invalides",
-  "Game.Add.Dialog.InvalidCharacters.Text": "Les noms du jeu ne peuvent pas contenir ( ou ).",
+  "Game.Add.Dialog.InvalidCharacters.Text": "Les noms de jeu ne peuvent pas contenir ( ou ).",
 
   // Cfg Entry
   "CfgBin.Entry.Name.Caption": "Nom",
