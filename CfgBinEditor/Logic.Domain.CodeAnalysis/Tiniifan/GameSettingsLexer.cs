@@ -41,6 +41,11 @@ namespace Logic.Domain.CodeAnalysis.Tiniifan
                     return new GameSettingsSyntaxToken(SyntaxTokenKind.Pipe, Position, Line, Column, $"{ReadChar()}");
 
                 case '/':
+                    if (TryPeekChar(1, out char nextCharacter) && nextCharacter is not '/')
+                        return new GameSettingsSyntaxToken(SyntaxTokenKind.Slash, Position, Line, Column, $"{ReadChar()}");
+
+                    goto case ' ';
+
                 case ' ':
                 case '\t':
                 case '\r':

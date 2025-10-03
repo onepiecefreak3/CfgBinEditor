@@ -44,6 +44,8 @@
 	"Game.Add.Dialog.Caption": "Neues Spiel",
 	"Game.Add.Dialog.Text": "Gib neuen Spielnamen ein:",
 	"Game.Add.Dialog.Placeholder": "Spielname",
+	"Game.Add.Dialog.InvalidCharacters.Caption": "Ungültige Zeichen",
+	"Game.Add.Dialog.InvalidCharacters.Text": "Spielname darf ( oder ) nicht enthalten.",
 
 	// Cfg Entry
 	"CfgBin.Entry.Name.Caption": "Name",

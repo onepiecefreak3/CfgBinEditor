@@ -48,7 +48,7 @@ namespace Logic.Business.CfgBinEditorManagement
 
         private GameConfigSyntax CreateGameConfig(string name, IDictionary<string, IList<ValueSettingEntry>> gameSettings)
         {
-            SyntaxToken identifier = _syntaxFactory.Identifier(name);
+            SyntaxToken[] identifier = [_syntaxFactory.Identifier(name)];
             SyntaxToken bracketOpen = _syntaxFactory.Token(SyntaxTokenKind.BracketOpen);
             SyntaxToken bracketClose = _syntaxFactory.Token(SyntaxTokenKind.BracketClose);
 
@@ -61,7 +61,7 @@ namespace Logic.Business.CfgBinEditorManagement
 
         private EntryConfigSyntax CreateEntryConfig(string name, IList<ValueSettingEntry> entrySettings)
         {
-            SyntaxToken identifier = _syntaxFactory.Identifier(name);
+            SyntaxToken[] nameTokens = [_syntaxFactory.Identifier(name)];
             SyntaxToken parenOpen = _syntaxFactory.Token(SyntaxTokenKind.ParenOpen);
             SyntaxToken parenClose = _syntaxFactory.Token(SyntaxTokenKind.ParenClose);
 
@@ -69,7 +69,7 @@ namespace Logic.Business.CfgBinEditorManagement
             foreach (ValueSettingEntry entry in entrySettings)
                 valueSettings.Add(CreateEntryConfigSetting(entry));
 
-            return new EntryConfigSyntax(identifier, parenOpen, valueSettings, parenClose);
+            return new EntryConfigSyntax(nameTokens, parenOpen, valueSettings, parenClose);
         }
 
         private EntryConfigSettingSyntax CreateEntryConfigSetting(ValueSettingEntry entry)

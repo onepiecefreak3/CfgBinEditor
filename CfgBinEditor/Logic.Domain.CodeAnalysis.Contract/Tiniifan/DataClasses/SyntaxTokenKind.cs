@@ -6,6 +6,8 @@
         BracketClose,
         ParenOpen,
         ParenClose,
+
+        Slash,
         Pipe,
 
         NumericLiteral,

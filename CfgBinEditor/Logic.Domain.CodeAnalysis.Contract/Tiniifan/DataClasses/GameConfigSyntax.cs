@@ -4,24 +4,29 @@ namespace Logic.Domain.CodeAnalysis.Contract.Tiniifan.DataClasses
 {
     public class GameConfigSyntax : SyntaxNode
     {
-        public SyntaxToken Identifier { get; private set; }
+        public SyntaxToken[] Name { get; private set; }
         public SyntaxToken BracketOpen { get; private set; }
         public IList<EntryConfigSyntax> EntryConfigs { get; private set; }
         public SyntaxToken BracketClose { get; private set; }
 
-        public override SyntaxLocation Location => Identifier.Location;
-        public override SyntaxSpan Span => new(Identifier.FullSpan.Position, BracketClose.FullSpan.EndPosition);
+        public override SyntaxLocation Location => Name.Length <= 0 ? BracketOpen.FullLocation : Name[0].FullLocation;
+        public override SyntaxSpan Span => new(Name.Length <= 0 ? BracketOpen.FullSpan.Position : Name[0].FullSpan.Position, BracketClose.FullSpan.EndPosition);
 
-        public GameConfigSyntax(SyntaxToken identifier, SyntaxToken bracketOpen, IList<EntryConfigSyntax>? entryConfigs, SyntaxToken bracketClose)
+        public GameConfigSyntax(SyntaxToken[] name, SyntaxToken bracketOpen, IList<EntryConfigSyntax>? entryConfigs, SyntaxToken bracketClose)
         {
-            identifier.Parent = this;
+            for (var i = 0; i < name.Length; i++)
+            {
+                SyntaxToken value = name[i];
+                value.Parent = this;
+                name[i] = value;
+            }
             bracketOpen.Parent = this;
             bracketClose.Parent = this;
             if (entryConfigs != null)
                 foreach (EntryConfigSyntax entryConfig in entryConfigs)
                     entryConfig.Parent = this;
 
-            Identifier = identifier;
+            Name = name;
             BracketOpen = bracketOpen;
             BracketClose = bracketClose;
             EntryConfigs = entryConfigs ?? Array.Empty<EntryConfigSyntax>();
@@ -29,11 +34,16 @@ namespace Logic.Domain.CodeAnalysis.Contract.Tiniifan.DataClasses
             Root.Update();
         }
 
-        public void SetIdentifier(SyntaxToken identifier, bool updatePositions = true)
+        public void SetName(SyntaxToken[] name, bool updatePositions = true)
         {
-            identifier.Parent = this;
+            for (var i = 0; i < name.Length; i++)
+            {
+                SyntaxToken value = name[i];
+                value.Parent = this;
+                name[i] = value;
+            }
 
-            Identifier = identifier;
+            Name = name;
 
             if (updatePositions)
                 Root.Update();
@@ -61,17 +71,22 @@ namespace Logic.Domain.CodeAnalysis.Contract.Tiniifan.DataClasses
 
         internal override int UpdatePosition(int position, ref int line, ref int column)
         {
-            SyntaxToken identifier = Identifier;
+            SyntaxToken[] name = Name;
             SyntaxToken bracketOpen = BracketOpen;
             SyntaxToken bracketClose = BracketClose;
 
-            position = identifier.UpdatePosition(position, ref line, ref column);
+            for (var i = 0; i < name.Length; i++)
+            {
+                SyntaxToken value = name[i];
+                position = value.UpdatePosition(position, ref line, ref column);
+                name[i] = value;
+            }
             position = bracketOpen.UpdatePosition(position, ref line, ref column);
             foreach (EntryConfigSyntax entryConfig in EntryConfigs)
                 position = entryConfig.UpdatePosition(position, ref line, ref column);
             position = bracketClose.UpdatePosition(position, ref line, ref column);
 
-            Identifier = identifier;
+            Name = name;
             BracketOpen = bracketOpen;
             BracketClose = bracketClose;
 

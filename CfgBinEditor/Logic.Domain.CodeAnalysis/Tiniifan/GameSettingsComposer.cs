@@ -19,7 +19,7 @@ namespace Logic.Domain.CodeAnalysis.Tiniifan
 
         private void ComposeGameConfig(GameConfigSyntax gameConfig, StringBuilder sb)
         {
-            ComposeSyntaxToken(gameConfig.Identifier, sb);
+            ComposeSyntaxTokens(gameConfig.Name, sb);
             ComposeSyntaxToken(gameConfig.BracketOpen, sb);
 
             foreach (var entryConfig in gameConfig.EntryConfigs)
@@ -30,7 +30,7 @@ namespace Logic.Domain.CodeAnalysis.Tiniifan
 
         private void ComposeEntryConfig(EntryConfigSyntax entryConfig, StringBuilder sb)
         {
-            ComposeSyntaxToken(entryConfig.Identifier, sb);
+            ComposeSyntaxTokens(entryConfig.Name, sb);
             ComposeSyntaxToken(entryConfig.ParenOpen, sb);
 
             foreach (var setting in entryConfig.Settings)

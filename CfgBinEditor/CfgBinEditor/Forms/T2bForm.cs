@@ -12,6 +12,7 @@ using ImGui.Forms.Controls.Base;
 using ImGui.Forms.Controls.Layouts;
 using ImGui.Forms.Controls.Text;
 using ImGui.Forms.Localization;
+using ImGui.Forms.Modals;
 using ImGui.Forms.Modals.IO;
 using ImGui.Forms.Models;
 using Logic.Business.CfgBinEditorManagement.Contract;
@@ -257,15 +258,22 @@ namespace CfgBinEditor.Forms
 
         private async void AddNewGame()
         {
-            string input = await InputBox.ShowAsync(LocalizationResources.GameAddDialogCaption,
+            string gameName = await InputBox.ShowAsync(LocalizationResources.GameAddDialogCaption,
                 LocalizationResources.GameAddDialogText, string.Empty, LocalizationResources.GameAddDialogPlaceholder);
 
-            if (string.IsNullOrEmpty(input))
+            if (string.IsNullOrEmpty(gameName))
                 return;
 
-            _settingsProvider.AddGame(input);
+            if (gameName.Contains('(') || gameName.Contains(')'))
+            {
+                await MessageBox.ShowErrorAsync(LocalizationResources.GameAddDialogInvalidCharactersCaption,
+                    LocalizationResources.GameAddDialogInvalidCharactersText);
+                return;
+            }
 
-            RaiseGameAdded(input);
+            _settingsProvider.AddGame(gameName);
+
+            RaiseGameAdded(gameName);
         }
 
         private void AddGame(GameAddedMessage msg)
@@ -334,7 +342,7 @@ namespace CfgBinEditor.Forms
             var configEntry = _treeViewForm.SelectedEntry;
             var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Name, rowIndex - 1);
 
-            settingsEntry.Name = textBox.Text.Replace(' ', '_');
+            settingsEntry.Name = textBox.Text.Replace(' ', '_').Replace('|', '_');
 
             _settingsProvider.SetEntrySettings(GetCurrentGame(), configEntry.Name, rowIndex - 1, settingsEntry);
 

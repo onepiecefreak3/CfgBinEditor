@@ -36,7 +36,7 @@ namespace Logic.Domain.CodeAnalysis.Tiniifan
 
         private GameConfigSyntax ParseGameConfig(IBuffer<GameSettingsSyntaxToken> buffer)
         {
-            SyntaxToken identifier = ParseIdentifierToken(buffer);
+            SyntaxToken[] name = ParseCompositeValueToken(buffer, SyntaxTokenKind.BracketOpen).ToArray();
             SyntaxToken bracketOpen = ParseBracketOpenToken(buffer);
 
             var entries = new List<EntryConfigSyntax>();
@@ -45,12 +45,12 @@ namespace Logic.Domain.CodeAnalysis.Tiniifan
 
             SyntaxToken bracketClose = ParseBracketCloseToken(buffer);
 
-            return new GameConfigSyntax(identifier, bracketOpen, entries, bracketClose);
+            return new GameConfigSyntax(name, bracketOpen, entries, bracketClose);
         }
 
         private EntryConfigSyntax ParseEntryConfigSyntax(IBuffer<GameSettingsSyntaxToken> buffer)
         {
-            SyntaxToken identifier = ParseIdentifierToken(buffer);
+            SyntaxToken[] name = ParseCompositeValueToken(buffer, SyntaxTokenKind.ParenOpen).ToArray();
             SyntaxToken parenOpen = ParseParenOpenToken(buffer);
 
             var entries = new List<EntryConfigSettingSyntax>();
@@ -59,7 +59,7 @@ namespace Logic.Domain.CodeAnalysis.Tiniifan
 
             SyntaxToken parenClose = ParseParenCloseToken(buffer);
 
-            return new EntryConfigSyntax(identifier, parenOpen, entries, parenClose);
+            return new EntryConfigSyntax(name, parenOpen, entries, parenClose);
         }
 
         private EntryConfigSettingSyntax ParseEntryConfigSettingSyntax(IBuffer<GameSettingsSyntaxToken> buffer)
@@ -87,34 +87,6 @@ namespace Logic.Domain.CodeAnalysis.Tiniifan
             } while (!valueToken.TrailingTrivia?.Text.Contains('\n') ?? true);
         }
 
-        private SyntaxToken ParseValueToken(IBuffer<GameSettingsSyntaxToken> buffer)
-        {
-            if (HasTokenKind(buffer, SyntaxTokenKind.Identifier))
-                return ParseIdentifierToken(buffer);
-
-            if (HasTokenKind(buffer, SyntaxTokenKind.NumericLiteral))
-                return ParseNumericLiteral(buffer);
-
-            if (HasTokenKind(buffer, SyntaxTokenKind.TrueKeyword))
-                return ParseTrueKeywordToken(buffer);
-
-            if (HasTokenKind(buffer, SyntaxTokenKind.FalseKeyword))
-                return ParseFalseKeywordToken(buffer);
-
-            throw CreateException(buffer, "Unknown value for setting.", SyntaxTokenKind.Identifier,
-                SyntaxTokenKind.NumericLiteral, SyntaxTokenKind.TrueKeyword, SyntaxTokenKind.FalseKeyword);
-        }
-
-        private SyntaxToken ParseIdentifierToken(IBuffer<GameSettingsSyntaxToken> buffer)
-        {
-            return CreateToken(buffer, SyntaxTokenKind.Identifier);
-        }
-
-        private SyntaxToken ParseNumericLiteral(IBuffer<GameSettingsSyntaxToken> buffer)
-        {
-            return CreateToken(buffer, SyntaxTokenKind.NumericLiteral);
-        }
-
         private SyntaxToken ParseBracketOpenToken(IBuffer<GameSettingsSyntaxToken> buffer)
         {
             return CreateToken(buffer, SyntaxTokenKind.BracketOpen);
@@ -133,16 +105,6 @@ namespace Logic.Domain.CodeAnalysis.Tiniifan
         private SyntaxToken ParseParenCloseToken(IBuffer<GameSettingsSyntaxToken> buffer)
         {
             return CreateToken(buffer, SyntaxTokenKind.ParenClose);
-        }
-
-        private SyntaxToken ParseTrueKeywordToken(IBuffer<GameSettingsSyntaxToken> buffer)
-        {
-            return CreateToken(buffer, SyntaxTokenKind.TrueKeyword);
-        }
-
-        private SyntaxToken ParseFalseKeywordToken(IBuffer<GameSettingsSyntaxToken> buffer)
-        {
-            return CreateToken(buffer, SyntaxTokenKind.FalseKeyword);
         }
 
         private SyntaxToken ParsePipeToken(IBuffer<GameSettingsSyntaxToken> buffer)

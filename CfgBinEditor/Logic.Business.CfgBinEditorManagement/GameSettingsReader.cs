@@ -1,4 +1,6 @@
+using System.Text;
 using Logic.Business.CfgBinEditorManagement.InternalContract;
+using Logic.Domain.CodeAnalysis.Contract.DataClasses;
 using Logic.Domain.CodeAnalysis.Contract.Tiniifan;
 using Logic.Domain.CodeAnalysis.Contract.Tiniifan.DataClasses;
 
@@ -27,6 +29,8 @@ namespace Logic.Business.CfgBinEditorManagement
 
             foreach (GameConfigSyntax gameConfig in configUnit!.GameConfigs)
             {
+                string name;
+
                 var entries = new Dictionary<string, IList<TEntry>>();
                 foreach (EntryConfigSyntax entryConfig in gameConfig.EntryConfigs)
                 {
@@ -36,16 +40,36 @@ namespace Logic.Business.CfgBinEditorManagement
                         configs.Add(CreateEntry(settings));
                     }
 
-                    entries[entryConfig.Identifier.Text] = configs;
+                    name = GetCompositeText(entryConfig.Name);
+                    entries[name] = configs;
                 }
 
-                result[gameConfig.Identifier.Text] = entries;
+                name = GetCompositeText(gameConfig.Name);
+                result[name] = entries;
             }
 
             return result;
         }
 
         protected abstract TEntry CreateEntry(EntryConfigSettingSyntax settings);
+
+        protected string GetCompositeText(SyntaxToken[] tokens)
+        {
+            var result = new StringBuilder();
+
+            for (var i = 0; i < tokens.Length; i++)
+            {
+                if (i != 0)
+                    result.Append(tokens[i].LeadingTrivia?.Text ?? string.Empty);
+
+                result.Append(tokens[i].Text);
+
+                if (i + 1 >= tokens.Length)
+                    result.Append(tokens[i].TrailingTrivia?.Text ?? string.Empty);
+            }
+
+            return result.ToString();
+        }
 
         private ConfigUnitSyntax ParseSettings(string settingsPath)
         {

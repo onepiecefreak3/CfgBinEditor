@@ -44,6 +44,8 @@ namespace CfgBinEditor.resources
         public static LocalizedString GameAddDialogCaption => LocalizedString.FromId("Game.Add.Dialog.Caption");
         public static LocalizedString GameAddDialogText => LocalizedString.FromId("Game.Add.Dialog.Text");
         public static LocalizedString GameAddDialogPlaceholder => LocalizedString.FromId("Game.Add.Dialog.Placeholder");
+        public static LocalizedString GameAddDialogInvalidCharactersCaption => LocalizedString.FromId("Game.Add.Dialog.InvalidCharacters.Caption");
+        public static LocalizedString GameAddDialogInvalidCharactersText=> LocalizedString.FromId("Game.Add.Dialog.InvalidCharacters.Text");
 
         public static LocalizedString CfgBinEntryNameCaption => LocalizedString.FromId("CfgBin.Entry.Name.Caption");
         public static LocalizedString CfgBinEntryTypeCaption => LocalizedString.FromId("CfgBin.Entry.Type.Caption");

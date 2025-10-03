@@ -16,7 +16,7 @@ namespace Logic.Business.CfgBinEditorManagement
         {
             return new ValueSettingEntry
             {
-                Name = settings.Value1[0].Text,
+                Name = GetCompositeText(settings.Value1),
                 IsHex = settings.Value2[0].RawKind == (int)SyntaxTokenKind.TrueKeyword
             };
         }

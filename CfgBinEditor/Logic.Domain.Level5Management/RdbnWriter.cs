@@ -90,7 +90,7 @@ namespace Logic.Domain.Level5Management
             {
                 result[i] = new RdbnTypeEntry
                 {
-                    nameHash = _checksum.ComputeValue(typeDeclarations[i].Name),
+                    nameHash = HashString(typeDeclarations[i].Name),
                     unk1 = typeDeclarations[i].UnkHash,
                     fieldIndex = fieldIndex,
                     fieldCount = (short)typeDeclarations[i].Fields.Length
@@ -119,7 +119,7 @@ namespace Logic.Domain.Level5Management
 
                     result[fieldIndex++] = new RdbnFieldEntry
                     {
-                        nameHash = _checksum.ComputeValue(fieldDeclaration.Name),
+                        nameHash = HashString(fieldDeclaration.Name),
                         type = (short)fieldDeclaration.FieldType,
                         typeCategory = (short)fieldDeclaration.FieldTypeCategory,
                         valueSize = valueSize,
@@ -162,7 +162,7 @@ namespace Logic.Domain.Level5Management
                     valueOffset = localValueOffset - baseValueOffset,
                     valueSize = GetTypeSize(type),
                     valueCount = rootEntry.Values.Length,
-                    nameHash = _checksum.ComputeValue(rootEntry.Name)
+                    nameHash = HashString(rootEntry.Name)
                 };
 
                 localValueOffset += result[i].valueCount * result[i].valueSize;
@@ -218,14 +218,14 @@ namespace Logic.Domain.Level5Management
         {
             // Write hashes
             foreach (RdbnListEntry list in lists)
-                bw.Write(_checksum.ComputeValue(list.Name));
+                bw.Write(HashString(list.Name));
 
             foreach (RdbnTypeDeclaration type in types)
             {
-                bw.Write(_checksum.ComputeValue(type.Name));
+                bw.Write(HashString(type.Name));
 
                 foreach (RdbnFieldDeclaration field in type.Fields)
-                    bw.Write(_checksum.ComputeValue(field.Name));
+                    bw.Write(HashString(field.Name));
             }
 
             // Write offsets
@@ -283,9 +283,10 @@ namespace Logic.Domain.Level5Management
 
                         object[] fieldValues = typeValues[h];
 
+                        long fieldValueOffset = valueOffset + list.valueOffset + j * list.valueSize + field.valueOffset;
                         for (var k = 0; k < field.valueCount; k++)
                         {
-                            bw.BaseStream.Position = valueOffset + list.valueOffset + j * list.valueSize + field.valueOffset;
+                            bw.BaseStream.Position = fieldValueOffset + k * field.valueSize;
                             WriteValue(bw, fieldValues[k], field, baseStringOffset, ref stringOffset, stringCache);
                         }
                     }
@@ -469,12 +470,12 @@ namespace Logic.Domain.Level5Management
 
         private long WriteString(IBinaryWriterX bw, string value, long offset, IDictionary<string, long> writtenNames)
         {
-            CacheStrings(offset, value, Encoding.ASCII, writtenNames);
+            CacheStrings(offset, value, Encoding.UTF8, writtenNames);
 
             long origPosition = bw.BaseStream.Position;
             bw.BaseStream.Position = offset;
 
-            bw.WriteString(value, Encoding.ASCII, false);
+            bw.WriteString(value, Encoding.UTF8, false);
             offset = bw.BaseStream.Position;
 
             bw.BaseStream.Position = origPosition;
@@ -493,6 +494,11 @@ namespace Logic.Domain.Level5Management
             }
 
             writtenNames.TryAdd(value, position);
+        }
+
+        private uint HashString(string value)
+        {
+            return _checksum.ComputeValue(value, Encoding.UTF8);
         }
     }
 }

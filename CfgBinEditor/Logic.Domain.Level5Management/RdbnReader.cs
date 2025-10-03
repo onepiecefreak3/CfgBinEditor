@@ -201,7 +201,7 @@ namespace Logic.Domain.Level5Management
                 byteValue = br.ReadByte();
             }
 
-            return Encoding.ASCII.GetString(result.ToArray());
+            return Encoding.UTF8.GetString(result.ToArray());
         }
 
         private Contract.DataClasses.Rdbn CreateRdbn(IBinaryReaderX br, int valueOffset, int stringOffset, RdbnRootEntry[] rootEntries, RdbnTypeEntry[] typeEntries, RdbnFieldEntry[] fieldEntries, IDictionary<uint, string> strings)

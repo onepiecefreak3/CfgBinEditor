@@ -26,7 +26,12 @@ namespace Logic.Domain.CodeAnalysis.Tiniifan
 
         private void NormalizeGameConfig(GameConfigSyntax gameConfig, WhitespaceNormalizeContext ctx)
         {
-            SyntaxToken identifier = gameConfig.Identifier.WithLeadingTrivia(null).WithTrailingTrivia(" ");
+            SyntaxToken namePart = gameConfig.Name[^1].WithTrailingTrivia(" ");
+            gameConfig.Name[^1] = namePart;
+
+            namePart = gameConfig.Name[0].WithLeadingTrivia(null);
+            gameConfig.Name[0] = namePart;
+
             SyntaxToken bracketOpen = gameConfig.BracketOpen.WithLeadingTrivia(null).WithTrailingTrivia("\r\n");
             SyntaxToken bracketClose = gameConfig.BracketClose.WithLeadingTrivia("\r\n").WithTrailingTrivia(null);
 
@@ -37,7 +42,6 @@ namespace Logic.Domain.CodeAnalysis.Tiniifan
             ctx.ShouldIndent = true;
             NormalizeEntryConfigs(gameConfig.EntryConfigs, ctx);
 
-            gameConfig.SetIdentifier(identifier, false);
             gameConfig.SetBracketOpen(bracketOpen, false);
             gameConfig.SetBracketClose(bracketClose, false);
         }
@@ -54,13 +58,17 @@ namespace Logic.Domain.CodeAnalysis.Tiniifan
 
         private void NormalizeEntryConfig(EntryConfigSyntax entryConfig, WhitespaceNormalizeContext ctx)
         {
-            SyntaxToken identifier = entryConfig.Identifier.WithLeadingTrivia(null).WithTrailingTrivia(" ");
+            SyntaxToken namePart = entryConfig.Name[^1].WithTrailingTrivia(" ");
+            entryConfig.Name[^1] = namePart;
+
+            namePart = entryConfig.Name[0].WithLeadingTrivia(null);
+
             SyntaxToken parenOpen = entryConfig.ParenOpen.WithLeadingTrivia(null).WithTrailingTrivia("\r\n");
             SyntaxToken parenClose = entryConfig.ParenClose.WithNoTrivia();
 
             if (ctx is { Indent: > 0, ShouldIndent: true })
             {
-                identifier = identifier.WithLeadingTrivia(new string('\t', ctx.Indent));
+                namePart = namePart.WithLeadingTrivia(new string('\t', ctx.Indent));
                 parenClose = parenClose.WithLeadingTrivia(new string('\t', ctx.Indent));
             }
 
@@ -71,7 +79,8 @@ namespace Logic.Domain.CodeAnalysis.Tiniifan
             ctx.ShouldIndent = true;
             NormalizeEntryConfigSettings(entryConfig.Settings, ctx);
 
-            entryConfig.SetIdentifier(identifier, false);
+            entryConfig.Name[0] = namePart;
+
             entryConfig.SetParenOpen(parenOpen, false);
             entryConfig.SetParenClose(parenClose, false);
         }
@@ -98,7 +107,7 @@ namespace Logic.Domain.CodeAnalysis.Tiniifan
 
             configSetting.Value1[0] = value1;
             configSetting.Value2[^1] = value2;
-            
+
             configSetting.SetPipe(pipe, false);
         }
     }
