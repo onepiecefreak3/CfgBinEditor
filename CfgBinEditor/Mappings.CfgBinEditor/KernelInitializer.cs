@@ -18,8 +18,6 @@ using CrossCutting.Core.Serialization.JsonAdapter;
 using CrossCutting.Core.Settings;
 using Logic.Business.CfgBinEditorManagement;
 using Logic.Domain.CodeAnalysis;
-using Logic.Domain.Kuriimu2.KomponentAdapter;
-using Logic.Domain.Kuriimu2.KryptographyAdapter;
 using Logic.Domain.Level5Management;
 
 namespace Mappings.CfgBinEditor
@@ -58,10 +56,7 @@ namespace Mappings.CfgBinEditor
 
         private void ActivateComponents(ICoCoKernel kernel)
         {
-            // TODO: Add own components
             kernel.RegisterComponent<Level5Activator>();
-            kernel.RegisterComponent<Kuriimu2KomponentActivator>();
-            kernel.RegisterComponent<Kuriimu2KryptographyActivator>();
             kernel.RegisterComponent<CodeAnalysisActivator>();
             kernel.RegisterComponent<CfgBinEditorManagementActivator>();
         }

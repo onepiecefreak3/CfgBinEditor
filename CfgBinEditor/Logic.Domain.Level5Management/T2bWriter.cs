@@ -1,6 +1,6 @@
 ﻿using System.Text;
-using Logic.Domain.Kuriimu2.KomponentAdapter.Contract;
-using Logic.Domain.Kuriimu2.KryptographyAdapter.Contract;
+using Komponent.IO;
+using Kryptography.Checksum;
 using Logic.Domain.Level5Management.Contract;
 using Logic.Domain.Level5Management.Contract.DataClasses;
 using Logic.Domain.Level5Management.Cryptography.InternalContract;
@@ -9,24 +9,15 @@ using ValueType = Logic.Domain.Level5Management.Contract.DataClasses.ValueType;
 
 namespace Logic.Domain.Level5Management
 {
-    internal class T2bWriter : IT2bWriter
+    internal class T2bWriter(IChecksumFactory checksumFactory) : IT2bWriter
     {
-        private readonly IBinaryFactory _binaryFactory;
-        private readonly IChecksumFactory _checksumFactory;
-
-        public T2bWriter(IBinaryFactory binaryFactory, IChecksumFactory checksumFactory)
-        {
-            _binaryFactory = binaryFactory;
-            _checksumFactory = checksumFactory;
-        }
-
         public Stream Write(Contract.DataClasses.T2b config)
         {
             Stream stream = new MemoryStream();
-            using IBinaryWriterX bw = _binaryFactory.CreateWriter(stream, true);
+            using var bw = new BinaryWriterX(stream, true);
 
             Encoding encoding = GetEncoding(config.Encoding);
-            IChecksum<uint> checksum = GetChecksum(config.HashType);
+            Checksum<uint> checksum = GetChecksum(config.HashType);
 
             bw.BaseStream.Position = 0x10;
             T2bEntryHeader entryHeader = WriteEntries(bw, config.Entries, encoding, checksum, config.ValueLength);
@@ -49,7 +40,7 @@ namespace Logic.Domain.Level5Management
             return stream;
         }
 
-        private T2bEntryHeader WriteEntries(IBinaryWriterX bw, Contract.DataClasses.T2bEntry[] configEntries, Encoding encoding, IChecksum<uint> checksum, ValueLength valueLength)
+        private T2bEntryHeader WriteEntries(BinaryWriterX bw, Contract.DataClasses.T2bEntry[] configEntries, Encoding encoding, Checksum<uint> checksum, ValueLength valueLength)
         {
             var header = new T2bEntryHeader
             {
@@ -80,7 +71,7 @@ namespace Logic.Domain.Level5Management
             return header;
         }
 
-        private void WriteEntry(IBinaryWriterX bw, Contract.DataClasses.T2bEntry configEntry, Encoding encoding, IChecksum<uint> checksum, ValueLength valueLength, uint stringOffsetBase,
+        private void WriteEntry(BinaryWriterX bw, Contract.DataClasses.T2bEntry configEntry, Encoding encoding, Checksum<uint> checksum, ValueLength valueLength, uint stringOffsetBase,
             IDictionary<string, long> writtenStrings, ref uint stringOffset, ref uint stringCount)
         {
             bw.Write(checksum.ComputeValue(configEntry.Name, encoding));
@@ -150,7 +141,7 @@ namespace Logic.Domain.Level5Management
             }
         }
 
-        private void WriteHeader(IBinaryWriterX bw, T2bEntryHeader entryHeader)
+        private void WriteHeader(BinaryWriterX bw, T2bEntryHeader entryHeader)
         {
             bw.Write(entryHeader.entryCount);
             bw.Write(entryHeader.stringDataOffset);
@@ -158,7 +149,7 @@ namespace Logic.Domain.Level5Management
             bw.Write(entryHeader.stringDataCount);
         }
 
-        private T2bChecksumHeader WriteChecksumEntries(IBinaryWriterX bw, Contract.DataClasses.T2bEntry[] configEntries, Encoding encoding, IChecksum<uint> checksum)
+        private T2bChecksumHeader WriteChecksumEntries(BinaryWriterX bw, Contract.DataClasses.T2bEntry[] configEntries, Encoding encoding, Checksum<uint> checksum)
         {
             string[] names = configEntries.Select(e => e.Name).Distinct().ToArray();
 
@@ -189,7 +180,7 @@ namespace Logic.Domain.Level5Management
             return header;
         }
 
-        private void WriteChecksumHeader(IBinaryWriterX bw, T2bChecksumHeader header)
+        private void WriteChecksumHeader(BinaryWriterX bw, T2bChecksumHeader header)
         {
             bw.Write(header.size);
             bw.Write(header.count);
@@ -197,7 +188,7 @@ namespace Logic.Domain.Level5Management
             bw.Write(header.stringSize);
         }
 
-        private void WriteFooter(IBinaryWriterX bw, T2bStringEncoding encoding)
+        private void WriteFooter(BinaryWriterX bw, T2bStringEncoding encoding)
         {
             bw.WriteString("\x1t2b", Encoding.ASCII, false, false);
             bw.Write((short)0x1fe);
@@ -239,7 +230,7 @@ namespace Logic.Domain.Level5Management
             }
         }
 
-        private void WriteString(IBinaryWriterX bw, string? value, Encoding encoding, ValueLength valueLength, uint stringOffsetBase, IDictionary<string, long> writtenNames,
+        private void WriteString(BinaryWriterX bw, string? value, Encoding encoding, ValueLength valueLength, uint stringOffsetBase, IDictionary<string, long> writtenNames,
             ref uint stringOffset, ref uint stringCount)
         {
             if (value == null)
@@ -267,7 +258,7 @@ namespace Logic.Domain.Level5Management
             bw.BaseStream.Position = entryOffset;
         }
 
-        private void WriteValue(IBinaryWriterX bw, long value, ValueLength valueLength)
+        private void WriteValue(BinaryWriterX bw, long value, ValueLength valueLength)
         {
             switch (valueLength)
             {
@@ -297,15 +288,15 @@ namespace Logic.Domain.Level5Management
             writtenNames.TryAdd(value, position);
         }
 
-        private IChecksum<uint> GetChecksum(HashType hashType)
+        private Checksum<uint> GetChecksum(HashType hashType)
         {
             switch (hashType)
             {
                 case HashType.Crc32Standard:
-                    return _checksumFactory.CreateCrc32();
+                    return checksumFactory.CreateCrc32();
 
                 case HashType.Crc32Jam:
-                    return _checksumFactory.CreateCrc32Jam();
+                    return checksumFactory.CreateCrc32Jam();
 
                 default:
                     throw new InvalidOperationException($"Unknown hash type '{hashType}'.");

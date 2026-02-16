@@ -1,31 +1,24 @@
-﻿using Logic.Domain.Kuriimu2.KryptographyAdapter.Contract;
-using Logic.Domain.Kuriimu2.KryptographyAdapter.Contract.DataClasses;
+﻿using Kryptography.Checksum;
+using Kryptography.Checksum.Crc;
 using Logic.Domain.Level5Management.Cryptography.InternalContract;
 
 namespace Logic.Domain.Level5Management.Cryptography
 {
     internal class ChecksumFactory : IChecksumFactory
     {
-        private readonly ICrcChecksumFactory _crcFactory;
-
-        public ChecksumFactory(ICrcChecksumFactory crcFactory)
+        public Checksum<uint> CreateCrc32()
         {
-            _crcFactory = crcFactory;
+            return Crc32.Crc32B;
         }
 
-        public IChecksum<uint> CreateCrc32()
+        public Checksum<uint> CreateCrc32Jam()
         {
-            return _crcFactory.CreateCrc32(Crc32Type.Standard);
+            return Crc32.JamCrc;
         }
 
-        public IChecksum<uint> CreateCrc32Jam()
+        public Checksum<ushort> CreateCrc16()
         {
-            return _crcFactory.CreateCrc32(Crc32Type.JamCrc);
-        }
-
-        public IChecksum<ushort> CreateCrc16()
-        {
-            return _crcFactory.CreateCrc16(Crc16Type.X25);
+            return Crc16.X25;
         }
     }
 }

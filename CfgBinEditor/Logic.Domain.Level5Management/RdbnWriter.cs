@@ -1,6 +1,6 @@
 ﻿using System.Text;
-using Logic.Domain.Kuriimu2.KomponentAdapter.Contract;
-using Logic.Domain.Kuriimu2.KryptographyAdapter.Contract;
+using Komponent.IO;
+using Kryptography.Checksum;
 using Logic.Domain.Level5Management.Contract;
 using Logic.Domain.Level5Management.Contract.DataClasses;
 using Logic.Domain.Level5Management.Cryptography.InternalContract;
@@ -12,12 +12,10 @@ namespace Logic.Domain.Level5Management
     {
         private const int DataOffset = 0x50;
 
-        private readonly IBinaryFactory _binaryFactory;
-        private readonly IChecksum<uint> _checksum;
+        private readonly Checksum<uint> _checksum;
 
-        public RdbnWriter(IBinaryFactory binaryFactory, IChecksumFactory checksumFactory)
+        public RdbnWriter(IChecksumFactory checksumFactory)
         {
-            _binaryFactory = binaryFactory;
             _checksum = checksumFactory.CreateCrc32();
         }
 
@@ -35,7 +33,7 @@ namespace Logic.Domain.Level5Management
             RdbnRootEntry lastRootEntry = rootEntries.Length > 0 ? rootEntries[^1] : new RdbnRootEntry();
 
             var output = new MemoryStream();
-            using IBinaryWriterX bw = _binaryFactory.CreateWriter(output, true);
+            using var bw = new BinaryWriterX(output, true);
 
             output.Position = DataOffset;
             WriteTypes(bw, typeEntries);
@@ -171,7 +169,7 @@ namespace Logic.Domain.Level5Management
             return result;
         }
 
-        private void WriteTypes(IBinaryWriterX bw, RdbnTypeEntry[] entries)
+        private void WriteTypes(BinaryWriterX bw, RdbnTypeEntry[] entries)
         {
             foreach (RdbnTypeEntry entry in entries)
             {
@@ -184,7 +182,7 @@ namespace Logic.Domain.Level5Management
             }
         }
 
-        private void WriteFields(IBinaryWriterX bw, RdbnFieldEntry[] entries)
+        private void WriteFields(BinaryWriterX bw, RdbnFieldEntry[] entries)
         {
             foreach (RdbnFieldEntry entry in entries)
             {
@@ -199,7 +197,7 @@ namespace Logic.Domain.Level5Management
             }
         }
 
-        private void WriteLists(IBinaryWriterX bw, RdbnRootEntry[] entries)
+        private void WriteLists(BinaryWriterX bw, RdbnRootEntry[] entries)
         {
             foreach (RdbnRootEntry entry in entries)
             {
@@ -214,7 +212,7 @@ namespace Logic.Domain.Level5Management
             }
         }
 
-        private void WriteHashes(IBinaryWriterX bw, RdbnListEntry[] lists, RdbnTypeDeclaration[] types, long baseStringOffset, IDictionary<string, long> stringCache)
+        private void WriteHashes(BinaryWriterX bw, RdbnListEntry[] lists, RdbnTypeDeclaration[] types, long baseStringOffset, IDictionary<string, long> stringCache)
         {
             // Write hashes
             foreach (RdbnListEntry list in lists)
@@ -241,7 +239,7 @@ namespace Logic.Domain.Level5Management
             }
         }
 
-        private void WriteTypeStrings(IBinaryWriterX bw, RdbnTypeDeclaration[] types, ref long stringOffset, IDictionary<string, long> stringCache)
+        private void WriteTypeStrings(BinaryWriterX bw, RdbnTypeDeclaration[] types, ref long stringOffset, IDictionary<string, long> stringCache)
         {
             foreach (RdbnTypeDeclaration type in types)
             {
@@ -258,7 +256,7 @@ namespace Logic.Domain.Level5Management
             }
         }
 
-        private void WriteValues(IBinaryWriterX bw, Contract.DataClasses.Rdbn config, RdbnRootEntry[] lists, RdbnTypeEntry[] types, RdbnFieldEntry[] fields,
+        private void WriteValues(BinaryWriterX bw, Contract.DataClasses.Rdbn config, RdbnRootEntry[] lists, RdbnTypeEntry[] types, RdbnFieldEntry[] fields,
             long baseStringOffset, long stringOffset, long valueOffset, IDictionary<string, long> stringCache)
         {
             bw.BaseStream.Position = valueOffset;
@@ -294,7 +292,7 @@ namespace Logic.Domain.Level5Management
             }
         }
 
-        private void WriteValue(IBinaryWriterX bw, object value, RdbnFieldEntry field, long baseStringOffset, ref long stringOffset,
+        private void WriteValue(BinaryWriterX bw, object value, RdbnFieldEntry field, long baseStringOffset, ref long stringOffset,
             IDictionary<string, long> stringCache)
         {
             // Sanity check
@@ -400,7 +398,7 @@ namespace Logic.Domain.Level5Management
             }
         }
 
-        private void WriteHeader(IBinaryWriterX bw, RdbnRootEntry[] lists, RdbnTypeEntry[] types, RdbnFieldEntry[] fields, long valueOffset, long stringOffset, int hashEntryCount)
+        private void WriteHeader(BinaryWriterX bw, RdbnRootEntry[] lists, RdbnTypeEntry[] types, RdbnFieldEntry[] fields, long valueOffset, long stringOffset, int hashEntryCount)
         {
             bw.Write(0x4e424452);
             bw.Write((short)DataOffset);
@@ -468,14 +466,14 @@ namespace Logic.Domain.Level5Management
             return highestAlignment;
         }
 
-        private long WriteString(IBinaryWriterX bw, string value, long offset, IDictionary<string, long> writtenNames)
+        private long WriteString(BinaryWriterX bw, string value, long offset, IDictionary<string, long> writtenNames)
         {
             CacheStrings(offset, value, Encoding.UTF8, writtenNames);
 
             long origPosition = bw.BaseStream.Position;
             bw.BaseStream.Position = offset;
 
-            bw.WriteString(value, Encoding.UTF8, false);
+            bw.WriteString(value, Encoding.UTF8);
             offset = bw.BaseStream.Position;
 
             bw.BaseStream.Position = origPosition;

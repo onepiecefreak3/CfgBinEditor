@@ -1,6 +1,6 @@
 ﻿using System.Text;
-using Logic.Domain.Kuriimu2.KomponentAdapter.Contract;
-using Logic.Domain.Kuriimu2.KryptographyAdapter.Contract;
+using Komponent.IO;
+using Kryptography.Checksum;
 using Logic.Domain.Level5Management.Contract;
 using Logic.Domain.Level5Management.Contract.DataClasses;
 using Logic.Domain.Level5Management.Cryptography.InternalContract;
@@ -10,22 +10,13 @@ using ValueType = Logic.Domain.Level5Management.Contract.DataClasses.ValueType;
 
 namespace Logic.Domain.Level5Management
 {
-    internal class T2bReader : IT2bReader
+    internal class T2bReader(IChecksumFactory checksumFactory) : IT2bReader
     {
-        private readonly IBinaryFactory _binaryFactory;
-        private readonly IChecksumFactory _checksumFactory;
-
         private const int MinimumSize_ = 0x30;
-
-        public T2bReader(IBinaryFactory binaryFactory, IChecksumFactory checksumFactory)
-        {
-            _binaryFactory = binaryFactory;
-            _checksumFactory = checksumFactory;
-        }
 
         public Contract.DataClasses.T2b? Read(Stream input)
         {
-            using IBinaryReaderX br = _binaryFactory.CreateReader(input);
+            using var br = new BinaryReaderX(input);
 
             // Read t2b footer
             if (br.BaseStream.Length < MinimumSize_)
@@ -91,7 +82,7 @@ namespace Logic.Domain.Level5Management
 
         #region Entries
 
-        private T2bEntrySection? ReadEntrySection(IBinaryReaderX br)
+        private T2bEntrySection? ReadEntrySection(BinaryReaderX br)
         {
             long sectionPosition = br.BaseStream.Position;
 
@@ -118,7 +109,7 @@ namespace Logic.Domain.Level5Management
             };
         }
 
-        private T2bEntryHeader ReadEntryHeader(IBinaryReaderX br)
+        private T2bEntryHeader ReadEntryHeader(BinaryReaderX br)
         {
             return new T2bEntryHeader
             {
@@ -129,7 +120,7 @@ namespace Logic.Domain.Level5Management
             };
         }
 
-        private bool TryDetectValueLength(IBinaryReaderX br, uint entryCount, long dataEndOffset, out ValueLength valueLength)
+        private bool TryDetectValueLength(BinaryReaderX br, uint entryCount, long dataEndOffset, out ValueLength valueLength)
         {
             valueLength = default;
 
@@ -152,7 +143,7 @@ namespace Logic.Domain.Level5Management
             return false;
         }
 
-        private bool TryReadEntrySection(IBinaryReaderX br, uint entryCount, long dataEndOffset, int valueLength)
+        private bool TryReadEntrySection(BinaryReaderX br, uint entryCount, long dataEndOffset, int valueLength)
         {
             int[] valueLengths = { valueLength, valueLength, valueLength };
 
@@ -178,7 +169,7 @@ namespace Logic.Domain.Level5Management
             return br.BaseStream.Position <= dataEndOffset && dataEndOffset - br.BaseStream.Position < 0x10;
         }
 
-        private T2bEntry[] ReadEntries(IBinaryReaderX br, uint entryCount, ValueLength valueLength)
+        private T2bEntry[] ReadEntries(BinaryReaderX br, uint entryCount, ValueLength valueLength)
         {
             var result = new T2bEntry[entryCount];
 
@@ -197,7 +188,7 @@ namespace Logic.Domain.Level5Management
             return result;
         }
 
-        private ValueType[] ReadEntryTypes(IBinaryReaderX br, int count)
+        private ValueType[] ReadEntryTypes(BinaryReaderX br, int count)
         {
             var types = new ValueType[count];
 
@@ -218,7 +209,7 @@ namespace Logic.Domain.Level5Management
             return types;
         }
 
-        private long[] ReadEntryValues(IBinaryReaderX br, ValueType[] types, ValueLength valueLength)
+        private long[] ReadEntryValues(BinaryReaderX br, ValueType[] types, ValueLength valueLength)
         {
             var values = new long[types.Length];
 
@@ -243,7 +234,7 @@ namespace Logic.Domain.Level5Management
 
         #region Checksums
 
-        private T2bChecksumSection ReadChecksumSection(IBinaryReaderX br)
+        private T2bChecksumSection ReadChecksumSection(BinaryReaderX br)
         {
             long sectionPosition = br.BaseStream.Position;
 
@@ -263,7 +254,7 @@ namespace Logic.Domain.Level5Management
             };
         }
 
-        private T2bChecksumHeader ReadChecksumHeader(IBinaryReaderX br)
+        private T2bChecksumHeader ReadChecksumHeader(BinaryReaderX br)
         {
             return new T2bChecksumHeader
             {
@@ -283,15 +274,15 @@ namespace Logic.Domain.Level5Management
             var hashTypes = new[] { HashType.Crc32Standard, HashType.Crc32Jam };
             foreach (HashType hashType in hashTypes)
             {
-                IChecksum<uint> checksum;
+                Checksum<uint> checksum;
                 switch (hashType)
                 {
                     case HashType.Crc32Standard:
-                        checksum = _checksumFactory.CreateCrc32();
+                        checksum = checksumFactory.CreateCrc32();
                         break;
 
                     case HashType.Crc32Jam:
-                        checksum = _checksumFactory.CreateCrc32Jam();
+                        checksum = checksumFactory.CreateCrc32Jam();
                         break;
 
                     default:
@@ -309,7 +300,7 @@ namespace Logic.Domain.Level5Management
             return false;
         }
 
-        private T2bChecksumEntry[] ReadChecksumEntries(IBinaryReaderX br, uint count)
+        private T2bChecksumEntry[] ReadChecksumEntries(BinaryReaderX br, uint count)
         {
             var result = new T2bChecksumEntry[count];
 
@@ -327,7 +318,7 @@ namespace Logic.Domain.Level5Management
 
         #endregion
 
-        private T2bFooter ReadFooter(IBinaryReaderX br)
+        private T2bFooter ReadFooter(BinaryReaderX br)
         {
             return new T2bFooter
             {

@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using Logic.Domain.Kuriimu2.KomponentAdapter.Contract;
+using Komponent.IO;
 using Logic.Domain.Level5Management.Contract;
 using Logic.Domain.Level5Management.Contract.DataClasses;
 using Logic.Domain.Level5Management.Rdbn.InternalContract;
@@ -8,18 +8,11 @@ namespace Logic.Domain.Level5Management
 {
     internal class RdbnReader : IRdbnReader
     {
-        private readonly IBinaryFactory _binaryFactory;
-
         private const int MinimumSize_ = 0x3C;
-
-        public RdbnReader(IBinaryFactory binaryFactory)
-        {
-            _binaryFactory = binaryFactory;
-        }
 
         public Contract.DataClasses.Rdbn? Read(Stream input)
         {
-            using IBinaryReaderX br = _binaryFactory.CreateReader(input);
+            using var br = new BinaryReaderX(input);
 
             // Read header
             if (br.BaseStream.Length < MinimumSize_)
@@ -56,7 +49,7 @@ namespace Logic.Domain.Level5Management
             return CreateRdbn(br, valueOffset, stringOffset, rootEntries, typeEntries, fieldEntries, stringLookup);
         }
 
-        private RdbnHeader ReadHeader(IBinaryReaderX br)
+        private RdbnHeader ReadHeader(BinaryReaderX br)
         {
             var header = new RdbnHeader
             {
@@ -84,7 +77,7 @@ namespace Logic.Domain.Level5Management
             return header;
         }
 
-        private RdbnRootEntry[] ReadRootEntries(IBinaryReaderX br, int count)
+        private RdbnRootEntry[] ReadRootEntries(BinaryReaderX br, int count)
         {
             var result = new RdbnRootEntry[count];
 
@@ -98,7 +91,7 @@ namespace Logic.Domain.Level5Management
             return result;
         }
 
-        private RdbnRootEntry ReadRootEntry(IBinaryReaderX br)
+        private RdbnRootEntry ReadRootEntry(BinaryReaderX br)
         {
             return new RdbnRootEntry
             {
@@ -111,7 +104,7 @@ namespace Logic.Domain.Level5Management
             };
         }
 
-        private RdbnTypeEntry[] ReadTypeEntries(IBinaryReaderX br, int count)
+        private RdbnTypeEntry[] ReadTypeEntries(BinaryReaderX br, int count)
         {
             var result = new RdbnTypeEntry[count];
 
@@ -125,7 +118,7 @@ namespace Logic.Domain.Level5Management
             return result;
         }
 
-        private RdbnTypeEntry ReadTypeEntry(IBinaryReaderX br)
+        private RdbnTypeEntry ReadTypeEntry(BinaryReaderX br)
         {
             return new RdbnTypeEntry
             {
@@ -136,7 +129,7 @@ namespace Logic.Domain.Level5Management
             };
         }
 
-        private RdbnFieldEntry[] ReadFieldEntries(IBinaryReaderX br, int count)
+        private RdbnFieldEntry[] ReadFieldEntries(BinaryReaderX br, int count)
         {
             var result = new RdbnFieldEntry[count];
 
@@ -150,7 +143,7 @@ namespace Logic.Domain.Level5Management
             return result;
         }
 
-        private RdbnFieldEntry ReadFieldEntry(IBinaryReaderX br)
+        private RdbnFieldEntry ReadFieldEntry(BinaryReaderX br)
         {
             return new RdbnFieldEntry
             {
@@ -163,7 +156,7 @@ namespace Logic.Domain.Level5Management
             };
         }
 
-        private IDictionary<uint, string>? ReadStrings(IBinaryReaderX br, int count, int hashOffset, int offsetOffset, int stringOffset)
+        private IDictionary<uint, string>? ReadStrings(BinaryReaderX br, int count, int hashOffset, int offsetOffset, int stringOffset)
         {
             var hashes = new uint[count];
             var offsets = new int[count];
@@ -190,7 +183,7 @@ namespace Logic.Domain.Level5Management
             return result;
         }
 
-        private string ReadString(IBinaryReaderX br)
+        private string ReadString(BinaryReaderX br)
         {
             var result = new List<byte>();
 
@@ -204,7 +197,7 @@ namespace Logic.Domain.Level5Management
             return Encoding.UTF8.GetString(result.ToArray());
         }
 
-        private Contract.DataClasses.Rdbn CreateRdbn(IBinaryReaderX br, int valueOffset, int stringOffset, RdbnRootEntry[] rootEntries, RdbnTypeEntry[] typeEntries, RdbnFieldEntry[] fieldEntries, IDictionary<uint, string> strings)
+        private Contract.DataClasses.Rdbn CreateRdbn(BinaryReaderX br, int valueOffset, int stringOffset, RdbnRootEntry[] rootEntries, RdbnTypeEntry[] typeEntries, RdbnFieldEntry[] fieldEntries, IDictionary<uint, string> strings)
         {
             // Create type declarations
             var typeDeclarations = new RdbnTypeDeclaration[typeEntries.Length];
