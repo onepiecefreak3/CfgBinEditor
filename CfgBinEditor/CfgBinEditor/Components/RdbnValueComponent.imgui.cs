@@ -5,7 +5,7 @@ using Logic.Domain.Level5Management.Contract.DataClasses;
 using ImGui.Forms.Controls.Layouts;
 using ImGui.Forms.Controls.Text;
 using ImGui.Forms.Models;
-using Veldrid;
+using ImGui.Forms.Support;
 
 namespace CfgBinEditor.Components
 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using CfgBinEditor.resources;
 using CrossCutting.Core.Contract.Settings;
+using Hexa.NET.ImGui;
 using ImGui.Forms;
 using ImGui.Forms.Controls;
 using ImGui.Forms.Controls.Layouts;
@@ -11,7 +12,6 @@ using ImGui.Forms.Localization;
 using ImGui.Forms.Models;
 using ImGui.Forms.Models.IO;
 using Microsoft.VisualBasic.FileIO;
-using Veldrid;
 
 namespace CfgBinEditor.Forms
 {
@@ -52,7 +52,7 @@ namespace CfgBinEditor.Forms
             _settingsMenuItem = new MenuBarMenu { Text = LocalizationResources.MenuSettingsCaption };
             _infoMenuButton = new MenuBarButton { Text = LocalizationResources.MenuInfoCaption };
 
-            _fileOpenMenuItem = new MenuBarButton { Text = LocalizationResources.MenuFileOpenCaption, KeyAction = new KeyCommand(ModifierKeys.Control, Key.O) };
+            _fileOpenMenuItem = new MenuBarButton { Text = LocalizationResources.MenuFileOpenCaption, KeyAction = new KeyCommand(ImGuiKey.ModCtrl, ImGuiKey.O) };
             _settingsLanguageMenuItem = new MenuBarRadio { Text = LocalizationResources.MenuSettingsLanguagesCaption };
             _settingsThemeMenuItem = new MenuBarRadio { Text = LocalizationResources.MenuSettingsThemesCaption };
 
@@ -61,7 +61,7 @@ namespace CfgBinEditor.Forms
                 Image = ImageResources.Save,
                 ImageSize = new Vector2(16, 16),
                 Padding = new Vector2(3, 3),
-                KeyAction = new KeyCommand(ModifierKeys.Control, Key.S),
+                KeyAction = new KeyCommand(ImGuiKey.ModCtrl, ImGuiKey.S),
                 Tooltip = LocalizationResources.FileSaveTooltipSingleCaption(() => _tabControl?.SelectedPage?.Title),
                 Enabled = false
             };
@@ -70,7 +70,7 @@ namespace CfgBinEditor.Forms
                 Image = ImageResources.SaveAll,
                 ImageSize = new Vector2(16, 16),
                 Padding = new Vector2(3, 3),
-                KeyAction = new KeyCommand(ModifierKeys.Control | ModifierKeys.Shift, Key.S),
+                KeyAction = new KeyCommand(ImGuiKey.ModCtrl | ImGuiKey.ModShift, ImGuiKey.S),
                 Tooltip = LocalizationResources.FileSaveTooltipAllCaption,
                 Enabled = false
             };

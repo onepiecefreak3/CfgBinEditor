@@ -8,8 +8,7 @@ using System.Numerics;
 using ImGui.Forms.Controls.Text;
 using ImGui.Forms.Localization;
 using ImGui.Forms.Models;
-using SixLabors.ImageSharp;
-using Rectangle = Veldrid.Rectangle;
+using ImGui.Forms.Support;
 using Size = ImGui.Forms.Models.Size;
 
 namespace CfgBinEditor.Forms
@@ -46,7 +45,7 @@ namespace CfgBinEditor.Forms
 
         private MenuBarSplitter _splitter;
 
-        private void InitializeComponent(TConfig config)
+        private void InitializeComponent()
         {
             _searchTextBox = new TextBox { Placeholder = LocalizationResources.CfgBinEntrySearchPlaceholderCaption };
             _searchSettingsButton = new Button { Text = "...", Padding = new Vector2(2, 3) };

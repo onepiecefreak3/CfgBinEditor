@@ -17,7 +17,7 @@ namespace CfgBinEditor.Forms
         private readonly Rdbn _config;
         private readonly IEventBroker _events;
 
-        public RdbnTreeViewForm(Rdbn config, IEventBroker eventBroker) : base(config, eventBroker)
+        public RdbnTreeViewForm(Rdbn config, IEventBroker eventBroker) : base(eventBroker)
         {
             _config = config;
             _events = eventBroker;

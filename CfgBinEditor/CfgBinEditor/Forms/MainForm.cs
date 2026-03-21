@@ -21,7 +21,6 @@ using ImGui.Forms.Models;
 using Logic.Business.CfgBinEditorManagement.Contract;
 using Logic.Domain.Level5Management.Contract;
 using Logic.Domain.Level5Management.Contract.DataClasses;
-using Veldrid.Sdl2;
 
 namespace CfgBinEditor.Forms
 {
@@ -242,10 +241,10 @@ namespace CfgBinEditor.Forms
                 SetStatus(string.Empty, LabelStatus.None);
         }
 
-        private void OpenFiles(DragDropEvent[] events)
+        private void OpenFiles(string[] files)
         {
-            foreach (DragDropEvent e in events)
-                OpenFile(e.File);
+            foreach (string file in files)
+                OpenFile(file);
         }
 
         private bool OpenFile(string filePath)

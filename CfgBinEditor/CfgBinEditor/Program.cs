@@ -18,7 +18,7 @@ eventBroker.Raise(new InitializeApplicationMessage());
 var localizer = kernel.Get<ILocalizer>();
 var app = new Application(localizer);
 
-FontFactory.RegisterFromResource("NotoJp", "notojp.ttf", FontGlyphRange.ChineseJapanese | FontGlyphRange.Korean);
+FontFactory.RegisterFromResource("NotoJp", "notojp.ttf");
 
 var formFactory = kernel.Get<IFormFactory>();
 

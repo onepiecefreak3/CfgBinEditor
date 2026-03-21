@@ -12,9 +12,9 @@ namespace CfgBinEditor.Forms
 
         public TEntry? SelectedEntry { get; private set; }
 
-        public BaseTreeViewForm(TConfig config, IEventBroker eventBroker)
+        public BaseTreeViewForm(IEventBroker eventBroker)
         {
-            InitializeComponent(config);
+            InitializeComponent();
 
             _eventBroker = eventBroker;
 

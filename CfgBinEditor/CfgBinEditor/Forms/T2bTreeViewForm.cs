@@ -44,7 +44,7 @@ namespace CfgBinEditor.Forms
         }
 
         public T2bTreeViewForm(T2b config, IEventBroker eventBroker, ISettingsProvider settingsProvider, ISerializer serializer,
-            IValueSettingsProvider valueSettingsProvider, IEntryNamesProvider namesProvider) : base(config, eventBroker)
+            IValueSettingsProvider valueSettingsProvider, IEntryNamesProvider namesProvider) : base(eventBroker)
         {
             _config = config;
             _events = eventBroker;

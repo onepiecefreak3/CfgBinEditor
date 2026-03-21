@@ -5,9 +5,9 @@ using ImGui.Forms.Controls;
 using ImGui.Forms.Controls.Layouts;
 using ImGui.Forms.Localization;
 using ImGui.Forms.Models;
+using ImGui.Forms.Support;
 using Logic.Business.CfgBinEditorManagement.Contract;
 using Logic.Domain.Level5Management.Contract.DataClasses;
-using Rectangle = Veldrid.Rectangle;
 using Size = ImGui.Forms.Models.Size;
 
 namespace CfgBinEditor.Forms
