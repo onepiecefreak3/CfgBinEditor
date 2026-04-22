@@ -2,7 +2,7 @@
   "Name": "Español",
 
   // Application
-  "Application.Title": "Editor de CfgBin",
+  "Application.Title": "CfgBinEditor",
   "Application.Close.UnsavedChanges.Caption": "Cambios no guardados",
   "Application.Close.UnsavedChanges.Text": "Se han detectado modificaciones en los archivos. Puede perder el progreso si cierra la aplicación en este momento. ¿Desea continuar?",
 
