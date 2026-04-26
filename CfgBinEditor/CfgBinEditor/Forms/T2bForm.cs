@@ -617,7 +617,7 @@ namespace CfgBinEditor.Forms
                     }
 
                 case ValueType.FloatingPoint:
-                    NumberStyles styles1 = isHex ? NumberStyles.HexNumber : NumberStyles.None;
+                    NumberStyles styles1 = isHex ? NumberStyles.HexNumber : NumberStyles.Float;
                     text = isHex ? text.StartsWith("0x") ? text[2..] : text : text;
 
                     switch (_config.ValueLength)
@@ -817,16 +817,19 @@ namespace CfgBinEditor.Forms
                     }
 
                 case ValueType.FloatingPoint:
-                    if (!isHex)
-                        return $"{value}";
-
                     switch (_config.ValueLength)
                     {
                         case ValueLength.Int:
+                            if (!isHex)
+                                return ((float)value!).ToString(CultureInfo.InvariantCulture);
+
                             int iValue = BitConverter.SingleToInt32Bits((float)value!);
                             return $"0x{iValue:X8}";
 
                         case ValueLength.Long:
+                            if (!isHex)
+                                return ((double)value!).ToString(CultureInfo.InvariantCulture);
+
                             long lValue = BitConverter.DoubleToInt64Bits((double)value!);
                             return $"0x{lValue:X16}";
 
