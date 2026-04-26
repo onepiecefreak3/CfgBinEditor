@@ -8,11 +8,23 @@
     <ApplicationIcon>Resources\Images\logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="resources\fonts\roboto.ttf" />
     <None Remove="resources\fonts\notojp.ttf" />
+    <None Remove="resources\fonts\notokr.ttf" />
+    <None Remove="resources\fonts\notozhtc.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="resources\fonts\roboto.ttf">
+      <LogicalName>roboto.ttf</LogicalName>
+    </EmbeddedResource>
     <EmbeddedResource Include="resources\fonts\notojp.ttf">
       <LogicalName>notojp.ttf</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="resources\fonts\notokr.ttf">
+      <LogicalName>notokr.ttf</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="resources\fonts\notozhtc.ttf">
+      <LogicalName>notozhtc.ttf</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +70,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="resources\langs\fr.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resources\langs\es.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
