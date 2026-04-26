@@ -80,6 +80,6 @@
     <Folder Include="Dialogs\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Imgui.Forms" Version="2.1.6" />
+    <PackageReference Include="Imgui.Forms" Version="2.1.7" />
   </ItemGroup>
 </Project>
