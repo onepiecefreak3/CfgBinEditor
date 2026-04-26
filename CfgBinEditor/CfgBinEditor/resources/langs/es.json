@@ -1,0 +1,105 @@
+{
+  "Name": "Español",
+
+  // Application
+  "Application.Title": "CfgBin Editor",
+  "Application.Close.UnsavedChanges.Caption": "Cambios no guardados",
+  "Application.Close.UnsavedChanges.Text": "Se han detectado modificaciones en los archivos. Puede perder el progreso si cierra la aplicación en este momento. ¿Desea continuar?",
+
+  // File Menu
+  "Menu.File.Caption": "Archivo",
+  "Menu.File.Open.Caption": "Abrir (Ctrl + O)",
+
+  // Settings
+  "Menu.Settings.Caption": "Configuración",
+  "Menu.Settings.Languages.Caption": "Idiomas",
+  "Menu.Settings.Themes.Caption": "Temas",
+
+  "Menu.Settings.Theme.Dark.Caption": "Oscuro",
+  "Menu.Settings.Theme.Light.Caption": "Claro",
+
+  // Info
+  "Menu.Info.Caption": "?",
+
+  // Open File
+  "File.Open.Caption": "Seleccione el archivo a abrir...",
+  "File.Open.CfgBinFilter.Caption": "Archivo de configuración",
+  "File.Open.JsonFilter.Caption": "Archivo JSON",
+  "File.Open.Cancel": "No se ha seleccionado ningún archivo.",
+  "File.Open.Error.Caption": "Error al cargar {0}: {1}",
+  "File.Open.Error.Type.Caption": "El archivo no corresponde a un formato cfg.bin válido.",
+
+  // Save File
+  "File.Save.Tooltip.Single.Caption": "Guardar {0} (Ctrl + S)",
+  "File.Save.Tooltip.All.Caption": "Guardar todo (Ctrl + Shift + S)",
+  "File.Save.Error.Caption": "Error al guardar {0}: {1}",
+
+  // Close File
+  "File.Close.UnsavedChanges.Caption": "Cambios no guardados",
+  "File.Close.UnsavedChanges.Text": "El archivo ha sido modificado. Puede perder el progreso si lo cierra en este momento. ¿Desea continuar?",
+
+  // Game settings
+  "Game.None.Caption": "Ninguno",
+  "Game.Add.Button.Caption": "+",
+  "Game.Add.Dialog.Caption": "Agregar nuevo juego",
+  "Game.Add.Dialog.Text": "Introduzca el nombre del nuevo juego:",
+  "Game.Add.Dialog.Placeholder": "Nombre del juego",
+  "Game.Add.Dialog.InvalidCharacters.Caption": "Caracteres no válidos",
+  "Game.Add.Dialog.InvalidCharacters.Text": "El nombre del juego no puede contener los caracteres ( o ).",
+
+  // Cfg Entry
+  "CfgBin.Entry.Name.Caption": "Nombre",
+  "CfgBin.Entry.Type.Caption": "Tipo",
+  "CfgBin.Entry.Value.Caption": "Valor",
+  "CfgBin.Entry.IsHex.Caption": "Mostrar en formato hexadecimal",
+
+  // Cfg Value Types
+  "CfgBin.Entry.Type.String.Caption": "Cadena",
+  "CfgBin.Entry.Type.Int.Caption": "Entero",
+  "CfgBin.Entry.Type.Float.Caption": "Punto flotante",
+
+  // Cfg Entry Search
+  "CfgBin.Entry.Search.Placeholder.Caption": "Buscar...",
+
+  // Cfg Entry Search Comparison
+  "CfgBin.Entry.Search.Comparison.Dialog.Caption": "Parámetros de búsqueda",
+  "CfgBin.Entry.Search.Comparison.Caption": "Interpretar valores como:",
+
+  "CfgBin.Entry.Search.Comparison.Hex": "Hexadecimal",
+  "CfgBin.Entry.Search.Comparison.Dec": "Decimal",
+  "CfgBin.Entry.Search.Comparison.Tags": "Etiquetas",
+
+  // Cfg Entry Addition
+  "CfgBin.Entry.Add.Caption": "Agregar",
+  "CfgBin.Entry.Add.Value.Caption": "Agregar valor",
+  "CfgBin.Entry.Add.Root.Caption": "Agregar entrada raíz",
+  "CfgBin.Entry.Add.Dialog.Caption": "Introduzca el nombre de la entrada:",
+  "CfgBin.Entry.Add.Error.Caption": "El nombre de la entrada no puede estar vacío.",
+
+  // Cfg Entry Duplication
+  "CfgBin.Entry.Duplicate.Caption": "Duplicar",
+
+  // Cfg Entry Removal
+  "CfgBin.Entry.Remove.Caption": "Eliminar",
+
+  // Cfg Entry Import
+  "CfgBin.Entry.Import.Caption": "Importar",
+
+  // Cfg Entry Export
+  "CfgBin.Entry.Export.Caption": "Exportar",
+
+  // Cfg Entry Value tooltips
+  "CfgBin.Entry.Random.Tooltip": "Generar valor aleatorio",
+  "CfgBin.Entry.Empty.Tooltip": "Eliminar valor",
+
+  // RDBN Add List
+  "Rdbn.List.Add.Caption": "Agregar lista",
+  "Rdbn.List.Add.Type.Dialog.Caption": "Seleccione el tipo de lista:",
+  "Rdbn.List.Add.Type.Error.Caption": "No se ha seleccionado ningún tipo.",
+  "Rdbn.List.Add.Name.Dialog.Caption": "Introduzca el nombre de la lista:",
+  "Rdbn.List.Add.Name.Error.Caption": "El nombre de la lista no puede estar vacío.",
+
+  // Value Tags
+  "CfgBin.Tags.Load.Error.Caption": "Error al cargar las etiquetas: {0}",
+  "CfgBin.Ids.Load.Error.Caption": "Error al cargar los identificadores: {0}"
+}
