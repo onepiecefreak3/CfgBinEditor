@@ -3,8 +3,8 @@
 
   // Application
   "Application.Title": "CfgBin Editor",
-  "Application.Close.UnsavedChanges.Caption": "Modifications non-sauvegardées",
-  "Application.Close.UnsavedChanges.Text": "Des fichiers ont été modifiés. Vous pourriez perdre votre progression, si vous fermez l'application maintenant. Continuer?",
+  "Application.Close.UnsavedChanges.Caption": "Modifications non sauvegardées",
+  "Application.Close.UnsavedChanges.Text": "Des fichiers ont été modifiés. Vous pourriez perdre votre progression si vous fermez l'application maintenant. Continuer ?",
 
   // File Menu
   "Menu.File.Caption": "Fichier",
@@ -24,25 +24,25 @@
   // Open File
   "File.Open.Caption": "Choisir un fichier à ouvrir...",
   "File.Open.CfgBinFilter.Caption": "Fichier de configuration",
-  "File.Open.JsonFilter.Caption": "Fichier de json",
-  "File.Open.Cancel": "Aucun fichier selectionné",
-  "File.Open.Error.Caption": "Une erreur est survenue en chargeant {0}: {1}",
+  "File.Open.JsonFilter.Caption": "Fichier json",
+  "File.Open.Cancel": "Aucun fichier sélectionné",
+  "File.Open.Error.Caption": "Une erreur est survenue en chargeant {0} : {1}",
   "File.Open.Error.Type.Caption": "Ce fichier n'est pas un cfg.bin valide.",
 
   // Save File
   "File.Save.Tooltip.Single.Caption": "Sauvegarder {0} (CTRL + S)",
-  "File.Save.Tooltip.All.Caption": "Tout sauvegarder (CTRL + SHIFT + S)",
-  "File.Save.Error.Caption": "Une erreur est survenue en sauvegardant {0}: {1}",
+  "File.Save.Tooltip.All.Caption": "Tout sauvegarder (CTRL + MAJ + S)",
+  "File.Save.Error.Caption": "Une erreur est survenue en sauvegardant {0} : {1}",
 
   // Close File
   "File.Close.UnsavedChanges.Caption": "Modifications non sauvegardées",
-  "File.Close.UnsavedChanges.Text": "Le fichier a été modifié. Vous pourriez perdre votre progression, si vous fermez l'application maintenant. Continuer?",
+  "File.Close.UnsavedChanges.Text": "Le fichier a été modifié. Vous pourriez perdre votre progression si vous fermez l'onglet maintenant. Continuer ?",
 
   // Game settings
   "Game.None.Caption": "Aucun",
   "Game.Add.Button.Caption": "+",
   "Game.Add.Dialog.Caption": "Ajouter un nouveau jeu",
-  "Game.Add.Dialog.Text": "Entrer le nom du nouveau jeu:",
+  "Game.Add.Dialog.Text": "Entrer le nom du nouveau jeu :",
   "Game.Add.Dialog.Placeholder": "Nom du jeu",
   "Game.Add.Dialog.InvalidCharacters.Caption": "Caractères invalides",
   "Game.Add.Dialog.InvalidCharacters.Text": "Les noms de jeu ne peuvent pas contenir ( ou ).",
@@ -63,7 +63,7 @@
 
   // Cfg Entry Search Comparison
   "CfgBin.Entry.Search.Comparison.Dialog.Caption": "Paramètres de recherche",
-  "CfgBin.Entry.Search.Comparison.Caption": "Correspondance des valeurs en:",
+  "CfgBin.Entry.Search.Comparison.Caption": "Correspondance des valeurs en :",
 
   "CfgBin.Entry.Search.Comparison.Hex": "Hexadécimal",
   "CfgBin.Entry.Search.Comparison.Dec": "Décimal",
@@ -73,7 +73,7 @@
   "CfgBin.Entry.Add.Caption": "Ajouter",
   "CfgBin.Entry.Add.Value.Caption": "Ajouter valeur",
   "CfgBin.Entry.Add.Root.Caption": "Ajouter racine",
-  "CfgBin.Entry.Add.Dialog.Caption": "Saisir le nom de l'entrée:",
+  "CfgBin.Entry.Add.Dialog.Caption": "Saisir le nom de l'entrée :",
   "CfgBin.Entry.Add.Error.Caption": "Le nom de la nouvelle entrée était vide.",
 
   // Cfg Entry Duplication
@@ -89,17 +89,17 @@
   "CfgBin.Entry.Export.Caption": "Exporter",
 
   // Cfg Entry Value tooltips
-  "CfgBin.Entry.Random.Tooltip": "Randomiser",
+  "CfgBin.Entry.Random.Tooltip": "Mélanger",
   "CfgBin.Entry.Empty.Tooltip": "Retirer valeur",
 
   // RDBN Add List
   "Rdbn.List.Add.Caption": "Ajouter liste",
   "Rdbn.List.Add.Type.Dialog.Caption": "Choisir un type:",
   "Rdbn.List.Add.Type.Error.Caption": "Aucun type n'a été choisi.",
-  "Rdbn.List.Add.Name.Dialog.Caption": "Saisir le nom de la liste:",
+  "Rdbn.List.Add.Name.Dialog.Caption": "Saisir le nom de la liste :",
   "Rdbn.List.Add.Name.Error.Caption": "Le nom de la liste était vide.",
 
   // Value Tags
-  "CfgBin.Tags.Load.Error.Caption": "Une erreur est survenue en chargeant les tags: {0}",
-  "CfgBin.Ids.Load.Error.Caption": "Une erreur est survenue en chargeant les ids: {0}"
+  "CfgBin.Tags.Load.Error.Caption": "Une erreur est survenue en chargeant les tags : {0}",
+  "CfgBin.Ids.Load.Error.Caption": "Une erreur est survenue en chargeant les IDs : {0}"
 }
