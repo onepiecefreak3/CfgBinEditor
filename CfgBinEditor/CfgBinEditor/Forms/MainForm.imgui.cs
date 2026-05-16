@@ -62,7 +62,7 @@ namespace CfgBinEditor.Forms
                 ImageSize = new Vector2(16, 16),
                 Padding = new Vector2(3, 3),
                 KeyAction = new KeyCommand(ImGuiKey.ModCtrl, ImGuiKey.S),
-                Tooltip = LocalizationResources.FileSaveTooltipSingleCaption(() => _tabControl?.SelectedPage?.Title),
+                Tooltip = LocalizationResources.FileSaveTooltipSingleCaption(() => _tabControl.SelectedPage?.Title ?? string.Empty),
                 Enabled = false
             };
             _saveAllBtn = new ImageButton

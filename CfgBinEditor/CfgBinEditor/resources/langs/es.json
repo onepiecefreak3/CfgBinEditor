@@ -38,6 +38,12 @@
   "File.Close.UnsavedChanges.Caption": "Cambios no guardados",
   "File.Close.UnsavedChanges.Text": "El archivo ha sido modificado. Puede perder el progreso si lo cierra en este momento. ¿Desea continuar?",
 
+  // Preview
+  // "Text.Preview.Default": "Default", // TODO
+
+  // "Font.Preview.Export": "Export preview", // TODO
+  // "Font.Preview.Settings": "Settings", // TODO
+
   // Game settings
   "Game.None.Caption": "Ninguno",
   "Game.Add.Button.Caption": "+",

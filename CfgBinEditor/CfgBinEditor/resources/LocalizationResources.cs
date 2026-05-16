@@ -39,6 +39,10 @@ namespace CfgBinEditor.resources
         public static LocalizedString FileCloseUnsavedChangesCaption => LocalizedString.FromId("File.Close.UnsavedChanges.Caption");
         public static LocalizedString FileCloseUnsavedChangesText => LocalizedString.FromId("File.Close.UnsavedChanges.Text");
 
+        public static LocalizedString TextPreviewDefault => LocalizedString.FromId("Text.Preview.Default");
+        public static LocalizedString FontPreviewExport => LocalizedString.FromId("Font.Preview.Export");
+        public static LocalizedString FontPreviewSettings => LocalizedString.FromId("Font.Preview.Settings");
+
         public static LocalizedString GameNoneCaption => LocalizedString.FromId("Game.None.Caption");
         public static LocalizedString GameAddButtonCaption => LocalizedString.FromId("Game.Add.Button.Caption");
         public static LocalizedString GameAddDialogCaption => LocalizedString.FromId("Game.Add.Dialog.Caption");

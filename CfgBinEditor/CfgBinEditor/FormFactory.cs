@@ -1,7 +1,9 @@
 ﻿using CfgBinEditor.Forms;
 using CfgBinEditor.InternalContract;
+using CfgBinEditor.InternalContract.DataClasses;
 using CrossCutting.Core.Contract.DependencyInjection;
 using CrossCutting.Core.Contract.DependencyInjection.DataClasses;
+using Konnect.Contract.Management.Plugin;
 using Logic.Domain.Level5Management.Contract.DataClasses;
 
 namespace CfgBinEditor
@@ -20,10 +22,11 @@ namespace CfgBinEditor
             return _kernel.Get<MainForm>();
         }
 
-        public T2bForm CreateT2bForm(T2b config)
+        public T2bForm CreateT2bForm(T2bFile file, IPluginManager pluginManager)
         {
             return _kernel.Get<T2bForm>(
-                new ConstructorParameter("config", config));
+                new ConstructorParameter("file", file),
+                new ConstructorParameter("pluginManager", pluginManager));
         }
 
         public RdbnForm CreateRdbnForm(Rdbn config)

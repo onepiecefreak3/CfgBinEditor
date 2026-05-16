@@ -38,6 +38,12 @@
   "File.Close.UnsavedChanges.Caption": "Unsaved changes",
   "File.Close.UnsavedChanges.Text": "The file was modified. You may lose progress, if you close the file now. Proceed?",
 
+  // Preview
+  "Text.Preview.Default": "Default",
+
+  "Font.Preview.Export": "Export preview",
+  "Font.Preview.Settings": "Settings",
+
   // Game settings
   "Game.None.Caption": "None",
   "Game.Add.Button.Caption": "+",

@@ -38,6 +38,12 @@
   "File.Close.UnsavedChanges.Caption": "Modifications non sauvegardées",
   "File.Close.UnsavedChanges.Text": "Le fichier a été modifié. Vous pourriez perdre votre progression, si vous fermez l'application maintenant. Continuer?",
 
+  // Preview
+  "Text.Preview.Default": "Par défaut",
+
+  "Font.Preview.Export": "Exporter aperçu",
+  "Font.Preview.Settings": "Paramètres",
+
   // Game settings
   "Game.None.Caption": "Aucun",
   "Game.Add.Button.Caption": "+",

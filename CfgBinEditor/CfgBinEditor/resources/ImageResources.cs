@@ -13,6 +13,9 @@ namespace CfgBinEditor.resources
         private const string SavePath_ = "resources/images/save.png";
         private const string SaveAllPath_ = "resources/images/save_all_1.png";
 
+        private const string ImageExportPath_ = "resources/images/image_export.png";
+        private const string SettingsPath_ = "resources/images/settings.png";
+
         private const string ClosePath_ = "resources/images/close.png";
 
         private const string RandomLightPath_ = "resources/images/random_light.png";
@@ -22,6 +25,9 @@ namespace CfgBinEditor.resources
 
         public static ThemedImageResource Save => ImageResource.FromFile(SavePath_);
         public static ThemedImageResource SaveAll => ImageResource.FromFile(SaveAllPath_);
+
+        public static ThemedImageResource ImageExport => ImageResource.FromFile(ImageExportPath_);
+        public static ThemedImageResource Settings => ImageResource.FromFile(SettingsPath_);
 
         public static ThemedImageResource Close => ImageResource.FromFile(ClosePath_);
 

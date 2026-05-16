@@ -28,6 +28,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Logic.Foundation.PreviewManagement.Abstract\Logic.Foundation.PreviewManagement.Abstract.csproj" />
     <ProjectReference Include="..\CrossCutting.Core.Contract\CrossCutting.Core.Contract.csproj" />
     <ProjectReference Include="..\Logic.Business.CfgBinEditorManagement.Contract\Logic.Business.CfgBinEditorManagement.Contract.csproj" />
     <ProjectReference Include="..\Mappings.CfgBinEditor\Mappings.CfgBinEditor.csproj" />
@@ -43,6 +44,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="resources\images\close.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resources\images\image_export.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="resources\images\logo.png">
@@ -63,6 +67,9 @@
     <None Update="resources\images\save_all_1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="resources\images\settings.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="resources\langs\de.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -77,9 +84,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Dialogs\" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Imgui.Forms" Version="2.1.7" />
+    <PackageReference Include="Imgui.Forms" Version="2.3.2" />
+    <PackageReference Include="Konnect" Version="2.1.92" />
   </ItemGroup>
 </Project>

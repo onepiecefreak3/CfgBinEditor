@@ -144,11 +144,6 @@ namespace CfgBinEditor.Forms
             _mainLayout.Update(contentRect);
         }
 
-        protected override void SetTabInactiveCore()
-        {
-            _mainLayout.SetTabInactive();
-        }
-
         protected virtual bool HasSearchSettings() => false;
 
         protected abstract LocalizedString GetRootButtonCaption();

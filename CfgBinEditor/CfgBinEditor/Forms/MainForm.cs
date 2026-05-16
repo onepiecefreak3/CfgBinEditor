@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using CfgBinEditor.InternalContract;
+﻿using CfgBinEditor.InternalContract;
 using CfgBinEditor.InternalContract.DataClasses;
 using CfgBinEditor.Messages;
 using CfgBinEditor.resources;
@@ -18,14 +13,27 @@ using ImGui.Forms.Modals;
 using ImGui.Forms.Modals.IO;
 using ImGui.Forms.Modals.IO.Windows;
 using ImGui.Forms.Models;
+using Konnect.Contract.Management.Plugin;
+using Konnect.Contract.Management.Plugin.Loaders;
+using Konnect.Contract.Plugin.Game;
+using Konnect.Management.Plugin;
 using Logic.Business.CfgBinEditorManagement.Contract;
 using Logic.Domain.Level5Management.Contract;
 using Logic.Domain.Level5Management.Contract.DataClasses;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Konnect.Contract.Plugin.File;
+using Konnect.Management.Plugin.Loaders;
+using Logic.Foundation.PreviewManagement.Abstract;
 
 namespace CfgBinEditor.Forms
 {
     public partial class MainForm : Form
     {
+        private readonly PluginManager _pluginManager;
         private readonly IEventBroker _events;
         private readonly ILocalizer _localizer;
         private readonly IFormFactory _formFactory;
@@ -42,6 +50,8 @@ namespace CfgBinEditor.Forms
         public MainForm(IEventBroker eventBroker, ILocalizer localizer, IFormFactory formFactory, ISettingsProvider settingsProvider, IT2bReader t2BReader, IRdbnReader rdbnReader, IValueSettingsProvider valueSettingsProvider, IEntryNamesProvider entryNamesProvider)
         {
             InitializeComponent(localizer, settingsProvider);
+
+            _pluginManager = new PluginManager(new PluginLoader<IPreviewPlugin>("plugins"));
 
             _events = eventBroker;
             _localizer = localizer;
@@ -221,7 +231,7 @@ namespace CfgBinEditor.Forms
             {
                 Title = LocalizationResources.FileOpenCaption,
                 InitialDirectory = GetLoadDirectory(_settingsProvider),
-                Filters = 
+                Filters =
                 {
                     new FileFilter(LocalizationResources.FileOpenCfgBinFilterCaption, "cfg.bin")
                 }
@@ -260,7 +270,7 @@ namespace CfgBinEditor.Forms
 
             if (TryLoadT2bFile(filePath, out T2b t2b))
             {
-                configForm = _formFactory.CreateT2bForm(t2b);
+                configForm = _formFactory.CreateT2bForm(new T2bFile { FilePath = filePath, Data = t2b }, _pluginManager);
             }
             else if (TryLoadRdbnFile(filePath, out Rdbn rdbn))
             {

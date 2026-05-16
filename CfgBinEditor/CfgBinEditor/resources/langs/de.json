@@ -38,6 +38,12 @@
 	"File.Close.UnsavedChanges.Caption": "Ungespeicherte Änderungen",
 	"File.Close.UnsavedChanges.Text": "Die Datei wurde verändert. Du verlierst deine Änderungen, wenn du die Datei jetzt schließt. Fortfahren?",
 
+	// Preview
+	"Text.Preview.Default": "Standard",
+
+	"Font.Preview.Export": "Vorschau exportieren",
+	"Font.Preview.Settings": "Einstellungen",
+
 	// Game settings
 	"Game.None.Caption": "Keins",
 	"Game.Button.Add.Caption": "+",

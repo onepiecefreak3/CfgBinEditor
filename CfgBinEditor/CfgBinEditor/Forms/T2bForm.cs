@@ -1,9 +1,5 @@
-﻿using System;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Numerics;
-using CfgBinEditor.InternalContract;
+﻿using CfgBinEditor.InternalContract;
+using CfgBinEditor.InternalContract.DataClasses;
 using CfgBinEditor.Messages;
 using CfgBinEditor.resources;
 using CrossCutting.Core.Contract.EventBrokerage;
@@ -15,26 +11,43 @@ using ImGui.Forms.Localization;
 using ImGui.Forms.Modals;
 using ImGui.Forms.Modals.IO;
 using ImGui.Forms.Models;
+using Konnect.Contract.Management.Plugin;
+using Konnect.Contract.Plugin.Game;
+using Konnect.Management.Files;
 using Logic.Business.CfgBinEditorManagement.Contract;
 using Logic.Business.CfgBinEditorManagement.Contract.DataClasses;
 using Logic.Domain.Level5Management.Contract;
 using Logic.Domain.Level5Management.Contract.DataClasses;
+using System;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
+using ImGui.Forms.Resources;
+using Kaligraphy.Parsing;
+using Konnect.Contract.DataClasses.Plugin.File.Text;
+using Logic.Foundation.PreviewManagement.Abstract;
+using ImageResources = CfgBinEditor.resources.ImageResources;
 using ValueType = Logic.Domain.Level5Management.Contract.DataClasses.ValueType;
 
 namespace CfgBinEditor.Forms
 {
     public partial class T2bForm : Component
     {
-        private readonly T2b _config;
+        private readonly T2bFile _file;
         private readonly IEventBroker _eventBroker;
         private readonly IT2bWriter _writer;
         private readonly IValueSettingsProvider _settingsProvider;
 
-        public T2bForm(T2b config, IFormFactory formFactory, IEventBroker eventBroker, IT2bWriter writer, IValueSettingsProvider settingsProvider)
-        {
-            InitializeComponent(config, formFactory, settingsProvider);
+        private IPreviewPlugin? _selectedPreviewPlugin;
 
-            _config = config;
+        public T2bForm(T2bFile file, IPluginManager pluginManager, IFormFactory formFactory, IEventBroker eventBroker, IT2bWriter writer, IValueSettingsProvider settingsProvider)
+        {
+            InitializeComponent(file, pluginManager, formFactory, settingsProvider);
+
+            _file = file;
             _eventBroker = eventBroker;
             _writer = writer;
             _settingsProvider = settingsProvider;
@@ -43,6 +56,9 @@ namespace CfgBinEditor.Forms
             _gameAddButton.Clicked += (s, e) => AddNewGame();
 
             _valueAddButton.Clicked += (s, e) => AddEntryValue();
+
+            _previewTextEditor.TextChanged += _previewTextEditor_TextChanged;
+            _previewBox.SelectedItemChanged += _previewBox_SelectedItemChanged;
 
             eventBroker.Subscribe<ValueSettingsChangedMessage>(ChangeValueSettings);
             eventBroker.Subscribe<FileSaveRequestMessage>(SaveFile);
@@ -62,6 +78,32 @@ namespace CfgBinEditor.Forms
                 if (msg.TreeViewForm == _treeViewForm)
                     ChangeEntry(msg.Entry);
             });
+        }
+
+        private async void _previewTextEditor_TextChanged(object? sender, string e)
+        {
+            await UpdatePreview();
+        }
+
+        private async void _previewBox_SelectedItemChanged(object? sender, EventArgs e)
+        {
+            await UpdatePreview();
+        }
+
+        private async Task UpdatePreview()
+        {
+            if (_selectedPreviewPlugin is null)
+                return;
+
+            var deserializer = _selectedPreviewPlugin.Deserializer ?? new CharacterDeserializer();
+
+            var characters = deserializer.Deserialize(_previewTextEditor.GetText());
+            var preview = await _selectedPreviewPlugin.RenderPreview(characters);
+
+            if (preview is null)
+                return;
+
+            _textPreview.SetImage(ImageResource.FromImage(preview));
         }
 
         private void ChangeEntry(T2bEntry? entry)
@@ -310,7 +352,7 @@ namespace CfgBinEditor.Forms
 
             try
             {
-                using Stream fileStream = _writer.Write(_config);
+                using Stream fileStream = _writer.Write(_file.Data);
                 using Stream targetFileStream = File.Create(savePath);
 
                 fileStream.CopyTo(targetFileStream);
@@ -452,7 +494,7 @@ namespace CfgBinEditor.Forms
             switch (valueType)
             {
                 case ValueType.Integer:
-                    switch (_config.ValueLength)
+                    switch (_file.Data.ValueLength)
                     {
                         case ValueLength.Int:
                             randomValue = random.Next();
@@ -463,12 +505,12 @@ namespace CfgBinEditor.Forms
                             break;
 
                         default:
-                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                            throw new InvalidOperationException($"Unknown value length {_file.Data.ValueLength}.");
                     }
                     break;
 
                 case ValueType.FloatingPoint:
-                    switch (_config.ValueLength)
+                    switch (_file.Data.ValueLength)
                     {
                         case ValueLength.Int:
                             randomValue = random.NextSingle();
@@ -479,7 +521,7 @@ namespace CfgBinEditor.Forms
                             break;
 
                         default:
-                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                            throw new InvalidOperationException($"Unknown value length {_file.Data.ValueLength}.");
                     }
                     break;
 
@@ -596,7 +638,7 @@ namespace CfgBinEditor.Forms
                     NumberStyles styles = isHex ? NumberStyles.HexNumber : NumberStyles.AllowLeadingSign;
                     text = isHex ? text.StartsWith("0x") ? text[2..] : text : text;
 
-                    switch (_config.ValueLength)
+                    switch (_file.Data.ValueLength)
                     {
                         case ValueLength.Int:
                             if (!int.TryParse(text, styles, CultureInfo.InvariantCulture, out int iValue))
@@ -613,14 +655,14 @@ namespace CfgBinEditor.Forms
                             return true;
 
                         default:
-                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                            throw new InvalidOperationException($"Unknown value length {_file.Data.ValueLength}.");
                     }
 
                 case ValueType.FloatingPoint:
                     NumberStyles styles1 = isHex ? NumberStyles.HexNumber : NumberStyles.Float;
                     text = isHex ? text.StartsWith("0x") ? text[2..] : text : text;
 
-                    switch (_config.ValueLength)
+                    switch (_file.Data.ValueLength)
                     {
                         case ValueLength.Int:
                             if (!float.TryParse(text, styles1, CultureInfo.InvariantCulture, out float fValue))
@@ -637,7 +679,7 @@ namespace CfgBinEditor.Forms
                             return true;
 
                         default:
-                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                            throw new InvalidOperationException($"Unknown value length {_file.Data.ValueLength}.");
                     }
 
                 default:
@@ -657,7 +699,7 @@ namespace CfgBinEditor.Forms
                     switch (targetType)
                     {
                         case ValueType.Integer:
-                            switch (_config.ValueLength)
+                            switch (_file.Data.ValueLength)
                             {
                                 case ValueLength.Int:
                                     if (int.TryParse(sValue, out int iValue))
@@ -678,11 +720,11 @@ namespace CfgBinEditor.Forms
                                     return GetDefaultValue(targetType);
 
                                 default:
-                                    throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                                    throw new InvalidOperationException($"Unknown value length {_file.Data.ValueLength}.");
                             }
 
                         case ValueType.FloatingPoint:
-                            switch (_config.ValueLength)
+                            switch (_file.Data.ValueLength)
                             {
                                 case ValueLength.Int:
                                     if (float.TryParse(sValue, out float fValue))
@@ -697,7 +739,7 @@ namespace CfgBinEditor.Forms
                                     return GetDefaultValue(targetType);
 
                                 default:
-                                    throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                                    throw new InvalidOperationException($"Unknown value length {_file.Data.ValueLength}.");
                             }
 
                         default:
@@ -711,7 +753,7 @@ namespace CfgBinEditor.Forms
                             return $"{value}";
 
                         case ValueType.FloatingPoint:
-                            switch (_config.ValueLength)
+                            switch (_file.Data.ValueLength)
                             {
                                 case ValueLength.Int:
                                     return (float)(int)value!;
@@ -720,7 +762,7 @@ namespace CfgBinEditor.Forms
                                     return (double)(long)value!;
 
                                 default:
-                                    throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                                    throw new InvalidOperationException($"Unknown value length {_file.Data.ValueLength}.");
                             }
 
                         default:
@@ -734,7 +776,7 @@ namespace CfgBinEditor.Forms
                             return $"{value}";
 
                         case ValueType.Integer:
-                            switch (_config.ValueLength)
+                            switch (_file.Data.ValueLength)
                             {
                                 case ValueLength.Int:
                                     return (int)Math.Round((float)value!);
@@ -743,7 +785,7 @@ namespace CfgBinEditor.Forms
                                     return (long)Math.Round((double)value!);
 
                                 default:
-                                    throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                                    throw new InvalidOperationException($"Unknown value length {_file.Data.ValueLength}.");
                             }
 
                         default:
@@ -763,7 +805,7 @@ namespace CfgBinEditor.Forms
                     return string.Empty;
 
                 case ValueType.Integer:
-                    switch (_config.ValueLength)
+                    switch (_file.Data.ValueLength)
                     {
                         case ValueLength.Int:
                             return 0;
@@ -772,11 +814,11 @@ namespace CfgBinEditor.Forms
                             return (long)0;
 
                         default:
-                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                            throw new InvalidOperationException($"Unknown value length {_file.Data.ValueLength}.");
                     }
 
                 case ValueType.FloatingPoint:
-                    switch (_config.ValueLength)
+                    switch (_file.Data.ValueLength)
                     {
                         case ValueLength.Int:
                             return .0f;
@@ -785,7 +827,7 @@ namespace CfgBinEditor.Forms
                             return .0d;
 
                         default:
-                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                            throw new InvalidOperationException($"Unknown value length {_file.Data.ValueLength}.");
                     }
 
                 default:
@@ -804,7 +846,7 @@ namespace CfgBinEditor.Forms
                     if (!isHex)
                         return $"{value}";
 
-                    switch (_config.ValueLength)
+                    switch (_file.Data.ValueLength)
                     {
                         case ValueLength.Int:
                             return $"0x{value:X8}";
@@ -813,11 +855,11 @@ namespace CfgBinEditor.Forms
                             return $"0x{value:X16}";
 
                         default:
-                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                            throw new InvalidOperationException($"Unknown value length {_file.Data.ValueLength}.");
                     }
 
                 case ValueType.FloatingPoint:
-                    switch (_config.ValueLength)
+                    switch (_file.Data.ValueLength)
                     {
                         case ValueLength.Int:
                             if (!isHex)
@@ -834,7 +876,7 @@ namespace CfgBinEditor.Forms
                             return $"0x{lValue:X16}";
 
                         default:
-                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                            throw new InvalidOperationException($"Unknown value length {_file.Data.ValueLength}.");
                     }
 
                 default:
