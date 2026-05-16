@@ -7,23 +7,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CrossCutting", "CrossCuttin
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{B5935625-B197-4029-87AF-5211BA4212BD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting.Core.Bootstrapping", "CfgBinEditor\CrossCutting.Core.Bootstrapping\CrossCutting.Core.Bootstrapping.csproj", "{5C58F3B3-63B6-4BC6-A219-D2725737A819}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting.Core.Bootstrapping", "CrossCutting.Core.Bootstrapping\CrossCutting.Core.Bootstrapping.csproj", "{5C58F3B3-63B6-4BC6-A219-D2725737A819}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting.Core.Configuration", "CfgBinEditor\CrossCutting.Core.Configuration\CrossCutting.Core.Configuration.csproj", "{FD5F4B8F-07ED-41BB-82B7-398C861D3340}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting.Core.Configuration", "CrossCutting.Core.Configuration\CrossCutting.Core.Configuration.csproj", "{FD5F4B8F-07ED-41BB-82B7-398C861D3340}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting.Core.Configuration.CommandLine", "CfgBinEditor\CrossCutting.Core.Configuration.CommandLine\CrossCutting.Core.Configuration.CommandLine.csproj", "{2267C955-CC22-45B4-A2F9-F14A188C9B1F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting.Core.Configuration.CommandLine", "CrossCutting.Core.Configuration.CommandLine\CrossCutting.Core.Configuration.CommandLine.csproj", "{2267C955-CC22-45B4-A2F9-F14A188C9B1F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting.Core.Configuration.File", "CfgBinEditor\CrossCutting.Core.Configuration.File\CrossCutting.Core.Configuration.File.csproj", "{32C3C431-11E6-40CD-BF06-C04741AB0A33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting.Core.Configuration.File", "CrossCutting.Core.Configuration.File\CrossCutting.Core.Configuration.File.csproj", "{32C3C431-11E6-40CD-BF06-C04741AB0A33}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting.Core.Contract", "CfgBinEditor\CrossCutting.Core.Contract\CrossCutting.Core.Contract.csproj", "{141153C5-B8A3-41EE-A407-6009997942E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting.Core.Contract", "CrossCutting.Core.Contract\CrossCutting.Core.Contract.csproj", "{141153C5-B8A3-41EE-A407-6009997942E2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting.Core.DI.AutofacAdapter", "CfgBinEditor\CrossCutting.Core.DI.AutofacAdapter\CrossCutting.Core.DI.AutofacAdapter.csproj", "{5C95DE05-EBAE-42C2-9BF0-14748931212F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting.Core.DI.AutofacAdapter", "CrossCutting.Core.DI.AutofacAdapter\CrossCutting.Core.DI.AutofacAdapter.csproj", "{5C95DE05-EBAE-42C2-9BF0-14748931212F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting.Core.EventBrokerage", "CfgBinEditor\CrossCutting.Core.EventBrokerage\CrossCutting.Core.EventBrokerage.csproj", "{0C754A79-8085-45AC-8BC1-A71E2AE1225E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting.Core.EventBrokerage", "CrossCutting.Core.EventBrokerage\CrossCutting.Core.EventBrokerage.csproj", "{0C754A79-8085-45AC-8BC1-A71E2AE1225E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting.Core.Logging.NLogAdapter", "CfgBinEditor\CrossCutting.Core.Logging.NLogAdapter\CrossCutting.Core.Logging.NLogAdapter.csproj", "{33769A6E-A2DC-49E7-81E4-3D13D3320FA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting.Core.Logging.NLogAdapter", "CrossCutting.Core.Logging.NLogAdapter\CrossCutting.Core.Logging.NLogAdapter.csproj", "{33769A6E-A2DC-49E7-81E4-3D13D3320FA1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting.Core.Serialization.JsonAdapter", "CfgBinEditor\CrossCutting.Core.Serialization.JsonAdapter\CrossCutting.Core.Serialization.JsonAdapter.csproj", "{DBE60363-7569-48DE-8B00-C4FA2A030C75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting.Core.Serialization.JsonAdapter", "CrossCutting.Core.Serialization.JsonAdapter\CrossCutting.Core.Serialization.JsonAdapter.csproj", "{DBE60363-7569-48DE-8B00-C4FA2A030C75}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{025441DC-2EBB-4FAA-9E85-94E7A7A63BF2}"
 EndProject
@@ -39,25 +39,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mappings", "Mappings", "{FB7CFA94-439D-4B5D-A2C2-2353EA7DE04D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mappings.CfgBinEditor", "CfgBinEditor\Mappings.CfgBinEditor\Mappings.CfgBinEditor.csproj", "{AA2B9F19-934E-4342-962B-BE5EAA37A01E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mappings.CfgBinEditor", "Mappings.CfgBinEditor\Mappings.CfgBinEditor.csproj", "{AA2B9F19-934E-4342-962B-BE5EAA37A01E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{97A9C7A4-6BA4-474F-AC79-D68F55BCE86D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CfgBinEditor", "CfgBinEditor\CfgBinEditor\CfgBinEditor.csproj", "{C82D9C57-A35F-4D17-93BE-7718E529DE32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CfgBinEditor", "CfgBinEditor\CfgBinEditor.csproj", "{C82D9C57-A35F-4D17-93BE-7718E529DE32}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic.Domain.Level5Management", "CfgBinEditor\Logic.Domain.Level5Management\Logic.Domain.Level5Management.csproj", "{E96B4983-235B-4509-83B7-831EE4FF6D70}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic.Domain.Level5Management", "Logic.Domain.Level5Management\Logic.Domain.Level5Management.csproj", "{E96B4983-235B-4509-83B7-831EE4FF6D70}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic.Domain.Level5Management.Contract", "CfgBinEditor\Logic.Domain.Level5Management.Contract\Logic.Domain.Level5Management.Contract.csproj", "{3B7DA79C-9849-4D24-A634-AF63377D482F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic.Domain.Level5Management.Contract", "Logic.Domain.Level5Management.Contract\Logic.Domain.Level5Management.Contract.csproj", "{3B7DA79C-9849-4D24-A634-AF63377D482F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic.Domain.CodeAnalysis", "CfgBinEditor\Logic.Domain.CodeAnalysis\Logic.Domain.CodeAnalysis.csproj", "{C5305376-03C1-4542-8131-0A9343A82E4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic.Domain.CodeAnalysis", "Logic.Domain.CodeAnalysis\Logic.Domain.CodeAnalysis.csproj", "{C5305376-03C1-4542-8131-0A9343A82E4C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic.Domain.CodeAnalysis.Contract", "CfgBinEditor\Logic.Domain.CodeAnalysis.Contract\Logic.Domain.CodeAnalysis.Contract.csproj", "{C465EB42-E2FC-4F17-9E79-CE5AC1E19698}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic.Domain.CodeAnalysis.Contract", "Logic.Domain.CodeAnalysis.Contract\Logic.Domain.CodeAnalysis.Contract.csproj", "{C465EB42-E2FC-4F17-9E79-CE5AC1E19698}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting.Core.Settings", "CfgBinEditor\CrossCutting.Core.Settings\CrossCutting.Core.Settings.csproj", "{F7E0F772-40BF-4040-96BE-46E3DAC76FC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting.Core.Settings", "CrossCutting.Core.Settings\CrossCutting.Core.Settings.csproj", "{F7E0F772-40BF-4040-96BE-46E3DAC76FC8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic.Business.CfgBinEditorManagement", "CfgBinEditor\Logic.Business.CfgBinEditorManagement\Logic.Business.CfgBinEditorManagement.csproj", "{DB6F2804-406F-43A3-B8D9-66847C852628}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic.Business.CfgBinEditorManagement", "Logic.Business.CfgBinEditorManagement\Logic.Business.CfgBinEditorManagement.csproj", "{DB6F2804-406F-43A3-B8D9-66847C852628}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic.Business.CfgBinEditorManagement.Contract", "CfgBinEditor\Logic.Business.CfgBinEditorManagement.Contract\Logic.Business.CfgBinEditorManagement.Contract.csproj", "{ADF83F4F-DB81-4DB1-84D9-A17806A16AC3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic.Business.CfgBinEditorManagement.Contract", "Logic.Business.CfgBinEditorManagement.Contract\Logic.Business.CfgBinEditorManagement.Contract.csproj", "{ADF83F4F-DB81-4DB1-84D9-A17806A16AC3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic.Foundation.PreviewManagement.Abstract", "Logic.Foundation.PreviewManagement.Abstract\Logic.Foundation.PreviewManagement.Abstract.csproj", "{193A56E5-26D5-46BE-A07C-08C3B022A710}"
 EndProject
