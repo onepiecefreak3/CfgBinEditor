@@ -32,7 +32,6 @@ namespace CfgBinEditor.Forms
 
         private ComboBox<IPreviewPlugin?> _previewBox;
         private ImageButton _exportBtn;
-        private ImageButton _settingsBtn;
 
         private TextEditor _previewTextEditor;
         private ZoomablePictureBox _textPreview;
@@ -54,14 +53,20 @@ namespace CfgBinEditor.Forms
 
             _valueAddButton = new Button { Text = LocalizationResources.CfgBinEntryAddValueCaption, Padding = new Vector2(15, 2), Enabled = false };
 
-            _configContent = new Panel{Size = new Size(SizeValue.Parent, SizeValue.Relative(.5f)) };
+            _configContent = new Panel { Size = new Size(SizeValue.Parent, SizeValue.Relative(.5f)) };
 
             _previewTextEditor = new TextEditor();
             _textPreview = new ZoomablePictureBox { ShowBorder = true };
 
             _previewBox = new ComboBox<IPreviewPlugin?>();
-            _exportBtn = new ImageButton { Image = ImageResources.ImageExport, Tooltip = LocalizationResources.FontPreviewExport, ImageSize = new Vector2(16, 16), Padding = new Vector2(5, 5) };
-            _settingsBtn = new ImageButton { Image = ImageResources.Settings, Tooltip = LocalizationResources.FontPreviewSettings, ImageSize = new Vector2(16, 16), Padding = new Vector2(5, 5) };
+            _exportBtn = new ImageButton
+            {
+                Image = ImageResources.ImageExport, 
+                Tooltip = LocalizationResources.TextPreviewExport,
+                ImageSize = new Vector2(16, 16), 
+                Padding = new Vector2(5, 5),
+                Enabled = false
+            };
 
             _gameLayout.Items.Add(_gameComboBox);
             _gameLayout.Items.Add(_gameAddButton);
@@ -77,7 +82,6 @@ namespace CfgBinEditor.Forms
 
             textPreviewSettingsLayout.Items.Add(_previewBox);
             textPreviewSettingsLayout.Items.Add(new StackItem(_exportBtn) { Size = Size.WidthAlign, HorizontalAlignment = HorizontalAlignment.Right });
-            textPreviewSettingsLayout.Items.Add(_settingsBtn);
 
             textPreviewLayout.Items.Add(_previewTextEditor);
             textPreviewLayout.Items.Add(_textPreview);
@@ -115,10 +119,7 @@ namespace CfgBinEditor.Forms
                 _previewBox.Items.Add(new DropDownItem<IPreviewPlugin?>(gamePlugin, gamePlugin.Metadata.Name));
 
             if (_previewBox.Items.Count > 0)
-            {
                 _previewBox.SelectedItem = _previewBox.Items[0];
-                _selectedPreviewPlugin = _previewBox.SelectedItem.Content;
-            }
         }
     }
 }

@@ -9,8 +9,8 @@ using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System.Reflection;
-using plugin_time_travelers.Formats.Font;
-using plugin_time_travelers.Formats.Font.DataClasses;
+using plugin_common.Font;
+using plugin_common.Font.DataClasses;
 using plugin_time_travelers.Rendering;
 
 namespace plugin_time_travelers.Narration

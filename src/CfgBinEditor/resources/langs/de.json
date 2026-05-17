@@ -40,9 +40,9 @@
 
 	// Preview
 	"Text.Preview.Default": "Standard",
-
-	"Font.Preview.Export": "Vorschau exportieren",
-	"Font.Preview.Settings": "Einstellungen",
+	"Text.Preview.Export": "Vorschau exportieren",
+	"Text.Preview.Placeholder": "Vorschau",
+	"Text.Preview.Export.Png": "PNG exportieren...",
 
 	// Game settings
 	"Game.None.Caption": "Keins",

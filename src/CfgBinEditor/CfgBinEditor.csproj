@@ -67,9 +67,6 @@
     <None Update="resources\images\save_all_1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="resources\images\settings.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="resources\langs\de.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

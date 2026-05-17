@@ -40,9 +40,9 @@
 
   // Preview
   // "Text.Preview.Default": "Default", // TODO
-
-  // "Font.Preview.Export": "Export preview", // TODO
-  // "Font.Preview.Settings": "Settings", // TODO
+  // "Text.Preview.Export": "Export preview", // TODO
+  // "Text.Preview.Placeholder": "Preview", // TODO
+  // "Text.Preview.Export.Png": "Export PNG...", // TODO
 
   // Game settings
   "Game.None.Caption": "Ninguno",

@@ -40,8 +40,9 @@ namespace CfgBinEditor.resources
         public static LocalizedString FileCloseUnsavedChangesText => LocalizedString.FromId("File.Close.UnsavedChanges.Text");
 
         public static LocalizedString TextPreviewDefault => LocalizedString.FromId("Text.Preview.Default");
-        public static LocalizedString FontPreviewExport => LocalizedString.FromId("Font.Preview.Export");
-        public static LocalizedString FontPreviewSettings => LocalizedString.FromId("Font.Preview.Settings");
+        public static LocalizedString TextPreviewExport => LocalizedString.FromId("Text.Preview.Export");
+        public static LocalizedString TextPreviewPlaceholder => LocalizedString.FromId("Text.Preview.Placeholder");
+        public static LocalizedString TextPreviewExportPng => LocalizedString.FromId("Text.Preview.Export.Png");
 
         public static LocalizedString GameNoneCaption => LocalizedString.FromId("Game.None.Caption");
         public static LocalizedString GameAddButtonCaption => LocalizedString.FromId("Game.Add.Button.Caption");
@@ -49,7 +50,7 @@ namespace CfgBinEditor.resources
         public static LocalizedString GameAddDialogText => LocalizedString.FromId("Game.Add.Dialog.Text");
         public static LocalizedString GameAddDialogPlaceholder => LocalizedString.FromId("Game.Add.Dialog.Placeholder");
         public static LocalizedString GameAddDialogInvalidCharactersCaption => LocalizedString.FromId("Game.Add.Dialog.InvalidCharacters.Caption");
-        public static LocalizedString GameAddDialogInvalidCharactersText=> LocalizedString.FromId("Game.Add.Dialog.InvalidCharacters.Text");
+        public static LocalizedString GameAddDialogInvalidCharactersText => LocalizedString.FromId("Game.Add.Dialog.InvalidCharacters.Text");
 
         public static LocalizedString CfgBinEntryNameCaption => LocalizedString.FromId("CfgBin.Entry.Name.Caption");
         public static LocalizedString CfgBinEntryTypeCaption => LocalizedString.FromId("CfgBin.Entry.Type.Caption");

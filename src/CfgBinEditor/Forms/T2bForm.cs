@@ -10,22 +10,28 @@ using ImGui.Forms.Controls.Text;
 using ImGui.Forms.Localization;
 using ImGui.Forms.Modals;
 using ImGui.Forms.Modals.IO;
+using ImGui.Forms.Modals.IO.Windows;
 using ImGui.Forms.Models;
+using ImGui.Forms.Resources;
+using Kaligraphy.Contract.DataClasses.Parsing;
+using Kaligraphy.Parsing;
 using Konnect.Contract.Management.Plugin;
 using Logic.Business.CfgBinEditorManagement.Contract;
 using Logic.Business.CfgBinEditorManagement.Contract.DataClasses;
 using Logic.Domain.Level5Management.Contract;
 using Logic.Domain.Level5Management.Contract.DataClasses;
+using Logic.Foundation.PreviewManagement.Abstract;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
-using ImGui.Forms.Resources;
-using Kaligraphy.Parsing;
-using Logic.Foundation.PreviewManagement.Abstract;
 using ImageResources = CfgBinEditor.resources.ImageResources;
+using Size = ImGui.Forms.Models.Size;
 using ValueType = Logic.Domain.Level5Management.Contract.DataClasses.ValueType;
 
 namespace CfgBinEditor.Forms
@@ -37,7 +43,8 @@ namespace CfgBinEditor.Forms
         private readonly IT2bWriter _writer;
         private readonly IValueSettingsProvider _settingsProvider;
 
-        private IPreviewPlugin? _selectedPreviewPlugin;
+        private IList<CharacterData>? _deserializedText;
+        private Image<Rgba32>? _preview;
 
         public T2bForm(T2bFile file, IPluginManager pluginManager, IFormFactory formFactory, IEventBroker eventBroker, IT2bWriter writer, IValueSettingsProvider settingsProvider)
         {
@@ -55,6 +62,8 @@ namespace CfgBinEditor.Forms
 
             _previewTextEditor.TextChanged += _previewTextEditor_TextChanged;
             _previewBox.SelectedItemChanged += _previewBox_SelectedItemChanged;
+
+            _exportBtn.Clicked += _exportBtn_Clicked;
 
             eventBroker.Subscribe<ValueSettingsChangedMessage>(ChangeValueSettings);
             eventBroker.Subscribe<FileSaveRequestMessage>(SaveFile);
@@ -74,32 +83,65 @@ namespace CfgBinEditor.Forms
                 if (msg.TreeViewForm == _treeViewForm)
                     ChangeEntry(msg.Entry);
             });
+
+            _previewTextEditor.SetText(LocalizationResources.TextPreviewPlaceholder);
+        }
+
+        private async void _exportBtn_Clicked(object? sender, EventArgs e)
+        {
+            if (_preview is null)
+                return;
+
+            // Select file to save at
+            var sfd = new WindowsSaveFileDialog
+            {
+                Title = LocalizationResources.TextPreviewExportPng,
+                InitialFileName = "preview.png"
+            };
+
+            if (await sfd.ShowAsync() is DialogResult.Ok)
+                await _preview.SaveAsPngAsync(sfd.Files[0]);
         }
 
         private async void _previewTextEditor_TextChanged(object? sender, string e)
         {
+            _deserializedText = DeserializeText(_previewTextEditor.GetText());
+
             await UpdatePreview();
         }
 
         private async void _previewBox_SelectedItemChanged(object? sender, EventArgs e)
         {
+            _deserializedText = DeserializeText(_previewTextEditor.GetText());
+
             await UpdatePreview();
         }
 
         private async Task UpdatePreview()
         {
+            _preview = await CreatePreview();
+
+            _exportBtn.Enabled = _preview is not null;
+            _textPreview.SetImage(_preview is null ? null : ImageResource.FromImage(_preview));
+        }
+
+        private async Task<Image<Rgba32>?> CreatePreview()
+        {
             if (_previewBox.SelectedItem?.Content is null)
-                return;
+                return null;
 
-            var deserializer = _previewBox.SelectedItem.Content.Deserializer ?? new CharacterDeserializer();
+            _deserializedText ??= DeserializeText(_previewTextEditor.GetText());
+            var preview = await _previewBox.SelectedItem.Content.RenderPreview(_deserializedText);
 
-            var characters = deserializer.Deserialize(_previewTextEditor.GetText());
-            var preview = await _previewBox.SelectedItem.Content.RenderPreview(characters);
+            return preview;
+        }
 
-            if (preview is null)
-                return;
+        private IList<CharacterData> DeserializeText(string text)
+        {
+            var deserializer = _previewBox.SelectedItem?.Content?.Deserializer ?? new CharacterDeserializer();
+            var characters = deserializer.Deserialize(text);
 
-            _textPreview.SetImage(ImageResource.FromImage(preview));
+            return characters;
         }
 
         private void ChangeEntry(T2bEntry? entry)

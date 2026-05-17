@@ -21,22 +21,19 @@ namespace CfgBinEditor.resources
         private const string RandomLightPath_ = "resources/images/random_light.png";
         private const string RandomDarkPath_ = "resources/images/random_dark.png";
 
-        public static Image<Rgba32> Icon => FromFile(IconPath_);
+        public static Image<Rgba32> Icon => Image.Load<Rgba32>(GetFullPath(IconPath_));
 
-        public static ThemedImageResource Save => ImageResource.FromFile(SavePath_);
-        public static ThemedImageResource SaveAll => ImageResource.FromFile(SaveAllPath_);
+        public static ThemedImageResource Save => ImageResource.FromFile(GetFullPath(SavePath_));
+        public static ThemedImageResource SaveAll => ImageResource.FromFile(GetFullPath(SaveAllPath_));
 
-        public static ThemedImageResource ImageExport => ImageResource.FromFile(ImageExportPath_);
-        public static ThemedImageResource Settings => ImageResource.FromFile(SettingsPath_);
+        public static ThemedImageResource ImageExport => ImageResource.FromFile(GetFullPath(ImageExportPath_));
+        public static ThemedImageResource Settings => ImageResource.FromFile(GetFullPath(SettingsPath_));
 
-        public static ThemedImageResource Close => ImageResource.FromFile(ClosePath_);
+        public static ThemedImageResource Close => ImageResource.FromFile(GetFullPath(ClosePath_));
 
-        public static ThemedImageResource Random => new(ImageResource.FromFile(RandomLightPath_), ImageResource.FromFile(RandomDarkPath_));
+        public static ThemedImageResource Random => new(ImageResource.FromFile(GetFullPath(RandomLightPath_)),
+            ImageResource.FromFile(GetFullPath(RandomDarkPath_)));
 
-        private static Image<Rgba32> FromFile(string filePath)
-        {
-            string fullPath = Path.Combine(Path.GetDirectoryName(Environment.ProcessPath)!, filePath);
-            return Image.Load<Rgba32>(fullPath);
-        }
+        private static string GetFullPath(string relativePath) => Path.Combine(Path.GetDirectoryName(Environment.ProcessPath)!, relativePath);
     }
 }
