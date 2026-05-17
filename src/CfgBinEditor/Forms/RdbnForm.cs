@@ -5,10 +5,11 @@ using CrossCutting.Core.Contract.EventBrokerage;
 using ImGui.Forms.Controls.Base;
 using ImGui.Forms.Controls.Layouts;
 using ImGui.Forms.Controls.Lists;
+using Konnect.Contract.Management.Plugin;
+using Logic.Domain.Level5Management.Contract;
 using Logic.Domain.Level5Management.Contract.DataClasses;
 using System;
 using System.IO;
-using Logic.Domain.Level5Management.Contract;
 
 namespace CfgBinEditor.Forms
 {
@@ -19,9 +20,9 @@ namespace CfgBinEditor.Forms
         private readonly IEventBroker _eventBroker;
         private readonly IRdbnWriter _writer;
 
-        public RdbnForm(Rdbn config, IFormFactory formFactory, IComponentFactory componentFactory, IEventBroker eventBroker, IRdbnWriter writer)
+        public RdbnForm(Rdbn config, IFormFactory formFactory, IPluginManager pluginManager, IComponentFactory componentFactory, IEventBroker eventBroker, IRdbnWriter writer)
         {
-            InitializeComponent(config, formFactory);
+            InitializeComponent(config, formFactory, pluginManager);
 
             _config = config;
             _componentFactory = componentFactory;

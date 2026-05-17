@@ -1,16 +1,15 @@
-﻿using CfgBinEditor.InternalContract;
-using CfgBinEditor.InternalContract.DataClasses;
+﻿using CfgBinEditor.Components;
+using CfgBinEditor.InternalContract;
 using CfgBinEditor.resources;
 using ImGui.Forms.Controls;
 using ImGui.Forms.Controls.Layouts;
-using ImGui.Forms.Controls.Text.Editor;
 using ImGui.Forms.Localization;
 using ImGui.Forms.Models;
 using ImGui.Forms.Support;
 using Konnect.Contract.Management.Plugin;
 using Logic.Business.CfgBinEditorManagement.Contract;
+using Logic.Domain.Level5Management.Contract.DataClasses;
 using System.Numerics;
-using Logic.Foundation.PreviewManagement.Abstract;
 using Size = ImGui.Forms.Models.Size;
 
 namespace CfgBinEditor.Forms
@@ -30,23 +29,16 @@ namespace CfgBinEditor.Forms
 
         private Panel _configContent;
 
-        private ComboBox<IPreviewPlugin?> _previewBox;
-        private ImageButton _exportBtn;
-
-        private TextEditor _previewTextEditor;
-        private ZoomablePictureBox _textPreview;
-
-        private void InitializeComponent(T2bFile file, IPluginManager pluginManager, IFormFactory formFactory, IValueSettingsProvider settingsProvider)
+        private void InitializeComponent(T2b file, IPluginManager pluginManager, IFormFactory formFactory, IValueSettingsProvider settingsProvider)
         {
             _contentLayout = new StackLayout { Alignment = Alignment.Horizontal, ItemSpacing = 5 };
 
             _gameLayout = new StackLayout { Alignment = Alignment.Horizontal, ItemSpacing = 5, Size = Size.WidthAlign };
             _valuesLayout = new StackLayout { Alignment = Alignment.Vertical, ItemSpacing = 5 };
 
-            var textPreviewSettingsLayout = new StackLayout { Alignment = Alignment.Horizontal, ItemSpacing = 5, Size = Size.WidthAlign };
-            var textPreviewLayout = new StackLayout { Alignment = Alignment.Horizontal, ItemSpacing = 5, Size = new Size(SizeValue.Parent, SizeValue.Relative(.5f)) };
+            var fontPreview = new FontPreviewComponent(pluginManager) { Size = new Size(SizeValue.Parent, SizeValue.Relative(.5f)) };
 
-            _treeViewForm = formFactory.CreateT2bTreeViewForm(file.Data);
+            _treeViewForm = formFactory.CreateT2bTreeViewForm(file);
 
             _gameComboBox = new ComboBox<LocalizedString>();
             _gameAddButton = new Button { Text = LocalizationResources.GameAddButtonCaption };
@@ -55,39 +47,18 @@ namespace CfgBinEditor.Forms
 
             _configContent = new Panel { Size = new Size(SizeValue.Parent, SizeValue.Relative(.5f)) };
 
-            _previewTextEditor = new TextEditor();
-            _textPreview = new ZoomablePictureBox { ShowBorder = true };
-
-            _previewBox = new ComboBox<IPreviewPlugin?>();
-            _exportBtn = new ImageButton
-            {
-                Image = ImageResources.ImageExport, 
-                Tooltip = LocalizationResources.TextPreviewExport,
-                ImageSize = new Vector2(16, 16), 
-                Padding = new Vector2(5, 5),
-                Enabled = false
-            };
-
             _gameLayout.Items.Add(_gameComboBox);
             _gameLayout.Items.Add(_gameAddButton);
             _gameLayout.Items.Add(new StackItem(_valueAddButton) { HorizontalAlignment = HorizontalAlignment.Right, Size = Size.WidthAlign });
 
             _valuesLayout.Items.Add(_gameLayout);
             _valuesLayout.Items.Add(_configContent);
-            _valuesLayout.Items.Add(textPreviewSettingsLayout);
-            _valuesLayout.Items.Add(textPreviewLayout);
+            _valuesLayout.Items.Add(fontPreview);
 
             _contentLayout.Items.Add(new StackItem(_treeViewForm) { Size = new Size(SizeValue.Relative(.4f), SizeValue.Parent) });
             _contentLayout.Items.Add(_valuesLayout);
 
-            textPreviewSettingsLayout.Items.Add(_previewBox);
-            textPreviewSettingsLayout.Items.Add(new StackItem(_exportBtn) { Size = Size.WidthAlign, HorizontalAlignment = HorizontalAlignment.Right });
-
-            textPreviewLayout.Items.Add(_previewTextEditor);
-            textPreviewLayout.Items.Add(_textPreview);
-
             InitializeGames(settingsProvider);
-            InitializePreviewPlugins(pluginManager);
         }
 
         public override Size GetSize()
@@ -107,19 +78,6 @@ namespace CfgBinEditor.Forms
 
             foreach (string game in settingsProvider.GetGames())
                 _gameComboBox.Items.Add(new DropDownItem<LocalizedString>(game));
-        }
-
-        private void InitializePreviewPlugins(IPluginManager pluginManager)
-        {
-            IPreviewPlugin[] gamePlugins = [.. pluginManager.GetPlugins<IPreviewPlugin>()];
-
-            _previewBox.Items.Add(new DropDownItem<IPreviewPlugin?>(null, LocalizationResources.TextPreviewDefault));
-
-            foreach (IPreviewPlugin gamePlugin in gamePlugins)
-                _previewBox.Items.Add(new DropDownItem<IPreviewPlugin?>(gamePlugin, gamePlugin.Metadata.Name));
-
-            if (_previewBox.Items.Count > 0)
-                _previewBox.SelectedItem = _previewBox.Items[0];
         }
     }
 }

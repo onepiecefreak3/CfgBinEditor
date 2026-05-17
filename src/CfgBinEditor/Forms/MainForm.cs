@@ -266,11 +266,11 @@ namespace CfgBinEditor.Forms
 
             if (TryLoadT2bFile(filePath, out T2b t2b))
             {
-                configForm = _formFactory.CreateT2bForm(new T2bFile { FilePath = filePath, Data = t2b }, _pluginManager);
+                configForm = _formFactory.CreateT2bForm(t2b, _pluginManager);
             }
             else if (TryLoadRdbnFile(filePath, out Rdbn rdbn))
             {
-                configForm = _formFactory.CreateRdbnForm(rdbn);
+                configForm = _formFactory.CreateRdbnForm(rdbn, _pluginManager);
             }
             else
                 return false;

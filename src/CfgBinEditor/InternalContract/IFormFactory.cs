@@ -1,5 +1,4 @@
 ﻿using CfgBinEditor.Forms;
-using CfgBinEditor.InternalContract.DataClasses;
 using CfgBinEditor.InternalContract.Exceptions;
 using CrossCutting.Core.Contract.Aspects;
 using Konnect.Contract.Management.Plugin;
@@ -11,8 +10,8 @@ namespace CfgBinEditor.InternalContract
     public interface IFormFactory
     {
         MainForm CreateMainForm();
-        T2bForm CreateT2bForm(T2bFile file, IPluginManager pluginManager);
-        RdbnForm CreateRdbnForm(Rdbn config);
+        T2bForm CreateT2bForm(T2b config, IPluginManager pluginManager);
+        RdbnForm CreateRdbnForm(Rdbn config, IPluginManager pluginManager);
         T2bTreeViewForm CreateT2bTreeViewForm(T2b config);
         RdbnTreeViewForm CreateRdbnTreeViewForm(Rdbn config);
     }
