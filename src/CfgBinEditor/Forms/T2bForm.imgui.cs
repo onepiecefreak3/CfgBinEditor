@@ -8,7 +8,6 @@ using ImGui.Forms.Localization;
 using ImGui.Forms.Models;
 using ImGui.Forms.Support;
 using Konnect.Contract.Management.Plugin;
-using Konnect.Contract.Plugin.Game;
 using Logic.Business.CfgBinEditorManagement.Contract;
 using System.Numerics;
 using Logic.Foundation.PreviewManagement.Abstract;

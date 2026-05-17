@@ -13,9 +13,6 @@ using ImGui.Forms.Modals;
 using ImGui.Forms.Modals.IO;
 using ImGui.Forms.Modals.IO.Windows;
 using ImGui.Forms.Models;
-using Konnect.Contract.Management.Plugin;
-using Konnect.Contract.Management.Plugin.Loaders;
-using Konnect.Contract.Plugin.Game;
 using Konnect.Management.Plugin;
 using Logic.Business.CfgBinEditorManagement.Contract;
 using Logic.Domain.Level5Management.Contract;
@@ -25,7 +22,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Konnect.Contract.Plugin.File;
 using Konnect.Management.Plugin.Loaders;
 using Logic.Foundation.PreviewManagement.Abstract;
 

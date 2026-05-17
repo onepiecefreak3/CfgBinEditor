@@ -12,8 +12,6 @@ using ImGui.Forms.Modals;
 using ImGui.Forms.Modals.IO;
 using ImGui.Forms.Models;
 using Konnect.Contract.Management.Plugin;
-using Konnect.Contract.Plugin.Game;
-using Konnect.Management.Files;
 using Logic.Business.CfgBinEditorManagement.Contract;
 using Logic.Business.CfgBinEditorManagement.Contract.DataClasses;
 using Logic.Domain.Level5Management.Contract;
@@ -23,11 +21,9 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Numerics;
-using System.Text;
 using System.Threading.Tasks;
 using ImGui.Forms.Resources;
 using Kaligraphy.Parsing;
-using Konnect.Contract.DataClasses.Plugin.File.Text;
 using Logic.Foundation.PreviewManagement.Abstract;
 using ImageResources = CfgBinEditor.resources.ImageResources;
 using ValueType = Logic.Domain.Level5Management.Contract.DataClasses.ValueType;
@@ -92,13 +88,13 @@ namespace CfgBinEditor.Forms
 
         private async Task UpdatePreview()
         {
-            if (_selectedPreviewPlugin is null)
+            if (_previewBox.SelectedItem?.Content is null)
                 return;
 
-            var deserializer = _selectedPreviewPlugin.Deserializer ?? new CharacterDeserializer();
+            var deserializer = _previewBox.SelectedItem.Content.Deserializer ?? new CharacterDeserializer();
 
             var characters = deserializer.Deserialize(_previewTextEditor.GetText());
-            var preview = await _selectedPreviewPlugin.RenderPreview(characters);
+            var preview = await _previewBox.SelectedItem.Content.RenderPreview(characters);
 
             if (preview is null)
                 return;

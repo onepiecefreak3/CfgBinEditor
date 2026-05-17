@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.Json;
-using CrossCutting.Core.Contract.Serialization;
 using CrossCutting.Core.Contract.Settings;
 using ImGui.Forms.Localization;
 
