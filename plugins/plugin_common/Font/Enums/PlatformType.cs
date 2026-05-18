@@ -4,6 +4,8 @@
     {
         Ctr,
         Psp,
-        PsVita
+        PsVita,
+        Android,
+        Switch
     }
 }

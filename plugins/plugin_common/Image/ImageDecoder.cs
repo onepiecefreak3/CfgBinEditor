@@ -53,15 +53,15 @@ namespace plugin_common.Image
 
         private static IImageFile[] GetMipMaps(RawImageData imageData, EncodingDefinition definition)
         {
-            if ((imageData.MipMapData?.Length ?? 0) <= 0)
-                return Array.Empty<IImageFile>();
+            if (imageData.MipMapData.Length <= 0)
+                return [];
 
             var result = new List<IImageFile>();
 
             int width = imageData.Width >> 1;
             int height = imageData.Height >> 1;
 
-            foreach (byte[] mipmap in imageData.MipMapData!)
+            foreach (byte[] mipmap in imageData.MipMapData)
             {
                 var imageInfo = new ImageFileInfo
                 {
@@ -90,20 +90,15 @@ namespace plugin_common.Image
 
         private static EncodingDefinition GetEncodingDefinition(PlatformType platform)
         {
-            switch (platform)
+            return platform switch
             {
-                case PlatformType.Ctr:
-                    return CreateCtrFormats();
-
-                case PlatformType.Psp:
-                    return CreatePspFormats();
-
-                case PlatformType.PsVita:
-                    return CreateVitaFormats();
-
-                default:
-                    throw new InvalidOperationException($"Unsupported platform {platform} for image.");
-            }
+                PlatformType.Ctr => CreateCtrFormats(),
+                PlatformType.Psp => CreatePspFormats(),
+                PlatformType.PsVita => CreateVitaFormats(),
+                PlatformType.Switch => CreateSwitchFormats(),
+                PlatformType.Android => CreateAndroidFormats(),
+                _ => throw new InvalidOperationException($"Unsupported platform {platform} for image.")
+            };
         }
 
         private static EncodingDefinition CreateCtrFormats()
@@ -139,9 +134,11 @@ namespace plugin_common.Image
             result.AddPaletteEncoding(0x02, new Rgba(5, 5, 5, 1, "ABGR"));
 
             result.AddColorEncoding(0x00, ImageFormats.Rgba8888(ByteOrder.BigEndian));
-            result.AddIndexEncoding(0x11, ImageFormats.I8(), new[] { 0, 1, 2 });
-            result.AddIndexEncoding(0x13, ImageFormats.I8(), new[] { 0, 1, 2 });
-            result.AddIndexEncoding(0x17, ImageFormats.I4(BitOrder.LeastSignificantBitFirst), new[] { 0, 1, 2 });
+            result.AddIndexEncoding(0x10, ImageFormats.I8(), [0, 1, 2]);
+            result.AddIndexEncoding(0x11, ImageFormats.I8(), [0, 1, 2]);
+            result.AddIndexEncoding(0x13, ImageFormats.I8(), [0, 1, 2]);
+            result.AddIndexEncoding(0x15, ImageFormats.I4(BitOrder.LeastSignificantBitFirst), [0, 1, 2]);
+            result.AddIndexEncoding(0x17, ImageFormats.I4(BitOrder.LeastSignificantBitFirst), [0, 1, 2]);
 
             return result;
         }
@@ -152,6 +149,27 @@ namespace plugin_common.Image
 
             result.AddColorEncoding(0x03, ImageFormats.Rgb888());
             result.AddColorEncoding(0x1E, ImageFormats.Dxt1());
+
+            return result;
+        }
+
+        private static EncodingDefinition CreateSwitchFormats()
+        {
+            var result = new EncodingDefinition();
+
+            result.AddColorEncoding(0x00, new Rgba(8, 8, 8, 8, "ABGR"));
+            result.AddColorEncoding(0x03, ImageFormats.Rgb888());
+            result.AddColorEncoding(0x0E, ImageFormats.A8());
+            result.AddColorEncoding(0x1D, ImageFormats.Dxt1());
+
+            return result;
+        }
+
+        private static EncodingDefinition CreateAndroidFormats()
+        {
+            var result = new EncodingDefinition();
+
+            result.AddColorEncoding(0x03, ImageFormats.Rgb888());
 
             return result;
         }

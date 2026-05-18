@@ -137,11 +137,7 @@ namespace plugin_common.Font
         {
             return new FontData
             {
-                Version = new FormatVersion
-                {
-                    Platform = GetPlatform(header),
-                    Version = GetVersion(header)
-                },
+                Version = FormatVersionParser.Parse(header.magic),
                 LargeFont = new FontGlyphData
                 {
                     FallbackCharacter = largeGlyphs.Keys.ElementAtOrDefault(header.largeEscapeCharacterIndex),
@@ -155,29 +151,6 @@ namespace plugin_common.Font
                     Glyphs = smallGlyphs
                 }
             };
-        }
-
-        private PlatformType GetPlatform(Fnt00Header header)
-        {
-            switch (header.magic[3])
-            {
-                case 'C':
-                    return PlatformType.Ctr;
-
-                case 'P':
-                    return PlatformType.Psp;
-
-                case 'V':
-                    return PlatformType.PsVita;
-
-                default:
-                    throw new InvalidOperationException($"Unknown platform identifier '{header.magic[3]}' in font.");
-            }
-        }
-
-        private int GetVersion(Fnt00Header header)
-        {
-            return int.Parse(header.magic[4..6]);
         }
     }
 }

@@ -33,8 +33,11 @@ namespace Logic.Business.CfgBinEditorManagement
 
             string baseDir = Path.GetDirectoryName(Environment.ProcessPath)!;
             string settingsPath = Path.Combine(baseDir, _config.ValueSettingsPath);
+            
+            string tempSettingsPath = Path.GetTempFileName();
 
-            File.WriteAllText(settingsPath, configText);
+            File.WriteAllText(tempSettingsPath, configText);
+            File.Replace(tempSettingsPath, settingsPath, null);
         }
 
         private ConfigUnitSyntax CreateConfigUnit(IDictionary<string, IDictionary<string, IList<ValueSettingEntry>>> settings)

@@ -1,7 +1,5 @@
 ﻿using Komponent.IO;
 using Komponent.Streams;
-using plugin_common.Font.DataClasses;
-using plugin_common.Font.Enums;
 using plugin_common.Image.DataClasses;
 using plugin_common.Image.InternalContract;
 
@@ -54,11 +52,7 @@ namespace plugin_common.Image
 
             var rawImageData = new RawImageData
             {
-                Version = new FormatVersion
-                {
-                    Platform = GetPlatform(header),
-                    Version = GetVersion(header)
-                },
+                Version = FormatVersionParser.Parse(header.magic),
 
                 BitDepth = header.bitDepth,
                 Format = header.imageFormat,
@@ -214,29 +208,6 @@ namespace plugin_common.Image
             }
 
             return (result, tileLegacy);
-        }
-
-        private PlatformType GetPlatform(Img00Header header)
-        {
-            switch (header.magic[3])
-            {
-                case 'C':
-                    return PlatformType.Ctr;
-
-                case 'P':
-                    return PlatformType.Psp;
-
-                case 'V':
-                    return PlatformType.PsVita;
-
-                default:
-                    throw new InvalidOperationException($"Unknown platform identifier '{header.magic[3]}' in image.");
-            }
-        }
-
-        private int GetVersion(Img00Header header)
-        {
-            return int.Parse(header.magic[4..6]);
         }
     }
 }
