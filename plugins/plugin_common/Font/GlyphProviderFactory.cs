@@ -14,7 +14,10 @@ namespace plugin_common.Font
                     return new CtrGlyphProvider(fontData, isFurigana);
 
                 case PlatformType.Psp:
-                    return new PspGlyphProvider(fontData, isFurigana);
+                case PlatformType.PsVita:
+                case PlatformType.Android:
+                case PlatformType.Switch:
+                    return new DefaultGlyphProvider(fontData, isFurigana);
 
                 default:
                     throw new InvalidOperationException($"Unsupported platform {fontData.Platform} for glyph providers.");

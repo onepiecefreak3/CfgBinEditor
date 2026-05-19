@@ -7,7 +7,7 @@ using SixLabors.ImageSharp.Processing;
 
 namespace plugin_common.Font
 {
-    internal class PspGlyphProvider(FontImageData fontData, bool isFurigana) : IGlyphProvider
+    internal class DefaultGlyphProvider(FontImageData fontData, bool isFurigana) : IGlyphProvider
     {
         public CharacterInfo? GetOrDefault(ushort codePoint)
         {
