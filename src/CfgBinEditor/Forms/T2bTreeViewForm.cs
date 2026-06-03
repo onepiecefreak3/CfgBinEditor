@@ -384,12 +384,15 @@ namespace CfgBinEditor.Forms
             // Re-allocate new entry array
             TreeNode<T2bNode> node = _entryNodeLookup[entry];
 
+            // Allocate new entries
             int entryIndex = Array.IndexOf(_config.Entries, entry);
-            int entryCount = CountEntries(node);
+            int newEntryIndex = node.Data.EndEntry is null ? _config.Entries.Length : Array.IndexOf(_config.Entries, node.Data.EndEntry) + 1;
+
+            int entryCount = newEntryIndex - entryIndex;
 
             var newEntries = new T2bEntry[_config.Entries.Length - entryCount];
             Array.Copy(_config.Entries, newEntries, entryIndex);
-            Array.Copy(_config.Entries, entryIndex + entryCount, newEntries, entryIndex, newEntries.Length - entryIndex);
+            Array.Copy(_config.Entries, newEntryIndex, newEntries, entryIndex, _config.Entries.Length - newEntryIndex);
 
             // Update entry array
             _config.Entries = newEntries;

@@ -63,7 +63,7 @@ namespace CfgBinEditor.Forms
             _eventBroker.Subscribe<TreeEntryChangedMessage<T2b, T2bNode>>(msg =>
             {
                 if (msg.TreeViewForm == _treeViewForm)
-                    ChangeEntry(msg.Entry.Entry);
+                    ChangeEntry(msg.Entry?.Entry);
             });
         }
 
