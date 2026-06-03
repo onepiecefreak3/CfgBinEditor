@@ -52,18 +52,18 @@ namespace CfgBinEditor.Forms
             eventBroker.Subscribe<GameAddedMessage>(AddGame);
 
             if (_treeViewForm.SelectedEntry != null)
-                ChangeEntry(_treeViewForm.SelectedEntry);
+                ChangeEntry(_treeViewForm.SelectedEntry.Entry);
 
-            _eventBroker.Subscribe<TreeChangedMessage<T2b, T2bEntry>>(msg =>
+            _eventBroker.Subscribe<TreeChangedMessage<T2b, T2bNode>>(msg =>
             {
                 if (msg.TreeViewForm == _treeViewForm)
                     RaiseFileChanged();
             });
 
-            _eventBroker.Subscribe<TreeEntryChangedMessage<T2b, T2bEntry>>(msg =>
+            _eventBroker.Subscribe<TreeEntryChangedMessage<T2b, T2bNode>>(msg =>
             {
                 if (msg.TreeViewForm == _treeViewForm)
-                    ChangeEntry(msg.Entry);
+                    ChangeEntry(msg.Entry.Entry);
             });
         }
 
@@ -103,7 +103,7 @@ namespace CfgBinEditor.Forms
 
         private void AddEntryValue()
         {
-            T2bEntry? entry = _treeViewForm.SelectedEntry;
+            T2bEntry? entry = _treeViewForm.SelectedEntry?.Entry;
             if (entry == null)
                 return;
 
@@ -209,7 +209,7 @@ namespace CfgBinEditor.Forms
         private void ChangeGame(LocalizedString gameName)
         {
             if (_treeViewForm.SelectedEntry != null)
-                ChangeValueSettings(gameName, _treeViewForm.SelectedEntry.Name);
+                ChangeValueSettings(gameName, _treeViewForm.SelectedEntry.Entry.Name);
 
             _treeViewForm.GameName = gameName;
         }
@@ -222,7 +222,7 @@ namespace CfgBinEditor.Forms
             if (message.GameName != GetCurrentGame())
                 return;
 
-            if (message.EntryName != _treeViewForm.SelectedEntry.Name)
+            if (message.EntryName != _treeViewForm.SelectedEntry?.Entry.Name)
                 return;
 
             ChangeValueSettings(message.GameName, message.EntryName);
@@ -255,7 +255,7 @@ namespace CfgBinEditor.Forms
 
                 isHexCheckbox.Enabled = gameName != LocalizationResources.GameNoneCaption;
                 SetValueIsHex(isHexCheckbox, entrySettings.IsHex);
-                SetValueText(valueTextBox, _treeViewForm.SelectedEntry.Values[i - 1], entrySettings.IsHex);
+                SetValueText(valueTextBox, _treeViewForm.SelectedEntry.Entry.Values[i - 1], entrySettings.IsHex);
             }
         }
 
@@ -343,11 +343,11 @@ namespace CfgBinEditor.Forms
                 return;
 
             var configEntry = _treeViewForm.SelectedEntry;
-            var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Name, rowIndex - 1);
+            var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Entry.Name, rowIndex - 1);
 
             settingsEntry.Name = textBox.Text.Replace(' ', '_').Replace('|', '_');
 
-            _settingsProvider.SetEntrySettings(GetCurrentGame(), configEntry.Name, rowIndex - 1, settingsEntry);
+            _settingsProvider.SetEntrySettings(GetCurrentGame(), configEntry.Entry.Name, rowIndex - 1, settingsEntry);
 
             for (var i = 1; i <= rowIndex; i++)
             {
@@ -355,13 +355,13 @@ namespace CfgBinEditor.Forms
                 if (nameTextBox == null || !string.IsNullOrEmpty(nameTextBox.Text))
                     continue;
 
-                var valueName = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Name, i - 1).Name;
+                var valueName = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Entry.Name, i - 1).Name;
                 SetValueNameText(nameTextBox, valueName);
             }
 
             _settingsProvider.Persist();
 
-            RaiseValueSettingsChanged(GetCurrentGame(), configEntry.Name);
+            RaiseValueSettingsChanged(GetCurrentGame(), configEntry.Entry.Name);
         }
 
         private void TypeComboBox_SelectedItemChanged(object sender, EventArgs e)
@@ -388,17 +388,17 @@ namespace CfgBinEditor.Forms
                 return;
 
             var configEntry = _treeViewForm.SelectedEntry;
-            var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Name, rowIndex - 1);
+            var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Entry.Name, rowIndex - 1);
 
             ValueType newValueType = comboBox.SelectedItem.Content;
-            object? newValue = ConvertValue(configEntry.Values[rowIndex - 1].Value, configEntry.Values[rowIndex - 1].Type, newValueType);
+            object? newValue = ConvertValue(configEntry.Entry.Values[rowIndex - 1].Value, configEntry.Entry.Values[rowIndex - 1].Type, newValueType);
 
-            SetEntryType(configEntry, rowIndex - 1, newValueType);
-            SetEntryValue(configEntry, rowIndex - 1, newValue);
+            SetEntryType(configEntry.Entry, rowIndex - 1, newValueType);
+            SetEntryValue(configEntry.Entry, rowIndex - 1, newValue);
 
             SetValueText(valueTextBox, newValueType, newValue, settingsEntry.IsHex);
 
-            row.Cells[3] = CreateValueActionButton(configEntry.Values[rowIndex - 1]);
+            row.Cells[3] = CreateValueActionButton(configEntry.Entry.Values[rowIndex - 1]);
         }
 
         private void ValueTextBox_TextChanged(object sender, EventArgs e)
@@ -417,11 +417,11 @@ namespace CfgBinEditor.Forms
                 return;
 
             var configEntry = _treeViewForm.SelectedEntry;
-            var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Name, rowIndex - 1);
+            var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Entry.Name, rowIndex - 1);
 
-            ValueType valueType = configEntry.Values[rowIndex - 1].Type;
+            ValueType valueType = configEntry.Entry.Values[rowIndex - 1].Type;
             if (TryParseValue(textBox.Text, valueType, settingsEntry.IsHex, out object? parsedValue))
-                SetEntryValue(configEntry, rowIndex - 1, parsedValue!);
+                SetEntryValue(configEntry.Entry, rowIndex - 1, parsedValue!);
         }
 
         private void RandomButton_Clicked(object? sender, EventArgs e)
@@ -448,7 +448,7 @@ namespace CfgBinEditor.Forms
                 return;
 
             var configEntry = _treeViewForm.SelectedEntry;
-            ValueType valueType = configEntry.Values[rowIndex - 1].Type;
+            ValueType valueType = configEntry.Entry.Values[rowIndex - 1].Type;
 
             var random = new Random();
             object randomValue;
@@ -490,8 +490,8 @@ namespace CfgBinEditor.Forms
                     throw new InvalidOperationException($"Unknown value type {valueType}.");
             }
 
-            SetEntryValue(configEntry, rowIndex - 1, randomValue);
-            SetValueText(valueTextBox, configEntry.Values[rowIndex - 1], checkBox.Checked);
+            SetEntryValue(configEntry.Entry, rowIndex - 1, randomValue);
+            SetValueText(valueTextBox, configEntry.Entry.Values[rowIndex - 1], checkBox.Checked);
         }
 
         private void EmptyButton_Clicked(object? sender, EventArgs e)
@@ -515,8 +515,8 @@ namespace CfgBinEditor.Forms
 
             var configEntry = _treeViewForm.SelectedEntry;
 
-            SetEntryValue(configEntry, rowIndex - 1, null);
-            SetValueText(valueTextBox, configEntry.Values[rowIndex - 1], false);
+            SetEntryValue(configEntry.Entry, rowIndex - 1, null);
+            SetValueText(valueTextBox, configEntry.Entry.Values[rowIndex - 1], false);
         }
 
         private void ValueIsHexCheckbox_CheckChanged(object sender, EventArgs e)
@@ -535,16 +535,16 @@ namespace CfgBinEditor.Forms
                 return;
 
             var configEntry = _treeViewForm.SelectedEntry;
-            var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Name, rowIndex - 1);
+            var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Entry.Name, rowIndex - 1);
 
             settingsEntry.IsHex = checkBox.Checked;
 
-            _settingsProvider.SetEntrySettings(GetCurrentGame(), configEntry.Name, rowIndex - 1, settingsEntry);
+            _settingsProvider.SetEntrySettings(GetCurrentGame(), configEntry.Entry.Name, rowIndex - 1, settingsEntry);
 
             var valueTextBox = layout.Rows[rowIndex].Cells[2].Content as TextBox;
 
-            if (configEntry.Values[rowIndex - 1].Type is ValueType.Integer or ValueType.FloatingPoint)
-                SetValueText(valueTextBox, configEntry.Values[rowIndex - 1], checkBox.Checked);
+            if (configEntry.Entry.Values[rowIndex - 1].Type is ValueType.Integer or ValueType.FloatingPoint)
+                SetValueText(valueTextBox, configEntry.Entry.Values[rowIndex - 1], checkBox.Checked);
         }
 
         private void SetValueNameText(TextBox nameTextBox, string text)

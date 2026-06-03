@@ -19,7 +19,7 @@ using ValueType = Logic.Domain.Level5Management.Contract.DataClasses.ValueType;
 
 namespace CfgBinEditor.Forms
 {
-    public partial class T2bTreeViewForm : BaseTreeViewForm<T2b, T2bEntry>
+    public partial class T2bTreeViewForm : BaseTreeViewForm<T2b, T2bNode>
     {
         private readonly T2b _config;
         private readonly IEventBroker _events;
@@ -91,15 +91,15 @@ namespace CfgBinEditor.Forms
                 UpdateTreeView();
         }
 
-        protected override bool CanAdd(TreeNode<T2bEntry>? parentNode)
+        protected override bool CanAdd(TreeNode<T2bNode>? parentNode)
         {
             return true;
         }
 
-        protected override async void AddNode(TreeNode<T2bEntry>? parentNode)
+        protected override async void AddNode(TreeNode<T2bNode>? parentNode)
         {
             // Set new entry name
-            string entryName = await InputBox.ShowAsync(LocalizationResources.CfgBinEntryAddRootCaption, LocalizationResources.CfgBinEntryAddDialogCaption);
+            string? entryName = await InputBox.ShowAsync(LocalizationResources.CfgBinEntryAddRootCaption, LocalizationResources.CfgBinEntryAddDialogCaption);
             if (string.IsNullOrEmpty(entryName))
             {
                 RaiseErrorStatus(LocalizationResources.CfgBinEntryAddErrorCaption);
@@ -111,7 +111,7 @@ namespace CfgBinEditor.Forms
             _config.Entries[newEntryIndex] = new T2bEntry
             {
                 Name = entryName,
-                Values = Array.Empty<T2bEntryValue>()
+                Values = []
             };
 
             // Add nodes
@@ -123,17 +123,17 @@ namespace CfgBinEditor.Forms
             RaiseSuccessStatus();
         }
 
-        private void AddNodesToTree(TreeNode<T2bEntry>? parentNode, int index, int count)
+        private void AddNodesToTree(TreeNode<T2bNode>? parentNode, int index, int count)
         {
             int endIndex = index + count;
             while (index < endIndex)
             {
-                TreeNode<T2bEntry> newNode = CreateNode(_config, ref index, ColorResources.TextSuccessful);
-                _entryNodeLookup[newNode.Data] = newNode;
+                TreeNode<T2bNode> newNode = CreateNode(_config, ref index, ColorResources.TextSuccessful);
+                _entryNodeLookup[newNode.Data.Entry] = newNode;
 
                 index++;
 
-                IList<TreeNode<T2bEntry>> nodes;
+                IList<TreeNode<T2bNode>> nodes;
                 if (parentNode == null)
                 {
                     nodes = GetRootNodes();
@@ -141,7 +141,7 @@ namespace CfgBinEditor.Forms
                 }
                 else
                 {
-                    bool isNested = IsNestedNode(parentNode.Data.Name);
+                    bool isNested = IsNestedNode(parentNode.Data.Entry.Name);
                     nodes = isNested ? parentNode.Nodes : GetNeighbourNodes(parentNode);
 
                     if (isNested)
@@ -157,20 +157,20 @@ namespace CfgBinEditor.Forms
             }
         }
 
-        protected override bool CanDuplicate(TreeNode<T2bEntry> node)
+        protected override bool CanDuplicate(TreeNode<T2bNode> node)
         {
             return true;
         }
 
-        protected override void DuplicateNode(TreeNode<T2bEntry> node)
+        protected override void DuplicateNode(TreeNode<T2bNode> node)
         {
             int duplicatedEntryIndex = DuplicateEntry(node.Data);
 
             // Add duplicated entries to tree
-            TreeNode<T2bEntry> newNode = CreateNode(_config, ref duplicatedEntryIndex, ColorResources.TextSuccessful);
-            _entryNodeLookup[newNode.Data] = newNode;
+            TreeNode<T2bNode> newNode = CreateNode(_config, ref duplicatedEntryIndex, ColorResources.TextSuccessful);
+            _entryNodeLookup[newNode.Data.Entry] = newNode;
 
-            IList<TreeNode<T2bEntry>> nodes = GetNeighbourNodes(node);
+            IList<TreeNode<T2bNode>> nodes = GetNeighbourNodes(node);
             nodes.Add(newNode);
 
             AdjustNodeNames(nodes);
@@ -179,17 +179,17 @@ namespace CfgBinEditor.Forms
             RaiseTreeChanged();
         }
 
-        protected override bool CanRemove(TreeNode<T2bEntry> node)
+        protected override bool CanRemove(TreeNode<T2bNode> node)
         {
             return true;
         }
 
-        protected override void RemoveNode(TreeNode<T2bEntry> node)
+        protected override void RemoveNode(TreeNode<T2bNode> node)
         {
-            RemoveEntry(node.Data);
+            RemoveEntry(node.Data.Entry);
 
             // Remove entries from tree
-            IList<TreeNode<T2bEntry>> nodes = GetNeighbourNodes(node);
+            IList<TreeNode<T2bNode>> nodes = GetNeighbourNodes(node);
             nodes.Remove(node);
 
             AdjustNodeNames(nodes);
@@ -198,12 +198,12 @@ namespace CfgBinEditor.Forms
             RaiseTreeChanged();
         }
 
-        protected override bool CanImport(TreeNode<T2bEntry>? parentNode)
+        protected override bool CanImport(TreeNode<T2bNode>? parentNode)
         {
             return true;
         }
 
-        protected override async void Import(TreeNode<T2bEntry>? parentNode)
+        protected override async void Import(TreeNode<T2bNode>? parentNode)
         {
             // Select json file
             var ofd = new WindowsOpenFileDialog
@@ -289,12 +289,12 @@ namespace CfgBinEditor.Forms
             RaiseSuccessStatus();
         }
 
-        protected override bool CanExport(TreeNode<T2bEntry>? node)
+        protected override bool CanExport(TreeNode<T2bNode>? node)
         {
             return true;
         }
 
-        protected override async void Export(TreeNode<T2bEntry>? node)
+        protected override async void Export(TreeNode<T2bNode>? node)
         {
             // Select save path
             var sfd = new WindowsSaveFileDialog
@@ -325,13 +325,12 @@ namespace CfgBinEditor.Forms
             await writer.WriteAsync(entryJson);
         }
 
-        private int AllocateEntries(TreeNode<T2bEntry>? parentNode, int count)
+        private int AllocateEntries(TreeNode<T2bNode>? node, int count)
         {
             // Allocate new entries
-            T2bEntry? parentEntry = parentNode?.Data;
-
-            int entryCount = parentNode == null ? 0 : CountEntries(parentNode) - Math.Min(parentNode.Nodes.Count, 1);
-            int newEntryIndex = parentEntry == null ? _config.Entries.Length : Array.IndexOf(_config.Entries, parentEntry) + entryCount;
+            int newEntryIndex = node is null ? _config.Entries.Length :
+                node.Nodes.Count <= 0 ? Array.IndexOf(_config.Entries, node.Data.Entry) + 1 :
+                node.Data.EndEntry is null ? Array.IndexOf(_config.Entries, node.Data.Entry) + 1 : Array.IndexOf(_config.Entries, node.Data.EndEntry);
 
             var newEntries = new T2bEntry[_config.Entries.Length + count];
             Array.Copy(_config.Entries, newEntries, newEntryIndex);
@@ -343,19 +342,13 @@ namespace CfgBinEditor.Forms
             return newEntryIndex;
         }
 
-        private int DuplicateEntry(T2bEntry entry)
+        private int DuplicateEntry(T2bNode node)
         {
-            // Re-allocate new entry array
-            TreeNode<T2bEntry> node = _entryNodeLookup[entry];
-            TreeNode<T2bEntry> lastNode = GetNeighbourNodes(node)[^1];
+            // Allocate new entries
+            int entryIndex = Array.IndexOf(_config.Entries, node.Entry);
+            int newEntryIndex = node.EndEntry is null ? _config.Entries.Length : Array.IndexOf(_config.Entries, node.EndEntry) + 1;
 
-            int entryIndex = Array.IndexOf(_config.Entries, entry);
-            int entryCount = CountEntries(node);
-
-            int lastEntryIndex = lastNode == node ? entryIndex : Array.IndexOf(_config.Entries, lastNode.Data);
-            int lastEntryCount = lastNode == node ? entryCount : CountEntries(lastNode);
-
-            int newEntryIndex = lastEntryIndex + lastEntryCount;
+            int entryCount = newEntryIndex - entryIndex;
 
             var newEntries = new T2bEntry[_config.Entries.Length + entryCount];
             Array.Copy(_config.Entries, newEntries, newEntryIndex);
@@ -389,8 +382,7 @@ namespace CfgBinEditor.Forms
         private void RemoveEntry(T2bEntry entry)
         {
             // Re-allocate new entry array
-            TreeNode<T2bEntry> node = _entryNodeLookup[entry];
-            TreeNode<T2bEntry> lastNode = GetNeighbourNodes(node)[^1];
+            TreeNode<T2bNode> node = _entryNodeLookup[entry];
 
             int entryIndex = Array.IndexOf(_config.Entries, entry);
             int entryCount = CountEntries(node);
@@ -403,18 +395,18 @@ namespace CfgBinEditor.Forms
             _config.Entries = newEntries;
         }
 
-        private IList<TreeNode<T2bEntry>> GetNeighbourNodes(TreeNode<T2bEntry>? node)
+        private IList<TreeNode<T2bNode>> GetNeighbourNodes(TreeNode<T2bNode>? node)
         {
             return node?.Parent?.Nodes ?? GetRootNodes();
         }
 
-        private int CountEntries(TreeNode<T2bEntry> node)
+        private int CountEntries(TreeNode<T2bNode> node)
         {
             if (node.Nodes.Count <= 0)
                 return 1;
 
             var count = 1;
-            foreach (TreeNode<T2bEntry> child in node.Nodes)
+            foreach (TreeNode<T2bNode> child in node.Nodes)
                 count += CountEntries(child);
 
             return count + 1;
@@ -460,4 +452,6 @@ namespace CfgBinEditor.Forms
             _events.Raise(new UpdateStatusMessage(string.Empty, LabelStatus.None));
         }
     }
+
+    public record T2bNode(T2bEntry Entry, T2bEntry? EndEntry);
 }

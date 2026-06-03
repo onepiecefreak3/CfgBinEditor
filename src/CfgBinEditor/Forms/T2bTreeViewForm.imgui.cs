@@ -14,8 +14,8 @@ namespace CfgBinEditor.Forms
 {
     public partial class T2bTreeViewForm
     {
-        private readonly IDictionary<T2bEntry, TreeNode<T2bEntry>> _entryNodeLookup =
-            new Dictionary<T2bEntry, TreeNode<T2bEntry>>();
+        private readonly IDictionary<T2bEntry, TreeNode<T2bNode>> _entryNodeLookup =
+            new Dictionary<T2bEntry, TreeNode<T2bNode>>();
 
         #region Tree population
 
@@ -24,29 +24,29 @@ namespace CfgBinEditor.Forms
             return LocalizationResources.CfgBinEntryAddRootCaption;
         }
 
-        protected override void PopulateFullTreeViewInternal(T2b config, TreeView<T2bEntry> treeView)
+        protected override void PopulateFullTreeViewInternal(T2b config, TreeView<T2bNode> treeView)
         {
-            var root = new TreeNode<T2bEntry>();
+            var root = new TreeNode<T2bNode>();
 
             _entryNodeLookup.Clear();
             PopulateNode(root, config, 0);
 
             treeView.Nodes.Clear();
-            foreach (TreeNode<T2bEntry> node in root.Nodes)
+            foreach (TreeNode<T2bNode> node in root.Nodes)
                 treeView.Nodes.Add(node);
 
             AdjustNodeNames(root.Nodes);
         }
 
-        private int PopulateNode(TreeNode<T2bEntry> rootNode, T2b config, int index, string endNodeName = null, ThemedColor textColor = default)
+        private int PopulateNode(TreeNode<T2bNode> rootNode, T2b config, int index, string? endNodeName = null, ThemedColor textColor = default)
         {
             for (; index < config.Entries.Length; index++)
             {
                 if (config.Entries[index].Name == endNodeName)
                     break;
 
-                TreeNode<T2bEntry> node = CreateNode(config, ref index, textColor);
-                _entryNodeLookup[node.Data] = node;
+                TreeNode<T2bNode> node = CreateNode(config, ref index, textColor);
+                _entryNodeLookup[node.Data.Entry] = node;
 
                 rootNode.Nodes.Add(node);
             }
@@ -54,11 +54,11 @@ namespace CfgBinEditor.Forms
             return index;
         }
 
-        private void AdjustNodeNames(IList<TreeNode<T2bEntry>> nodes)
+        private void AdjustNodeNames(IList<TreeNode<T2bNode>> nodes)
         {
-            foreach (IGrouping<string, TreeNode<T2bEntry>> group in nodes.GroupBy(x => GetNodeName(x.Data), x => x))
+            foreach (IGrouping<string, TreeNode<T2bNode>> group in nodes.GroupBy(x => GetNodeName(x.Data.Entry), x => x))
             {
-                TreeNode<T2bEntry>[] sameNameNodes = group.ToArray();
+                TreeNode<T2bNode>[] sameNameNodes = group.ToArray();
                 if (sameNameNodes.Length <= 0)
                     continue;
 
@@ -73,11 +73,11 @@ namespace CfgBinEditor.Forms
             }
         }
 
-        private TreeNode<T2bEntry> CreateNode(T2b config, ref int index, ThemedColor textColor)
+        private TreeNode<T2bNode> CreateNode(T2b config, ref int index, ThemedColor textColor)
         {
             T2bEntry entry = config.Entries[index];
 
-            var entryNode = new TreeNode<T2bEntry> { Data = entry, Text = entry.Name, TextColor = textColor };
+            var entryNode = new TreeNode<T2bNode> { Data = new T2bNode(entry, null), Text = entry.Name, TextColor = textColor };
 
             int beginIndex = GetBeginIndex(entry.Name);
             if (beginIndex < 0)
@@ -87,6 +87,9 @@ namespace CfgBinEditor.Forms
             string beginPart = beginIndex == 0 ? string.Empty : entry.Name[beginIndex..];
 
             index = PopulateNode(entryNode, config, index + 1, GetEndName(entryNode.Text, beginPart), textColor);
+            
+            if (index < config.Entries.Length)
+                entryNode.Data = new T2bNode(entry, config.Entries[index]);
 
             return entryNode;
         }
@@ -139,12 +142,12 @@ namespace CfgBinEditor.Forms
 
         #endregion
 
-        protected override bool IsEntrySearched(T2bEntry entry, string searchText)
+        protected override bool IsEntrySearched(T2bNode node, string searchText)
         {
             if (string.IsNullOrEmpty(searchText))
                 return true;
 
-            for (var i = 0; i < entry.Values.Length; i++)
+            for (var i = 0; i < node.Entry.Values.Length; i++)
             {
                 bool isHex;
 
@@ -160,7 +163,7 @@ namespace CfgBinEditor.Forms
                         break;
 
                     case SearchComparisonType.Tags:
-                        ValueSettingEntry settingEntry = _valueSettingsProvider.GetEntrySettings(GameName, entry.Name, i);
+                        ValueSettingEntry settingEntry = _valueSettingsProvider.GetEntrySettings(GameName, node.Entry.Name, i);
                         isHex = settingEntry.IsHex;
                         break;
 
@@ -168,7 +171,7 @@ namespace CfgBinEditor.Forms
                         throw new InvalidOperationException($"Unknown value comparison type {comparisonType}.");
                 }
 
-                string valueString = GetValueString(entry.Values[i].Value, entry.Values[i].Type, isHex);
+                string valueString = GetValueString(node.Entry.Values[i].Value, node.Entry.Values[i].Type, isHex);
 
                 if (valueString.Contains(searchText))
                     return true;

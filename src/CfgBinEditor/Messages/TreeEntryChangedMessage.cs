@@ -2,7 +2,7 @@
 
 namespace CfgBinEditor.Messages
 {
-    internal class TreeEntryChangedMessage<TConfig, TEntry> where TEntry:class
+    internal class TreeEntryChangedMessage<TConfig, TEntry> where TEntry : class
     {
         public BaseTreeViewForm<TConfig, TEntry> TreeViewForm { get; }
         public TEntry? Entry { get; }
