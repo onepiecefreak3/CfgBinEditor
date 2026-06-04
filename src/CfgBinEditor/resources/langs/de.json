@@ -39,6 +39,7 @@
 	"File.Close.UnsavedChanges.Text": "Die Datei wurde verändert. Du verlierst deine Änderungen, wenn du die Datei jetzt schließt. Fortfahren?",
 
 	// Preview
+	"Text.Preview.Caption": "Vorschau",
 	"Text.Preview.Default": "Standard",
 	"Text.Preview.Export": "Vorschau exportieren",
 	"Text.Preview.Placeholder": "Vorschau",

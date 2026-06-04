@@ -36,7 +36,7 @@ namespace CfgBinEditor.Forms
             _gameLayout = new StackLayout { Alignment = Alignment.Horizontal, ItemSpacing = 5, Size = Size.WidthAlign };
             _valuesLayout = new StackLayout { Alignment = Alignment.Vertical, ItemSpacing = 5 };
 
-            var fontPreview = new FontPreviewComponent(pluginManager) { Size = new Size(SizeValue.Parent, SizeValue.Relative(.5f)) };
+            var fontPreview = new FontPreviewComponent(pluginManager) { Size = Size.Parent };
 
             _treeViewForm = formFactory.CreateT2bTreeViewForm(file);
 
@@ -45,7 +45,7 @@ namespace CfgBinEditor.Forms
 
             _valueAddButton = new Button { Text = LocalizationResources.CfgBinEntryAddValueCaption, Padding = new Vector2(15, 2), Enabled = false };
 
-            _configContent = new Panel { Size = new Size(SizeValue.Parent, SizeValue.Relative(.5f)) };
+            _configContent = new Panel { Size = Size.Parent };
 
             _gameLayout.Items.Add(_gameComboBox);
             _gameLayout.Items.Add(_gameAddButton);
@@ -53,7 +53,7 @@ namespace CfgBinEditor.Forms
 
             _valuesLayout.Items.Add(_gameLayout);
             _valuesLayout.Items.Add(_configContent);
-            _valuesLayout.Items.Add(fontPreview);
+            _valuesLayout.Items.Add(new Expander(fontPreview) { WidthIndent = 0, Caption = LocalizationResources.TextPreviewCaption, Size = Size.Parent });
 
             _contentLayout.Items.Add(new StackItem(_treeViewForm) { Size = new Size(SizeValue.Relative(.4f), SizeValue.Parent) });
             _contentLayout.Items.Add(_valuesLayout);

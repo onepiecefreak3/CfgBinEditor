@@ -1,5 +1,6 @@
 ﻿using CfgBinEditor.Components;
 using CfgBinEditor.InternalContract;
+using CfgBinEditor.resources;
 using ImGui.Forms.Controls;
 using ImGui.Forms.Controls.Layouts;
 using ImGui.Forms.Models;
@@ -18,7 +19,7 @@ namespace CfgBinEditor.Forms
 
         private void InitializeComponent(Rdbn config, IFormFactory formFactory, IPluginManager pluginManager)
         {
-            var fontPreview = new FontPreviewComponent(pluginManager) { Size = new Size(SizeValue.Parent, SizeValue.Relative(.5f)) };
+            var fontPreview = new FontPreviewComponent(pluginManager) { Size = Size.Parent };
 
             var valueLayout = new StackLayout { Alignment = Alignment.Vertical, ItemSpacing = 5 };
 
@@ -28,7 +29,7 @@ namespace CfgBinEditor.Forms
             _treeViewForm = formFactory.CreateRdbnTreeViewForm(config);
 
             valueLayout.Items.Add(_contentPanel);
-            valueLayout.Items.Add(fontPreview);
+            valueLayout.Items.Add(new Expander(fontPreview) { WidthIndent = 0, Caption = LocalizationResources.TextPreviewCaption, Size = Size.Parent });
 
             _contentLayout.Items.Add(new StackItem(_treeViewForm) { Size = new Size(SizeValue.Relative(.4f), SizeValue.Parent) });
             _contentLayout.Items.Add(valueLayout);

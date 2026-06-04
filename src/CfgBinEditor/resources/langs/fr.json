@@ -39,6 +39,7 @@
   "File.Close.UnsavedChanges.Text": "Le fichier a été modifié. Vous pourriez perdre votre progression si vous fermez l'onglet maintenant. Continuer ?",
 
   // Preview
+  "Text.Preview.Caption": "Aperçu",
   "Text.Preview.Default": "Par défaut",
   "Text.Preview.Export": "Exporter aperçu",
   "Text.Preview.Placeholder": "Aperçu",
