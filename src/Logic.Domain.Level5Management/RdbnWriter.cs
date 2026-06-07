@@ -357,6 +357,12 @@ namespace Logic.Domain.Level5Management
                     bw.Write((uint)value);
                     break;
 
+                // 2D Position
+                case 0x11:
+                    for (var i = 0; i < ((float[])value).Length; i++)
+                        bw.Write(((float[])value)[i]);
+                    break;
+
                 // Rates
                 case 0x12:
                     for (var i = 0; i < ((float[])value).Length; i++)

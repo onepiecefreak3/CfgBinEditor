@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 using Komponent.IO;
 using Logic.Domain.Level5Management.Contract;
 using Logic.Domain.Level5Management.Contract.DataClasses;
@@ -313,6 +314,11 @@ namespace Logic.Domain.Level5Management
                                 // Hash
                                 case 0xF:
                                     listValues[j][h][k] = br.ReadUInt32();
+                                    break;
+
+                                // 2D Position
+                                case 0x11:
+                                    listValues[j][h][k] = new[] { br.ReadSingle(), br.ReadSingle() };
                                     break;
 
                                 // Rates

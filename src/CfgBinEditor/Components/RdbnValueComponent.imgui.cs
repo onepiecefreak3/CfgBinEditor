@@ -89,6 +89,23 @@ namespace CfgBinEditor.Components
                     result = textBox1;
                     break;
 
+                case FieldType.Position2D:
+                    var layout2 = new StackLayout { Alignment = Alignment.Horizontal, ItemSpacing = 5, Size = Size.WidthAlign };
+
+                    var valueArray2 = (float[])values[index];
+                    for (var i = 0; i < 2; i++)
+                    {
+                        var textBox3 = new TextBox { Text = GetValueText(valueArray2[i], FieldType.Float) };
+
+                        int valueIndex = i;
+                        textBox3.TextChanged += (s, e) => SetFloatValue(valueArray2, valueIndex, textBox3.Text);
+
+                        layout2.Items.Add(textBox3);
+                    }
+
+                    result = layout2;
+                    break;
+
                 case FieldType.RateMatrix:
                 case FieldType.Position:
                     var layout = new StackLayout { Alignment = Alignment.Horizontal, ItemSpacing = 5, Size = Size.WidthAlign };

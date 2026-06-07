@@ -17,6 +17,7 @@
 
         Hash = 15,
 
+        Position2D = 17,
         RateMatrix = 18,
         Position = 19,
         String = 20,

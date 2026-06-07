@@ -38,11 +38,11 @@ namespace CfgBinEditor.Forms
             AdjustNodeNames(root.Nodes);
         }
 
-        private int PopulateNode(TreeNode<T2bNode> rootNode, T2b config, int index, string? endNodeName = null, ThemedColor textColor = default)
+        private int PopulateNode(TreeNode<T2bNode> rootNode, T2b config, int index, T2bEntry? endNode = null, ThemedColor textColor = default)
         {
             for (; index < config.Entries.Length; index++)
             {
-                if (config.Entries[index].Name == endNodeName)
+                if (config.Entries[index] == endNode)
                     break;
 
                 TreeNode<T2bNode> node = CreateNode(config, ref index, textColor);
@@ -86,8 +86,8 @@ namespace CfgBinEditor.Forms
             entryNode.Text = beginIndex == 0 ? entry.Name : entry.Name[..beginIndex];
             string beginPart = beginIndex == 0 ? string.Empty : entry.Name[beginIndex..];
 
-            index = PopulateNode(entryNode, config, index + 1, GetEndName(entryNode.Text, beginPart), textColor);
-            
+            index = PopulateNode(entryNode, config, index + 1, GetEndEntry(config, index, entryNode.Text, beginPart), textColor);
+
             if (index < config.Entries.Length)
                 entryNode.Data = new T2bNode(entry, config.Entries[index]);
 
@@ -132,12 +132,24 @@ namespace CfgBinEditor.Forms
             return beginIndex < 0 ? begIndex < 0 ? bgnIndex < 0 ? underScoreIndex : bgnIndex : begIndex : beginIndex;
         }
 
-        private string GetEndName(string beginName, string beginPart)
+        private T2bEntry? GetEndEntry(T2b config, int index, string beginName, string beginPart)
         {
+            string endName;
             if (beginName == "PTREE" || beginPart == "_")
-                return "_" + beginName;
+                endName = "_" + beginName;
+            else
+                endName = beginName + "_END";
 
-            return beginName + "_END";
+            for (var i = index + 1; i < config.Entries.Length; i++)
+            {
+                if (config.Entries[i].Name == endName)
+                    return config.Entries[i];
+
+                if (config.Entries[i].Name == beginName && config.Entries[i].Values.Length <= 0)
+                    return config.Entries[i];
+            }
+
+            return null;
         }
 
         #endregion
