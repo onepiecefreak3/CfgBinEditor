@@ -1,4 +1,4 @@
-﻿using Kaligraphy.DataClasses.Parsing;
+﻿using Kaligraphy.Contract.DataClasses.Parsing;
 using plugin_time_travelers.Rendering.Deserialization;
 using plugin_time_travelers.Rendering.Deserialization.CharacterData;
 

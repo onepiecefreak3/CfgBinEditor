@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using Kaligraphy.DataClasses.Parsing;
+using Kaligraphy.Contract.DataClasses.Parsing;
 using Kaligraphy.Parsing;
 using plugin_yokai_watch.Rendering.Deserialization.CharacterData;
 using SixLabors.ImageSharp;

@@ -1,4 +1,4 @@
-﻿using Kaligraphy.DataClasses.Parsing;
+﻿using Kaligraphy.Contract.DataClasses.Parsing;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace plugin_yokai_watch.Rendering.Deserialization.CharacterData
