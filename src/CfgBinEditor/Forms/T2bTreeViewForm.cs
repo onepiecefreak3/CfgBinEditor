@@ -313,7 +313,7 @@ namespace CfgBinEditor.Forms
             SetExportDirectory(Path.GetDirectoryName(sfd.Files[0])!);
 
             // Choose entries to export
-            int entryIndex = node == null ? 0 : Array.IndexOf(_config.Entries, node.Data);
+            int entryIndex = node == null ? 0 : Array.IndexOf(_config.Entries, node.Data.Entry);
             int entryCount = node == null ? _config.Entries.Length : CountEntries(node);
 
             string entryJson = _serializer.Serialize(_config.Entries[entryIndex..(entryIndex + entryCount)]);
