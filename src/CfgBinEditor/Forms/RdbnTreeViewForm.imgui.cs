@@ -89,7 +89,9 @@ namespace CfgBinEditor.Forms
 
                     break;
 
+                case FieldType.Position2D:
                 case FieldType.RateMatrix:
+                case FieldType.Position:
                 case FieldType.StatusRate:
                     var floatValues = (float[])value;
                     foreach (float floatValue in floatValues)

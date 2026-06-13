@@ -43,7 +43,7 @@ namespace CfgBinEditor.Forms
                 }
 
                 // Set list name
-                string listName = await InputBox.ShowAsync(LocalizationResources.RdbnListAddCaption, LocalizationResources.RdbnListAddNameDialogCaption);
+                string? listName = await InputBox.ShowAsync(LocalizationResources.RdbnListAddCaption, LocalizationResources.RdbnListAddNameDialogCaption);
                 if (string.IsNullOrEmpty(listName))
                 {
                     RaiseErrorStatus(LocalizationResources.RdbnListAddNameErrorCaption);
@@ -283,6 +283,14 @@ namespace CfgBinEditor.Forms
                 case FieldType.Float:
                     return (float)value;
 
+                case FieldType.Position2D:
+                    var ftValue1 = (float[])value;
+                    var newFtValue1 = new float[ftValue1.Length];
+
+                    Array.Copy(ftValue1, newFtValue1, ftValue1.Length);
+
+                    return newFtValue1;
+
                 case FieldType.RateMatrix:
                 case FieldType.Position:
                     var ftValue = (float[])value;
@@ -339,6 +347,9 @@ namespace CfgBinEditor.Forms
 
                 case FieldType.Float:
                     return 0f;
+
+                case FieldType.Position2D:
+                    return new float[] { 0, 0 };
 
                 case FieldType.RateMatrix:
                 case FieldType.Position:
