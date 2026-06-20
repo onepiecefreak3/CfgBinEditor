@@ -99,7 +99,9 @@ namespace CfgBinEditor.Forms
         protected override async void AddNode(TreeNode<T2bNode>? parentNode)
         {
             // Set new entry name
-            string? entryName = await InputBox.ShowAsync(LocalizationResources.CfgBinEntryAddRootCaption, LocalizationResources.CfgBinEntryAddDialogCaption);
+            var presetName = parentNode is null ? string.Empty :
+                parentNode.Nodes.Count > 0 ? parentNode.Nodes[0].Data.Entry.Name : parentNode.Data.Entry.Name;
+            string? entryName = await InputBox.ShowAsync(LocalizationResources.CfgBinEntryAddRootCaption, LocalizationResources.CfgBinEntryAddDialogCaption, presetName);
             if (string.IsNullOrEmpty(entryName))
             {
                 RaiseErrorStatus(LocalizationResources.CfgBinEntryAddErrorCaption);
@@ -111,7 +113,11 @@ namespace CfgBinEditor.Forms
             _config.Entries[newEntryIndex] = new T2bEntry
             {
                 Name = entryName,
-                Values = []
+                Values = [new T2bEntryValue
+                {
+                    Type = ValueType.Integer,
+                    Value = 0
+                }]
             };
 
             // Add nodes
@@ -346,7 +352,7 @@ namespace CfgBinEditor.Forms
         {
             // Allocate new entries
             int entryIndex = Array.IndexOf(_config.Entries, node.Entry);
-            int newEntryIndex = node.EndEntry is null ? _config.Entries.Length : Array.IndexOf(_config.Entries, node.EndEntry) + 1;
+            int newEntryIndex = node.EndEntry is null ? entryIndex + 1 : Array.IndexOf(_config.Entries, node.EndEntry) + 1;
 
             int entryCount = newEntryIndex - entryIndex;
 
@@ -386,7 +392,7 @@ namespace CfgBinEditor.Forms
 
             // Allocate new entries
             int entryIndex = Array.IndexOf(_config.Entries, entry);
-            int newEntryIndex = node.Data.EndEntry is null ? _config.Entries.Length : Array.IndexOf(_config.Entries, node.Data.EndEntry) + 1;
+            int newEntryIndex = node.Data.EndEntry is null ? entryIndex + 1 : Array.IndexOf(_config.Entries, node.Data.EndEntry) + 1;
 
             int entryCount = newEntryIndex - entryIndex;
 
