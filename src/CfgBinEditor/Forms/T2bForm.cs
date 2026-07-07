@@ -149,7 +149,7 @@ namespace CfgBinEditor.Forms
             typeComboBox.SelectedItem = typeComboBox.Items.FirstOrDefault(x => x.Content == entryValue.Type);
             typeComboBox.SelectedItemChanged += TypeComboBox_SelectedItemChanged;
 
-            var valueTextBox = new TextBox();
+            var valueTextBox = new TextBox { MaxCharacters = 1024 };
             valueTextBox.TextChanged += ValueTextBox_TextChanged;
 
             SetValueText(valueTextBox, entryValue, settingEntry.IsHex);
