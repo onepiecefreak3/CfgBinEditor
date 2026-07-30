@@ -620,21 +620,42 @@ namespace CfgBinEditor.Forms
                     }
 
                 case ValueType.FloatingPoint:
-                    NumberStyles styles1 = isHex ? NumberStyles.HexNumber : NumberStyles.Float;
                     text = isHex ? text.StartsWith("0x") ? text[2..] : text : text;
 
                     switch (_config.ValueLength)
                     {
                         case ValueLength.Int:
-                            if (!float.TryParse(text, styles1, CultureInfo.InvariantCulture, out float fValue))
-                                return false;
+                            float fValue;
+                            if (isHex)
+                            {
+                                if (!int.TryParse(text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int iValue))
+                                    return false;
+
+                                fValue = BitConverter.Int32BitsToSingle(iValue);
+                            }
+                            else
+                            {
+                                if (!float.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out fValue))
+                                    return false;
+                            }
 
                             parsedValue = fValue;
                             return true;
 
                         case ValueLength.Long:
-                            if (!double.TryParse(text, styles1, CultureInfo.InvariantCulture, out double dValue))
-                                return false;
+                            double dValue;
+                            if (isHex)
+                            {
+                                if (!int.TryParse(text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int iValue))
+                                    return false;
+
+                                dValue = BitConverter.Int64BitsToDouble(iValue);
+                            }
+                            else
+                            {
+                                if (!double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out dValue))
+                                    return false;
+                            }
 
                             parsedValue = dValue;
                             return true;
@@ -666,7 +687,7 @@ namespace CfgBinEditor.Forms
                                     if (int.TryParse(sValue, out int iValue))
                                         return iValue;
 
-                                    if (float.TryParse(sValue, out float fValue))
+                                    if (float.TryParse(sValue, CultureInfo.InvariantCulture, out float fValue))
                                         return (int)Math.Round(fValue);
 
                                     return GetDefaultValue(targetType);
@@ -675,7 +696,7 @@ namespace CfgBinEditor.Forms
                                     if (long.TryParse(sValue, out long lValue))
                                         return lValue;
 
-                                    if (double.TryParse(sValue, out double dValue))
+                                    if (double.TryParse(sValue, CultureInfo.InvariantCulture, out double dValue))
                                         return (long)Math.Round(dValue);
 
                                     return GetDefaultValue(targetType);
@@ -688,13 +709,13 @@ namespace CfgBinEditor.Forms
                             switch (_config.ValueLength)
                             {
                                 case ValueLength.Int:
-                                    if (float.TryParse(sValue, out float fValue))
+                                    if (float.TryParse(sValue, CultureInfo.InvariantCulture, out float fValue))
                                         return fValue;
 
                                     return GetDefaultValue(targetType);
 
                                 case ValueLength.Long:
-                                    if (double.TryParse(sValue, out double dValue))
+                                    if (double.TryParse(sValue, CultureInfo.InvariantCulture, out double dValue))
                                         return dValue;
 
                                     return GetDefaultValue(targetType);
@@ -734,7 +755,7 @@ namespace CfgBinEditor.Forms
                     switch (targetType)
                     {
                         case ValueType.String:
-                            return $"{value}";
+                            return ((float)value!).ToString(CultureInfo.InvariantCulture);
 
                         case ValueType.Integer:
                             switch (_config.ValueLength)
@@ -782,10 +803,10 @@ namespace CfgBinEditor.Forms
                     switch (_config.ValueLength)
                     {
                         case ValueLength.Int:
-                            return .0f;
+                            return 0f;
 
                         case ValueLength.Long:
-                            return .0d;
+                            return 0d;
 
                         default:
                             throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
