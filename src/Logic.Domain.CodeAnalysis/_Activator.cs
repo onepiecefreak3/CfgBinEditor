@@ -31,9 +31,6 @@ public class CodeAnalysisActivator : IComponentActivator
     public void Register(ICoCoKernel kernel)
     {
         kernel.Register<ITokenFactory<GameSettingsSyntaxToken>, GameSettingsFactory>(ActivationScope.Unique);
-        kernel.Register<ILexer<GameSettingsSyntaxToken>, GameSettingsLexer>();
-        kernel.Register<IBuffer<GameSettingsSyntaxToken>, TokenBuffer<GameSettingsSyntaxToken>>();
-        kernel.Register<IBuffer<int>, StringBuffer>();
 
         kernel.Register<IGameSettingsParser, GameSettingsParser>(ActivationScope.Unique);
         kernel.Register<IGameSettingsComposer, GameSettingsComposer>(ActivationScope.Unique);

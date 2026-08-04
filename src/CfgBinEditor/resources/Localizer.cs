@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using CrossCutting.Core.Contract.Settings;
 using ImGui.Forms.Localization;
 
@@ -9,11 +10,6 @@ namespace CfgBinEditor.resources;
 
 internal class Localizer : BaseLocalizer
 {
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        ReadCommentHandling = JsonCommentHandling.Skip
-    };
-
     private const string NameValue_ = "Name";
 
     private readonly CfgBinEditorConfiguration _config;
@@ -45,11 +41,9 @@ internal class Localizer : BaseLocalizer
         var result = new List<LanguageInfo>();
         foreach (string localeFile in localeFiles)
         {
-            // Read text from stream
             string json = File.ReadAllText(localeFile);
 
-            // Deserialize JSON
-            var entries = JsonSerializer.Deserialize<IDictionary<string, string>>(json, JsonOptions);
+            var entries = JsonSerializer.Deserialize(json, LocalizationJsonContext.Default.DictionaryStringString);
             if (entries == null || !entries.TryGetValue(NameValue_, out string? name))
                 continue;
 
@@ -72,3 +66,7 @@ internal class Localizer : BaseLocalizer
         _settingsProvider.Set("CfgBinEditor.Settings.Locale", locale);
     }
 }
+
+[JsonSerializable(typeof(Dictionary<string, string>))]
+[JsonSourceGenerationOptions(PropertyNameCaseInsensitive = true, ReadCommentHandling = JsonCommentHandling.Skip, AllowTrailingCommas = true)]
+internal partial class LocalizationJsonContext : JsonSerializerContext;

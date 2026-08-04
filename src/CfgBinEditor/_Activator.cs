@@ -1,5 +1,4 @@
-﻿using CfgBinEditor.Components;
-using CfgBinEditor.Forms;
+﻿using CfgBinEditor.Forms;
 using CfgBinEditor.InternalContract;
 using CfgBinEditor.resources;
 using CrossCutting.Core.Contract.Bootstrapping;
@@ -35,13 +34,6 @@ public class CfgBinEditorActivator : IComponentActivator
         kernel.Register<IComponentFactory, ComponentFactory>(ActivationScope.Unique);
 
         kernel.RegisterToSelf<MainForm>();
-        kernel.RegisterToSelf<T2bForm>();
-        kernel.RegisterToSelf<RdbnForm>();
-
-        kernel.RegisterToSelf<T2bTreeViewForm>();
-        kernel.RegisterToSelf<RdbnTreeViewForm>();
-
-        kernel.RegisterToSelf<RdbnValueComponent>();
 
         kernel.Register<ILocalizer, Localizer>(ActivationScope.Unique);
 
