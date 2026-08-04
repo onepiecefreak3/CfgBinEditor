@@ -44,6 +44,7 @@ public class KernelInitializer : IKernelInitializer
         kernel.Register<IConfigurator, Configurator>(ActivationScope.Unique);
         kernel.Register<IConfigObjectProvider, ConfigObjectProvider>(ActivationScope.Unique);
         kernel.Register<ILogger, Logger>(ActivationScope.Unique);
+        kernel.RegisterConfiguration<LoggingSerilogConfiguration>();
         kernel.Register<ISettingsProvider, SettingsProvider>(ActivationScope.Unique);
     }
 

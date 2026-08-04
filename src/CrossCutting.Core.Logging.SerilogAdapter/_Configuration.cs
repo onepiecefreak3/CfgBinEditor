@@ -10,7 +10,7 @@ public class LoggingSerilogConfiguration
     /// <summary>Path of the log file relative to the process working directory.</summary>
     /// <summary_de>Pfad der Logdatei relativ zum Arbeitsverzeichnis des Prozesses.</summary_de>
     /// <example>logs/iDxLog.log</example>
-    public string FilePath { get; set; } = "logs/XtractQuery.log";
+    public string FilePath { get; set; } = "logs/CfgBinEditor.log";
 
     /// <summary>Serilog output template used for the file sink.</summary>
     /// <summary_de>Serilog-Ausgabevorlage für den Datei-Sink.</summary_de>

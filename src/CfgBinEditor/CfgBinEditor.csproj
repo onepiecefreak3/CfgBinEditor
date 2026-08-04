@@ -27,7 +27,9 @@
       <LogicalName>notozhtc.ttf</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
+  <Import Project="..\CrossCutting.Core.Configuration.Generators\ConfigurationGenerators.props" />
   <ItemGroup>
+    <ProjectReference Include="..\CrossCutting.Core.Configuration\CrossCutting.Core.Configuration.csproj" />
     <ProjectReference Include="..\Logic.Foundation.PreviewManagement.Abstract\Logic.Foundation.PreviewManagement.Abstract.csproj" />
     <ProjectReference Include="..\CrossCutting.Core.Contract\CrossCutting.Core.Contract.csproj" />
     <ProjectReference Include="..\Logic.Business.CfgBinEditorManagement.Contract\Logic.Business.CfgBinEditorManagement.Contract.csproj" />

@@ -8,7 +8,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <Import Project="..\CrossCutting.Core.Configuration.Generators\ConfigurationGenerators.props" />
+
   <ItemGroup>
+    <ProjectReference Include="..\CrossCutting.Core.Configuration\CrossCutting.Core.Configuration.csproj" />
     <ProjectReference Include="..\Logic.Business.CfgBinEditorManagement.Contract\Logic.Business.CfgBinEditorManagement.Contract.csproj" />
     <ProjectReference Include="..\Logic.Domain.CodeAnalysis.Contract\Logic.Domain.CodeAnalysis.Contract.csproj" />
   </ItemGroup>
