@@ -1,8 +1,7 @@
-﻿namespace Logic.Domain.Level5Management.Contract.DataClasses
+﻿namespace Logic.Domain.Level5Management.Contract.DataClasses;
+
+public class Rdbn
 {
-    public class Rdbn
-    {
-        public RdbnTypeDeclaration[] Types { get; set; }
-        public RdbnListEntry[] Lists { get; set; }
-    }
+    public required RdbnTypeDeclaration[] Types { get; set; }
+    public required RdbnListEntry[] Lists { get; set; }
 }

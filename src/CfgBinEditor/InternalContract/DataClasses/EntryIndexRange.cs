@@ -1,14 +1,13 @@
-﻿namespace CfgBinEditor.InternalContract.DataClasses
-{
-    internal struct EntryIndexRange
-    {
-        public int Start { get; }
-        public int End { get; }
+﻿namespace CfgBinEditor.InternalContract.DataClasses;
 
-        public EntryIndexRange(int start, int end)
-        {
-            Start = start;
-            End = end;
-        }
+internal struct EntryIndexRange
+{
+    public int Start { get; }
+    public int End { get; }
+
+    public EntryIndexRange(int start, int end)
+    {
+        Start = start;
+        End = end;
     }
 }

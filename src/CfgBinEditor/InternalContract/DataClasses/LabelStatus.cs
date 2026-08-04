@@ -1,8 +1,7 @@
-﻿namespace CfgBinEditor.InternalContract.DataClasses
+﻿namespace CfgBinEditor.InternalContract.DataClasses;
+
+public enum LabelStatus
 {
-    public enum LabelStatus
-    {
-        None,
-        Error
-    }
+    None,
+    Error
 }

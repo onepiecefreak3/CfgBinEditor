@@ -1,8 +1,7 @@
-﻿namespace Logic.Domain.Level5Management.Contract.DataClasses
+﻿namespace Logic.Domain.Level5Management.Contract.DataClasses;
+
+public enum StringEncoding
 {
-    public enum StringEncoding
-    {
-        Sjis,
-        Utf8
-    }
+    Sjis,
+    Utf8
 }

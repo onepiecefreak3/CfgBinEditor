@@ -11,111 +11,110 @@ using Logic.Domain.Level5Management.Contract.DataClasses;
 using System;
 using System.IO;
 
-namespace CfgBinEditor.Forms
+namespace CfgBinEditor.Forms;
+
+public partial class RdbnForm : Component
 {
-    public partial class RdbnForm : Component
+    private readonly Rdbn _config;
+    private readonly IComponentFactory _componentFactory;
+    private readonly IEventBroker _eventBroker;
+    private readonly IRdbnWriter _writer;
+
+    public RdbnForm(Rdbn config, IFormFactory formFactory, IPluginManager pluginManager, IComponentFactory componentFactory, IEventBroker eventBroker, IRdbnWriter writer)
     {
-        private readonly Rdbn _config;
-        private readonly IComponentFactory _componentFactory;
-        private readonly IEventBroker _eventBroker;
-        private readonly IRdbnWriter _writer;
+        InitializeComponent(config, formFactory, pluginManager);
 
-        public RdbnForm(Rdbn config, IFormFactory formFactory, IPluginManager pluginManager, IComponentFactory componentFactory, IEventBroker eventBroker, IRdbnWriter writer)
+        _config = config;
+        _componentFactory = componentFactory;
+        _eventBroker = eventBroker;
+        _writer = writer;
+
+        eventBroker.Subscribe<FileSaveRequestMessage>(SaveFile);
+
+        if (_treeViewForm!.SelectedEntry != null)
+            ChangeEntry(_treeViewForm.SelectedEntry);
+
+        _eventBroker.Subscribe<TreeChangedMessage<Rdbn, object>>(msg =>
         {
-            InitializeComponent(config, formFactory, pluginManager);
+            if (msg.TreeViewForm == _treeViewForm)
+                RaiseFileChanged();
+        });
 
-            _config = config;
-            _componentFactory = componentFactory;
-            _eventBroker = eventBroker;
-            _writer = writer;
+        eventBroker.Subscribe<TreeEntryChangedMessage<Rdbn, object>>(msg =>
+        {
+            if (msg.TreeViewForm == _treeViewForm)
+                ChangeEntry(msg.Entry);
+        });
+    }
 
-            eventBroker.Subscribe<FileSaveRequestMessage>(SaveFile);
+    private void SaveFile(FileSaveRequestMessage msg)
+    {
+        if (!msg.ConfigForms.TryGetValue(this, out string? savePath))
+            return;
 
-            if (_treeViewForm!.SelectedEntry != null)
-                ChangeEntry(_treeViewForm.SelectedEntry);
-
-            _eventBroker.Subscribe<TreeChangedMessage<Rdbn, object>>(msg =>
-            {
-                if (msg.TreeViewForm == _treeViewForm)
-                    RaiseFileChanged();
-            });
-
-            eventBroker.Subscribe<TreeEntryChangedMessage<Rdbn, object>>(msg =>
-            {
-                if (msg.TreeViewForm == _treeViewForm)
-                    ChangeEntry(msg.Entry);
-            });
+        if (!TryWriteFile(savePath, out Exception? e))
+        {
+            RaiseFileSaved(e);
+            return;
         }
 
-        private void SaveFile(FileSaveRequestMessage msg)
+        _treeViewForm.ResetNodeState();
+
+        RaiseFileSaved();
+    }
+
+    private bool TryWriteFile(string savePath, out Exception? ex)
+    {
+        ex = null;
+
+        try
         {
-            if (!msg.ConfigForms.TryGetValue(this, out string? savePath))
-                return;
+            using Stream fileStream = _writer.Write(_config);
+            using Stream targetFileStream = File.Create(savePath);
 
-            if (!TryWriteFile(savePath, out Exception? e))
-            {
-                RaiseFileSaved(e);
-                return;
-            }
-
-            _treeViewForm.ResetNodeState();
-
-            RaiseFileSaved();
+            fileStream.CopyTo(targetFileStream);
+        }
+        catch (Exception e)
+        {
+            ex = e;
+            return false;
         }
 
-        private bool TryWriteFile(string savePath, out Exception? ex)
+        return true;
+    }
+
+    private void ChangeEntry(object? obj)
+    {
+        var list = new List<RdbnValueComponent>
         {
-            ex = null;
+            Alignment = Alignment.Vertical,
+            ItemSpacing = 5
+        };
 
-            try
-            {
-                using Stream fileStream = _writer.Write(_config);
-                using Stream targetFileStream = File.Create(savePath);
+        _contentPanel.ShowBorder = false;
 
-                fileStream.CopyTo(targetFileStream);
-            }
-            catch (Exception e)
-            {
-                ex = e;
-                return false;
-            }
-
-            return true;
-        }
-
-        private void ChangeEntry(object? obj)
+        if (obj is not (RdbnTypeDeclaration type, object[][] values))
         {
-            var list = new List<RdbnValueComponent>
-            {
-                Alignment = Alignment.Vertical,
-                ItemSpacing = 5
-            };
-
-            _contentPanel.ShowBorder = false;
-
-            if (obj is not (RdbnTypeDeclaration type, object[][] values))
-            {
-                _contentPanel.Content = list;
-                return;
-            }
-
-            for (var i = 0; i < type.Fields.Length; i++)
-            {
-                RdbnValueComponent value = _componentFactory.CreateRdbnValue(this, values[i], type.Fields[i]);
-                list.Items.Add(value);
-            }
-
             _contentPanel.Content = list;
+            return;
         }
 
-        private void RaiseFileChanged()
+        for (var i = 0; i < type.Fields.Length; i++)
         {
-            _eventBroker.Raise(new FileChangedMessage(this));
+            RdbnValueComponent value = _componentFactory.CreateRdbnValue(this, values[i], type.Fields[i]);
+            list.Items.Add(value);
         }
 
-        private void RaiseFileSaved(Exception? e = null)
-        {
-            _eventBroker.Raise(new FileSavedMessage(this, e));
-        }
+        _contentPanel.Content = list;
+    }
+
+    private void RaiseFileChanged()
+    {
+        _eventBroker.Raise(new FileChangedMessage(this));
+    }
+
+    private void RaiseFileSaved(Exception? e = null)
+    {
+        _eventBroker.Raise(new FileSavedMessage(this, e));
     }
 }

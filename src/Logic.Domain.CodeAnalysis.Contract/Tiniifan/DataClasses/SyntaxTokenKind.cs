@@ -1,23 +1,22 @@
-﻿namespace Logic.Domain.CodeAnalysis.Contract.Tiniifan.DataClasses
+﻿namespace Logic.Domain.CodeAnalysis.Contract.Tiniifan.DataClasses;
+
+public enum SyntaxTokenKind
 {
-    public enum SyntaxTokenKind
-    {
-        BracketOpen,
-        BracketClose,
-        ParenOpen,
-        ParenClose,
+    BracketOpen,
+    BracketClose,
+    ParenOpen,
+    ParenClose,
 
-        Slash,
-        Pipe,
+    Slash,
+    Pipe,
 
-        NumericLiteral,
+    NumericLiteral,
 
-        Identifier,
-        Trivia,
+    Identifier,
+    Trivia,
 
-        TrueKeyword,
-        FalseKeyword,
+    TrueKeyword,
+    FalseKeyword,
 
-        EndOfFile
-    }
+    EndOfFile
 }

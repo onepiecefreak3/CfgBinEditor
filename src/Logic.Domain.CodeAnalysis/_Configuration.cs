@@ -1,6 +1,5 @@
-﻿namespace Logic.Domain.CodeAnalysis
+﻿namespace Logic.Domain.CodeAnalysis;
+
+public class CodeAnalysisConfiguration
 {
-    public class CodeAnalysisConfiguration
-    {
-    }
 }

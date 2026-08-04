@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using ImGui.Forms.Controls.Base;
 
-namespace CfgBinEditor.Messages
-{
-    internal class FileSaveRequestMessage
-    {
-        public IDictionary<Component, string> ConfigForms { get; }
+namespace CfgBinEditor.Messages;
 
-        public FileSaveRequestMessage(IDictionary<Component, string> configForms)
-        {
-            ConfigForms = configForms;
-        }
+internal class FileSaveRequestMessage
+{
+    public IDictionary<Component, string> ConfigForms { get; }
+
+    public FileSaveRequestMessage(IDictionary<Component, string> configForms)
+    {
+        ConfigForms = configForms;
     }
 }

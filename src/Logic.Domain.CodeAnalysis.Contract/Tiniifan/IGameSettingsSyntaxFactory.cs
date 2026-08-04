@@ -1,17 +1,13 @@
-﻿using CrossCutting.Core.Contract.Aspects;
-using Logic.Domain.CodeAnalysis.Contract.DataClasses;
+﻿using Logic.Domain.CodeAnalysis.Contract.DataClasses;
 using Logic.Domain.CodeAnalysis.Contract.Tiniifan.DataClasses;
-using Logic.Domain.CodeAnalysis.Contract.Tiniifan.Exceptions;
 
-namespace Logic.Domain.CodeAnalysis.Contract.Tiniifan
+namespace Logic.Domain.CodeAnalysis.Contract.Tiniifan;
+
+public interface IGameSettingsSyntaxFactory
 {
-    [MapException(typeof(GameSettingsSyntaxFactoryException))]
-    public interface IGameSettingsSyntaxFactory
-    {
-        SyntaxToken Create(string text, int rawKind, SyntaxTokenTrivia? leadingTrivia = null, SyntaxTokenTrivia? trailingTrivia = null);
+    SyntaxToken Create(string text, int rawKind, SyntaxTokenTrivia? leadingTrivia = null, SyntaxTokenTrivia? trailingTrivia = null);
 
-        SyntaxToken Token(SyntaxTokenKind kind);
+    SyntaxToken Token(SyntaxTokenKind kind);
         
-        SyntaxToken Identifier(string text);
-    }
+    SyntaxToken Identifier(string text);
 }

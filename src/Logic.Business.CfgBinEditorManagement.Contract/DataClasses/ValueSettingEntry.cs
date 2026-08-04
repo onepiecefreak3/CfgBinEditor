@@ -1,10 +1,9 @@
-﻿namespace Logic.Business.CfgBinEditorManagement.Contract.DataClasses
-{
-    public struct ValueSettingEntry
-    {
-        public static ValueSettingEntry Empty => new() { Name = string.Empty, IsHex = false };
+﻿namespace Logic.Business.CfgBinEditorManagement.Contract.DataClasses;
 
-        public string Name { get; set; }
-        public bool IsHex { get; set; }
-    }
+public struct ValueSettingEntry
+{
+    public static ValueSettingEntry Empty => new() { Name = string.Empty, IsHex = false };
+
+    public string Name { get; set; }
+    public bool IsHex { get; set; }
 }

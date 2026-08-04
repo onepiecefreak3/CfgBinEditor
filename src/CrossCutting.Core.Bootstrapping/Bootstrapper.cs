@@ -5,23 +5,17 @@ using CrossCutting.Core.Contract.EventBrokerage;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CrossCutting.Core.Bootstrapping
+namespace CrossCutting.Core.Bootstrapping;
+
+public sealed class Bootstrapper(IEnumerable<IComponentActivator> components) : IBootstrapper
 {
-    public sealed class Bootstrapper : IBootstrapper
-    {
-        private readonly List<IComponentActivator> _components;
+    private readonly List<IComponentActivator> _components = components.ToList();
 
-        public Bootstrapper(IComponentActivator[] components)
-        {
-            _components = components.ToList();
-        }
-
-        public void ActivatingAll() => _components.ForEach(ca => ca.Activating());
-        public void ActivatedAll() => _components.ForEach(ca => ca.Activated());
-        public void DeactivatedAll() => _components.ForEach(ca => ca.Deactivated());
-        public void DeactivatingAll() => _components.ForEach(ca => ca.Deactivating());
-        public void RegisterAll(ICoCoKernel kernel) => _components.ForEach(ca => ca.Register(kernel));
-        public void AddAllMessageSubscriptions(IEventBroker broker) => _components.ForEach(ca => ca.AddMessageSubscriptions(broker));
-        public void ConfigureAll(IConfigurator config) => _components.ForEach(ca => ca.Configure(config));
-    }
+    public void ActivatingAll() => _components.ForEach(ca => ca.Activating());
+    public void ActivatedAll() => _components.ForEach(ca => ca.Activated());
+    public void DeactivatedAll() => _components.ForEach(ca => ca.Deactivated());
+    public void DeactivatingAll() => _components.ForEach(ca => ca.Deactivating());
+    public void RegisterAll(ICoCoKernel kernel) => _components.ForEach(ca => ca.Register(kernel));
+    public void AddAllMessageSubscriptions(IEventBroker broker) => _components.ForEach(ca => ca.AddMessageSubscriptions(broker));
+    public void ConfigureAll(IConfigurator config) => _components.ForEach(ca => ca.Configure(config));
 }

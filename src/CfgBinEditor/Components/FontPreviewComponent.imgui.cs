@@ -9,69 +9,68 @@ using Konnect.Contract.Management.Plugin;
 using Logic.Foundation.PreviewManagement.Abstract;
 using System.Numerics;
 
-namespace CfgBinEditor.Components
+namespace CfgBinEditor.Components;
+
+internal partial class FontPreviewComponent : Component
 {
-    internal partial class FontPreviewComponent : Component
+    private StackLayout _mainLayout;
+
+    private ComboBox<IPreviewPlugin?> _previewBox;
+    private ImageButton _exportBtn;
+
+    private TextEditor _previewTextEditor;
+    private ZoomablePictureBox _textPreview;
+
+    public Size Size { get; set; } = Size.Parent;
+
+    public override Size GetSize() => Size;
+
+    protected override void UpdateInternal(Rectangle contentRect)
     {
-        private StackLayout _mainLayout;
+        _mainLayout.Update(contentRect);
+    }
 
-        private ComboBox<IPreviewPlugin?> _previewBox;
-        private ImageButton _exportBtn;
+    private void InitializeComponent(IPluginManager pluginManager)
+    {
+        _previewTextEditor = new TextEditor();
+        _textPreview = new ZoomablePictureBox { ShowBorder = true };
 
-        private TextEditor _previewTextEditor;
-        private ZoomablePictureBox _textPreview;
-
-        public Size Size { get; set; } = Size.Parent;
-
-        public override Size GetSize() => Size;
-
-        protected override void UpdateInternal(Rectangle contentRect)
+        _previewBox = new ComboBox<IPreviewPlugin?>();
+        _exportBtn = new ImageButton
         {
-            _mainLayout.Update(contentRect);
-        }
+            Image = ImageResources.ImageExport,
+            Tooltip = LocalizationResources.TextPreviewExport,
+            ImageSize = new Vector2(16, 16),
+            Padding = new Vector2(5, 5),
+            Enabled = false
+        };
 
-        private void InitializeComponent(IPluginManager pluginManager)
-        {
-            _previewTextEditor = new TextEditor();
-            _textPreview = new ZoomablePictureBox { ShowBorder = true };
+        _mainLayout = new StackLayout { Alignment = Alignment.Vertical, ItemSpacing = 5, Size = Size.Parent };
+        var textPreviewSettingsLayout = new StackLayout { Alignment = Alignment.Horizontal, ItemSpacing = 5, Size = Size.WidthAlign };
+        var textPreviewLayout = new StackLayout { Alignment = Alignment.Horizontal, ItemSpacing = 5, Size = Size.HeightAlign };
 
-            _previewBox = new ComboBox<IPreviewPlugin?>();
-            _exportBtn = new ImageButton
-            {
-                Image = ImageResources.ImageExport,
-                Tooltip = LocalizationResources.TextPreviewExport,
-                ImageSize = new Vector2(16, 16),
-                Padding = new Vector2(5, 5),
-                Enabled = false
-            };
+        textPreviewSettingsLayout.Items.Add(_previewBox);
+        textPreviewSettingsLayout.Items.Add(new StackItem(_exportBtn) { Size = Size.WidthAlign, HorizontalAlignment = HorizontalAlignment.Right });
 
-            _mainLayout = new StackLayout { Alignment = Alignment.Vertical, ItemSpacing = 5, Size = Size.Parent };
-            var textPreviewSettingsLayout = new StackLayout { Alignment = Alignment.Horizontal, ItemSpacing = 5, Size = Size.WidthAlign };
-            var textPreviewLayout = new StackLayout { Alignment = Alignment.Horizontal, ItemSpacing = 5, Size = Size.HeightAlign };
+        textPreviewLayout.Items.Add(_previewTextEditor);
+        textPreviewLayout.Items.Add(_textPreview);
 
-            textPreviewSettingsLayout.Items.Add(_previewBox);
-            textPreviewSettingsLayout.Items.Add(new StackItem(_exportBtn) { Size = Size.WidthAlign, HorizontalAlignment = HorizontalAlignment.Right });
+        _mainLayout.Items.Add(textPreviewSettingsLayout);
+        _mainLayout.Items.Add(textPreviewLayout);
 
-            textPreviewLayout.Items.Add(_previewTextEditor);
-            textPreviewLayout.Items.Add(_textPreview);
+        InitializePreviewPlugins(pluginManager);
+    }
 
-            _mainLayout.Items.Add(textPreviewSettingsLayout);
-            _mainLayout.Items.Add(textPreviewLayout);
+    private void InitializePreviewPlugins(IPluginManager pluginManager)
+    {
+        IPreviewPlugin[] gamePlugins = [.. pluginManager.GetPlugins<IPreviewPlugin>()];
 
-            InitializePreviewPlugins(pluginManager);
-        }
+        _previewBox.Items.Add(new DropDownItem<IPreviewPlugin?>(null, LocalizationResources.TextPreviewDefault));
 
-        private void InitializePreviewPlugins(IPluginManager pluginManager)
-        {
-            IPreviewPlugin[] gamePlugins = [.. pluginManager.GetPlugins<IPreviewPlugin>()];
+        foreach (IPreviewPlugin gamePlugin in gamePlugins)
+            _previewBox.Items.Add(new DropDownItem<IPreviewPlugin?>(gamePlugin, gamePlugin.Metadata.Name));
 
-            _previewBox.Items.Add(new DropDownItem<IPreviewPlugin?>(null, LocalizationResources.TextPreviewDefault));
-
-            foreach (IPreviewPlugin gamePlugin in gamePlugins)
-                _previewBox.Items.Add(new DropDownItem<IPreviewPlugin?>(gamePlugin, gamePlugin.Metadata.Name));
-
-            if (_previewBox.Items.Count > 0)
-                _previewBox.SelectedItem = _previewBox.Items[0];
-        }
+        if (_previewBox.Items.Count > 0)
+            _previewBox.SelectedItem = _previewBox.Items[0];
     }
 }

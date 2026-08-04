@@ -24,871 +24,870 @@ using ImageResources = CfgBinEditor.resources.ImageResources;
 using Size = ImGui.Forms.Models.Size;
 using ValueType = Logic.Domain.Level5Management.Contract.DataClasses.ValueType;
 
-namespace CfgBinEditor.Forms
+namespace CfgBinEditor.Forms;
+
+public partial class T2bForm : Component
 {
-    public partial class T2bForm : Component
+    private readonly T2b _config;
+    private readonly IEventBroker _eventBroker;
+    private readonly IT2bWriter _writer;
+    private readonly IValueSettingsProvider _settingsProvider;
+
+    public T2bForm(T2b config, IPluginManager pluginManager, IFormFactory formFactory, IEventBroker eventBroker, IT2bWriter writer, IValueSettingsProvider settingsProvider)
     {
-        private readonly T2b _config;
-        private readonly IEventBroker _eventBroker;
-        private readonly IT2bWriter _writer;
-        private readonly IValueSettingsProvider _settingsProvider;
+        InitializeComponent(config, pluginManager, formFactory, settingsProvider);
 
-        public T2bForm(T2b config, IPluginManager pluginManager, IFormFactory formFactory, IEventBroker eventBroker, IT2bWriter writer, IValueSettingsProvider settingsProvider)
+        _config = config;
+        _eventBroker = eventBroker;
+        _writer = writer;
+        _settingsProvider = settingsProvider;
+
+        _gameComboBox.SelectedItemChanged += (s, e) => ChangeGame(_gameComboBox.SelectedItem.Content);
+        _gameAddButton.Clicked += (s, e) => AddNewGame();
+
+        _valueAddButton.Clicked += (s, e) => AddEntryValue();
+
+        eventBroker.Subscribe<ValueSettingsChangedMessage>(ChangeValueSettings);
+        eventBroker.Subscribe<FileSaveRequestMessage>(SaveFile);
+        eventBroker.Subscribe<GameAddedMessage>(AddGame);
+
+        if (_treeViewForm.SelectedEntry != null)
+            ChangeEntry(_treeViewForm.SelectedEntry.Entry);
+
+        _eventBroker.Subscribe<TreeChangedMessage<T2b, T2bNode>>(msg =>
         {
-            InitializeComponent(config, pluginManager, formFactory, settingsProvider);
+            if (msg.TreeViewForm == _treeViewForm)
+                RaiseFileChanged();
+        });
 
-            _config = config;
-            _eventBroker = eventBroker;
-            _writer = writer;
-            _settingsProvider = settingsProvider;
-
-            _gameComboBox.SelectedItemChanged += (s, e) => ChangeGame(_gameComboBox.SelectedItem.Content);
-            _gameAddButton.Clicked += (s, e) => AddNewGame();
-
-            _valueAddButton.Clicked += (s, e) => AddEntryValue();
-
-            eventBroker.Subscribe<ValueSettingsChangedMessage>(ChangeValueSettings);
-            eventBroker.Subscribe<FileSaveRequestMessage>(SaveFile);
-            eventBroker.Subscribe<GameAddedMessage>(AddGame);
-
-            if (_treeViewForm.SelectedEntry != null)
-                ChangeEntry(_treeViewForm.SelectedEntry.Entry);
-
-            _eventBroker.Subscribe<TreeChangedMessage<T2b, T2bNode>>(msg =>
-            {
-                if (msg.TreeViewForm == _treeViewForm)
-                    RaiseFileChanged();
-            });
-
-            _eventBroker.Subscribe<TreeEntryChangedMessage<T2b, T2bNode>>(msg =>
-            {
-                if (msg.TreeViewForm == _treeViewForm)
-                    ChangeEntry(msg.Entry?.Entry);
-            });
-        }
-
-        private void ChangeEntry(T2bEntry? entry)
+        _eventBroker.Subscribe<TreeEntryChangedMessage<T2b, T2bNode>>(msg =>
         {
-            _valueAddButton.Enabled = true;
+            if (msg.TreeViewForm == _treeViewForm)
+                ChangeEntry(msg.Entry?.Entry);
+        });
+    }
 
-            var layout = new TableLayout { Size = new Size(SizeValue.Parent, SizeValue.Content), Spacing = new Vector2(5, 5) };
+    private void ChangeEntry(T2bEntry? entry)
+    {
+        _valueAddButton.Enabled = true;
 
-            var headerRow = new TableRow
+        var layout = new TableLayout { Size = new Size(SizeValue.Parent, SizeValue.Content), Spacing = new Vector2(5, 5) };
+
+        var headerRow = new TableRow
+        {
+            Cells =
             {
-                Cells =
-                {
-                    new Label { Text = LocalizationResources.CfgBinEntryNameCaption },
-                    new Label { Text = LocalizationResources.CfgBinEntryTypeCaption },
-                    new Label { Text = LocalizationResources.CfgBinEntryValueCaption },
-                    new Label { Text = string.Empty },
-                    new Label { Text = LocalizationResources.CfgBinEntryIsHexCaption }
-                }
-            };
-            layout.Rows.Add(headerRow);
-
-            if (entry == null)
-            {
-                _configContent.Content = layout;
-                return;
+                new Label { Text = LocalizationResources.CfgBinEntryNameCaption },
+                new Label { Text = LocalizationResources.CfgBinEntryTypeCaption },
+                new Label { Text = LocalizationResources.CfgBinEntryValueCaption },
+                new Label { Text = string.Empty },
+                new Label { Text = LocalizationResources.CfgBinEntryIsHexCaption }
             }
+        };
+        layout.Rows.Add(headerRow);
 
-            for (var i = 0; i < entry.Values.Length; i++)
-            {
-                TableRow valueRow = CreateValueRow(entry, i);
-                layout.Rows.Add(valueRow);
-            }
-
+        if (entry == null)
+        {
             _configContent.Content = layout;
+            return;
         }
 
-        private void AddEntryValue()
+        for (var i = 0; i < entry.Values.Length; i++)
         {
-            T2bEntry? entry = _treeViewForm.SelectedEntry?.Entry;
-            if (entry == null)
-                return;
-
-            // Add value entry
-            T2bEntryValue[] values = entry.Values;
-            Array.Resize(ref values, values.Length + 1);
-            entry.Values = values;
-
-            entry.Values[^1] = new T2bEntryValue
-            {
-                Type = ValueType.Integer,
-                Value = GetDefaultValue(ValueType.Integer)
-            };
-
-            // Add table row
-            TableRow newValueRow = CreateValueRow(entry, entry.Values.Length - 1);
-            ((TableLayout)_configContent.Content).Rows.Add(newValueRow);
-
-            RaiseFileChanged();
+            TableRow valueRow = CreateValueRow(entry, i);
+            layout.Rows.Add(valueRow);
         }
 
-        private TableRow CreateValueRow(T2bEntry entry, int index)
+        _configContent.Content = layout;
+    }
+
+    private void AddEntryValue()
+    {
+        T2bEntry? entry = _treeViewForm.SelectedEntry?.Entry;
+        if (entry == null)
+            return;
+
+        // Add value entry
+        T2bEntryValue[] values = entry.Values;
+        Array.Resize(ref values, values.Length + 1);
+        entry.Values = values;
+
+        entry.Values[^1] = new T2bEntryValue
         {
-            string currentGame = GetCurrentGame();
+            Type = ValueType.Integer,
+            Value = GetDefaultValue(ValueType.Integer)
+        };
 
-            T2bEntryValue entryValue = entry.Values[index];
-            ValueSettingEntry settingEntry = _settingsProvider.GetEntrySettings(currentGame, entry.Name, index);
+        // Add table row
+        TableRow newValueRow = CreateValueRow(entry, entry.Values.Length - 1);
+        ((TableLayout)_configContent.Content).Rows.Add(newValueRow);
 
-            var valueNameTextBox = new TextBox { Enabled = currentGame != LocalizationResources.GameNoneCaption };
-            valueNameTextBox.TextChanged += ValueNameTextBox_TextChanged;
+        RaiseFileChanged();
+    }
 
-            SetValueNameText(valueNameTextBox, settingEntry.Name);
+    private TableRow CreateValueRow(T2bEntry entry, int index)
+    {
+        string currentGame = GetCurrentGame();
 
-            var typeComboBox = new ComboBox<ValueType>
+        T2bEntryValue entryValue = entry.Values[index];
+        ValueSettingEntry settingEntry = _settingsProvider.GetEntrySettings(currentGame, entry.Name, index);
+
+        var valueNameTextBox = new TextBox { Enabled = currentGame != LocalizationResources.GameNoneCaption };
+        valueNameTextBox.TextChanged += ValueNameTextBox_TextChanged;
+
+        SetValueNameText(valueNameTextBox, settingEntry.Name);
+
+        var typeComboBox = new ComboBox<ValueType>
+        {
+            Items =
             {
-                Items =
+                new DropDownItem<ValueType>(ValueType.String, LocalizationResources.CfgBinEntryTypeStringCaption),
+                new DropDownItem<ValueType>(ValueType.Integer, LocalizationResources.CfgBinEntryTypeIntCaption),
+                new DropDownItem<ValueType>(ValueType.FloatingPoint, LocalizationResources.CfgBinEntryTypeFloatCaption)
+            }
+        };
+        typeComboBox.SelectedItem = typeComboBox.Items.FirstOrDefault(x => x.Content == entryValue.Type);
+        typeComboBox.SelectedItemChanged += TypeComboBox_SelectedItemChanged;
+
+        var valueTextBox = new TextBox { MaxCharacters = 1024 };
+        valueTextBox.TextChanged += ValueTextBox_TextChanged;
+
+        SetValueText(valueTextBox, entryValue, settingEntry.IsHex);
+
+        var actionButton = CreateValueActionButton(entryValue);
+
+        var valueIsHexCheckbox = new CheckBox { Checked = settingEntry.IsHex, Enabled = currentGame != LocalizationResources.GameNoneCaption };
+        valueIsHexCheckbox.CheckChanged += ValueIsHexCheckbox_CheckChanged;
+
+        return new TableRow
+        {
+            Cells =
+            {
+                new TableCell(valueNameTextBox) { Size = new Size(SizeValue.Absolute(200), SizeValue.Content) },
+                typeComboBox,
+                valueTextBox,
+                actionButton,
+                new TableCell(valueIsHexCheckbox){HorizontalAlignment = HorizontalAlignment.Center}
+            }
+        };
+    }
+
+    private Component CreateValueActionButton(T2bEntryValue entryValue)
+    {
+        switch (entryValue.Type)
+        {
+            case ValueType.Integer:
+            case ValueType.FloatingPoint:
+                var randomButton = new ImageButton
                 {
-                    new DropDownItem<ValueType>(ValueType.String, LocalizationResources.CfgBinEntryTypeStringCaption),
-                    new DropDownItem<ValueType>(ValueType.Integer, LocalizationResources.CfgBinEntryTypeIntCaption),
-                    new DropDownItem<ValueType>(ValueType.FloatingPoint, LocalizationResources.CfgBinEntryTypeFloatCaption)
-                }
-            };
-            typeComboBox.SelectedItem = typeComboBox.Items.FirstOrDefault(x => x.Content == entryValue.Type);
-            typeComboBox.SelectedItemChanged += TypeComboBox_SelectedItemChanged;
+                    Image = ImageResources.Random,
+                    ImageSize = new Vector2(17, 17),
+                    Padding = Vector2.One,
+                    Tooltip = LocalizationResources.CfgBinEntryRandomTooltip
+                };
+                randomButton.Clicked += RandomButton_Clicked;
 
-            var valueTextBox = new TextBox { MaxCharacters = 1024 };
-            valueTextBox.TextChanged += ValueTextBox_TextChanged;
+                return randomButton;
 
-            SetValueText(valueTextBox, entryValue, settingEntry.IsHex);
-
-            var actionButton = CreateValueActionButton(entryValue);
-
-            var valueIsHexCheckbox = new CheckBox { Checked = settingEntry.IsHex, Enabled = currentGame != LocalizationResources.GameNoneCaption };
-            valueIsHexCheckbox.CheckChanged += ValueIsHexCheckbox_CheckChanged;
-
-            return new TableRow
-            {
-                Cells =
+            case ValueType.String:
+                var actionButton = new ImageButton
                 {
-                    new TableCell(valueNameTextBox) { Size = new Size(SizeValue.Absolute(200), SizeValue.Content) },
-                    typeComboBox,
-                    valueTextBox,
-                    actionButton,
-                    new TableCell(valueIsHexCheckbox){HorizontalAlignment = HorizontalAlignment.Center}
+                    Image = ImageResources.Close,
+                    ImageSize = new Vector2(17, 17),
+                    Padding = Vector2.One,
+                    Tooltip = LocalizationResources.CfgBinEntryEmptyTooltip
+                };
+                actionButton.Clicked += EmptyButton_Clicked;
+
+                return actionButton;
+
+            default:
+                throw new InvalidOperationException($"Unknown value type {entryValue.Type}.");
+        }
+    }
+
+    private void ChangeGame(LocalizedString gameName)
+    {
+        if (_treeViewForm.SelectedEntry != null)
+            ChangeValueSettings(gameName, _treeViewForm.SelectedEntry.Entry.Name);
+
+        _treeViewForm.GameName = gameName;
+    }
+
+    private void ChangeValueSettings(ValueSettingsChangedMessage message)
+    {
+        if (message.Sender == this)
+            return;
+
+        if (message.GameName != GetCurrentGame())
+            return;
+
+        if (message.EntryName != _treeViewForm.SelectedEntry?.Entry.Name)
+            return;
+
+        ChangeValueSettings(message.GameName, message.EntryName);
+    }
+
+    private void ChangeValueSettings(LocalizedString gameName, string entryName)
+    {
+        var layout = _configContent.Content as TableLayout;
+        if (layout == null)
+            return;
+
+        for (var i = 1; i < layout.Rows.Count; i++)
+        {
+            ValueSettingEntry entrySettings = _settingsProvider.GetEntrySettings(gameName, entryName, i - 1);
+
+            var nameTextBox = layout.Rows[i].Cells[0].Content as TextBox;
+            if (nameTextBox == null)
+                continue;
+
+            nameTextBox.Enabled = gameName != LocalizationResources.GameNoneCaption;
+            SetValueNameText(nameTextBox, entrySettings.Name);
+
+            var valueTextBox = layout.Rows[i].Cells[2].Content as TextBox;
+            if (valueTextBox == null)
+                continue;
+
+            var isHexCheckbox = layout.Rows[i].Cells[4].Content as CheckBox;
+            if (isHexCheckbox == null)
+                continue;
+
+            isHexCheckbox.Enabled = gameName != LocalizationResources.GameNoneCaption;
+            SetValueIsHex(isHexCheckbox, entrySettings.IsHex);
+            SetValueText(valueTextBox, _treeViewForm.SelectedEntry.Entry.Values[i - 1], entrySettings.IsHex);
+        }
+    }
+
+    private async void AddNewGame()
+    {
+        string gameName = await InputBox.ShowAsync(LocalizationResources.GameAddDialogCaption,
+            LocalizationResources.GameAddDialogText, string.Empty, LocalizationResources.GameAddDialogPlaceholder);
+
+        if (string.IsNullOrEmpty(gameName))
+            return;
+
+        if (gameName.Contains('(') || gameName.Contains(')'))
+        {
+            await MessageBox.ShowErrorAsync(LocalizationResources.GameAddDialogInvalidCharactersCaption,
+                LocalizationResources.GameAddDialogInvalidCharactersText);
+            return;
+        }
+
+        _settingsProvider.AddGame(gameName);
+
+        RaiseGameAdded(gameName);
+    }
+
+    private void AddGame(GameAddedMessage msg)
+    {
+        _gameComboBox.Items.Add(new DropDownItem<LocalizedString>(msg.Game));
+
+        if (msg.Sender != this)
+            return;
+
+        _gameComboBox.SelectedItem = _gameComboBox.Items[^1];
+
+        ChangeGame(msg.Game);
+    }
+
+    private void SaveFile(FileSaveRequestMessage msg)
+    {
+        if (!msg.ConfigForms.TryGetValue(this, out string? savePath))
+            return;
+
+        if (!TryWriteFile(savePath, out Exception e))
+        {
+            RaiseFileSaved(e);
+            return;
+        }
+
+        _treeViewForm.ResetNodeState();
+
+        RaiseFileSaved();
+    }
+
+    private bool TryWriteFile(string savePath, out Exception ex)
+    {
+        ex = null;
+
+        try
+        {
+            using Stream fileStream = _writer.Write(_config);
+            using Stream targetFileStream = File.Create(savePath);
+
+            fileStream.CopyTo(targetFileStream);
+        }
+        catch (Exception e)
+        {
+            ex = e;
+            return false;
+        }
+
+        return true;
+    }
+
+    private void ValueNameTextBox_TextChanged(object sender, EventArgs e)
+    {
+        var textBox = sender as TextBox;
+        if (textBox == null)
+            return;
+
+        var layout = _configContent.Content as TableLayout;
+        if (layout == null)
+            return;
+
+        var row = layout.Rows.FirstOrDefault(r => r.Cells[0].Content == textBox);
+        var rowIndex = layout.Rows.IndexOf(row);
+        if (rowIndex < 0)
+            return;
+
+        var configEntry = _treeViewForm.SelectedEntry;
+        var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Entry.Name, rowIndex - 1);
+
+        settingsEntry.Name = textBox.Text.Replace(' ', '_').Replace('|', '_');
+
+        _settingsProvider.SetEntrySettings(GetCurrentGame(), configEntry.Entry.Name, rowIndex - 1, settingsEntry);
+
+        for (var i = 1; i <= rowIndex; i++)
+        {
+            var nameTextBox = layout.Rows[i].Cells[0].Content as TextBox;
+            if (nameTextBox == null || !string.IsNullOrEmpty(nameTextBox.Text))
+                continue;
+
+            var valueName = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Entry.Name, i - 1).Name;
+            SetValueNameText(nameTextBox, valueName);
+        }
+
+        _settingsProvider.Persist();
+
+        RaiseValueSettingsChanged(GetCurrentGame(), configEntry.Entry.Name);
+    }
+
+    private void TypeComboBox_SelectedItemChanged(object sender, EventArgs e)
+    {
+        var comboBox = sender as ComboBox<ValueType>;
+        if (comboBox == null)
+            return;
+
+        var layout = _configContent.Content as TableLayout;
+        if (layout == null)
+            return;
+
+        var row = layout.Rows.FirstOrDefault(r => r.Cells[1].Content == comboBox);
+        var rowIndex = layout.Rows.IndexOf(row);
+        if (rowIndex < 0)
+            return;
+
+        var valueTextBox = row!.Cells[2].Content as TextBox;
+        if (valueTextBox == null)
+            return;
+
+        var randomBtn = row.Cells[3].Content as ImageButton;
+        if (randomBtn == null)
+            return;
+
+        var configEntry = _treeViewForm.SelectedEntry;
+        var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Entry.Name, rowIndex - 1);
+
+        ValueType newValueType = comboBox.SelectedItem.Content;
+        object? newValue = ConvertValue(configEntry.Entry.Values[rowIndex - 1].Value, configEntry.Entry.Values[rowIndex - 1].Type, newValueType);
+
+        SetEntryType(configEntry.Entry, rowIndex - 1, newValueType);
+        SetEntryValue(configEntry.Entry, rowIndex - 1, newValue);
+
+        SetValueText(valueTextBox, newValueType, newValue, settingsEntry.IsHex);
+
+        row.Cells[3] = CreateValueActionButton(configEntry.Entry.Values[rowIndex - 1]);
+    }
+
+    private void ValueTextBox_TextChanged(object sender, EventArgs e)
+    {
+        var textBox = sender as TextBox;
+        if (textBox == null)
+            return;
+
+        var layout = _configContent.Content as TableLayout;
+        if (layout == null)
+            return;
+
+        var row = layout.Rows.FirstOrDefault(r => r.Cells[2].Content == textBox);
+        var rowIndex = layout.Rows.IndexOf(row);
+        if (rowIndex < 0)
+            return;
+
+        var configEntry = _treeViewForm.SelectedEntry;
+        var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Entry.Name, rowIndex - 1);
+
+        ValueType valueType = configEntry.Entry.Values[rowIndex - 1].Type;
+        if (TryParseValue(textBox.Text, valueType, settingsEntry.IsHex, out object? parsedValue))
+            SetEntryValue(configEntry.Entry, rowIndex - 1, parsedValue!);
+    }
+
+    private void RandomButton_Clicked(object? sender, EventArgs e)
+    {
+        var randomBtn = sender as ImageButton;
+        if (randomBtn == null)
+            return;
+
+        var layout = _configContent.Content as TableLayout;
+        if (layout == null)
+            return;
+
+        var row = layout.Rows.FirstOrDefault(r => r.Cells[3].Content == randomBtn);
+        var rowIndex = layout.Rows.IndexOf(row);
+        if (rowIndex < 0)
+            return;
+
+        var valueTextBox = row.Cells[2].Content as TextBox;
+        if (valueTextBox == null)
+            return;
+
+        var checkBox = row.Cells[4].Content as CheckBox;
+        if (checkBox == null)
+            return;
+
+        var configEntry = _treeViewForm.SelectedEntry;
+        ValueType valueType = configEntry.Entry.Values[rowIndex - 1].Type;
+
+        var random = new Random();
+        object randomValue;
+        switch (valueType)
+        {
+            case ValueType.Integer:
+                switch (_config.ValueLength)
+                {
+                    case ValueLength.Int:
+                        randomValue = random.Next();
+                        break;
+
+                    case ValueLength.Long:
+                        randomValue = random.NextInt64();
+                        break;
+
+                    default:
+                        throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
                 }
-            };
+                break;
+
+            case ValueType.FloatingPoint:
+                switch (_config.ValueLength)
+                {
+                    case ValueLength.Int:
+                        randomValue = random.NextSingle();
+                        break;
+
+                    case ValueLength.Long:
+                        randomValue = random.NextDouble();
+                        break;
+
+                    default:
+                        throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                }
+                break;
+
+            default:
+                throw new InvalidOperationException($"Unknown value type {valueType}.");
         }
 
-        private Component CreateValueActionButton(T2bEntryValue entryValue)
-        {
-            switch (entryValue.Type)
-            {
-                case ValueType.Integer:
-                case ValueType.FloatingPoint:
-                    var randomButton = new ImageButton
-                    {
-                        Image = ImageResources.Random,
-                        ImageSize = new Vector2(17, 17),
-                        Padding = Vector2.One,
-                        Tooltip = LocalizationResources.CfgBinEntryRandomTooltip
-                    };
-                    randomButton.Clicked += RandomButton_Clicked;
+        SetEntryValue(configEntry.Entry, rowIndex - 1, randomValue);
+        SetValueText(valueTextBox, configEntry.Entry.Values[rowIndex - 1], checkBox.Checked);
+    }
 
-                    return randomButton;
+    private void EmptyButton_Clicked(object? sender, EventArgs e)
+    {
+        var emptyBtn = sender as ImageButton;
+        if (emptyBtn == null)
+            return;
 
-                case ValueType.String:
-                    var actionButton = new ImageButton
-                    {
-                        Image = ImageResources.Close,
-                        ImageSize = new Vector2(17, 17),
-                        Padding = Vector2.One,
-                        Tooltip = LocalizationResources.CfgBinEntryEmptyTooltip
-                    };
-                    actionButton.Clicked += EmptyButton_Clicked;
+        var layout = _configContent.Content as TableLayout;
+        if (layout == null)
+            return;
 
-                    return actionButton;
+        var row = layout.Rows.FirstOrDefault(r => r.Cells[3].Content == emptyBtn);
+        var rowIndex = layout.Rows.IndexOf(row);
+        if (rowIndex < 0)
+            return;
 
-                default:
-                    throw new InvalidOperationException($"Unknown value type {entryValue.Type}.");
-            }
-        }
+        var valueTextBox = row.Cells[2].Content as TextBox;
+        if (valueTextBox == null)
+            return;
 
-        private void ChangeGame(LocalizedString gameName)
-        {
-            if (_treeViewForm.SelectedEntry != null)
-                ChangeValueSettings(gameName, _treeViewForm.SelectedEntry.Entry.Name);
+        var configEntry = _treeViewForm.SelectedEntry;
 
-            _treeViewForm.GameName = gameName;
-        }
+        SetEntryValue(configEntry.Entry, rowIndex - 1, null);
+        SetValueText(valueTextBox, configEntry.Entry.Values[rowIndex - 1], false);
+    }
 
-        private void ChangeValueSettings(ValueSettingsChangedMessage message)
-        {
-            if (message.Sender == this)
-                return;
+    private void ValueIsHexCheckbox_CheckChanged(object sender, EventArgs e)
+    {
+        var checkBox = sender as CheckBox;
+        if (checkBox == null)
+            return;
 
-            if (message.GameName != GetCurrentGame())
-                return;
+        var layout = _configContent.Content as TableLayout;
+        if (layout == null)
+            return;
 
-            if (message.EntryName != _treeViewForm.SelectedEntry?.Entry.Name)
-                return;
+        var row = layout.Rows.FirstOrDefault(r => r.Cells[4].Content == checkBox);
+        var rowIndex = layout.Rows.IndexOf(row);
+        if (rowIndex < 0)
+            return;
 
-            ChangeValueSettings(message.GameName, message.EntryName);
-        }
+        var configEntry = _treeViewForm.SelectedEntry;
+        var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Entry.Name, rowIndex - 1);
 
-        private void ChangeValueSettings(LocalizedString gameName, string entryName)
-        {
-            var layout = _configContent.Content as TableLayout;
-            if (layout == null)
-                return;
+        settingsEntry.IsHex = checkBox.Checked;
 
-            for (var i = 1; i < layout.Rows.Count; i++)
-            {
-                ValueSettingEntry entrySettings = _settingsProvider.GetEntrySettings(gameName, entryName, i - 1);
+        _settingsProvider.SetEntrySettings(GetCurrentGame(), configEntry.Entry.Name, rowIndex - 1, settingsEntry);
 
-                var nameTextBox = layout.Rows[i].Cells[0].Content as TextBox;
-                if (nameTextBox == null)
-                    continue;
+        var valueTextBox = layout.Rows[rowIndex].Cells[2].Content as TextBox;
 
-                nameTextBox.Enabled = gameName != LocalizationResources.GameNoneCaption;
-                SetValueNameText(nameTextBox, entrySettings.Name);
-
-                var valueTextBox = layout.Rows[i].Cells[2].Content as TextBox;
-                if (valueTextBox == null)
-                    continue;
-
-                var isHexCheckbox = layout.Rows[i].Cells[4].Content as CheckBox;
-                if (isHexCheckbox == null)
-                    continue;
-
-                isHexCheckbox.Enabled = gameName != LocalizationResources.GameNoneCaption;
-                SetValueIsHex(isHexCheckbox, entrySettings.IsHex);
-                SetValueText(valueTextBox, _treeViewForm.SelectedEntry.Entry.Values[i - 1], entrySettings.IsHex);
-            }
-        }
-
-        private async void AddNewGame()
-        {
-            string gameName = await InputBox.ShowAsync(LocalizationResources.GameAddDialogCaption,
-                LocalizationResources.GameAddDialogText, string.Empty, LocalizationResources.GameAddDialogPlaceholder);
-
-            if (string.IsNullOrEmpty(gameName))
-                return;
-
-            if (gameName.Contains('(') || gameName.Contains(')'))
-            {
-                await MessageBox.ShowErrorAsync(LocalizationResources.GameAddDialogInvalidCharactersCaption,
-                    LocalizationResources.GameAddDialogInvalidCharactersText);
-                return;
-            }
-
-            _settingsProvider.AddGame(gameName);
-
-            RaiseGameAdded(gameName);
-        }
-
-        private void AddGame(GameAddedMessage msg)
-        {
-            _gameComboBox.Items.Add(new DropDownItem<LocalizedString>(msg.Game));
-
-            if (msg.Sender != this)
-                return;
-
-            _gameComboBox.SelectedItem = _gameComboBox.Items[^1];
-
-            ChangeGame(msg.Game);
-        }
-
-        private void SaveFile(FileSaveRequestMessage msg)
-        {
-            if (!msg.ConfigForms.TryGetValue(this, out string? savePath))
-                return;
-
-            if (!TryWriteFile(savePath, out Exception e))
-            {
-                RaiseFileSaved(e);
-                return;
-            }
-
-            _treeViewForm.ResetNodeState();
-
-            RaiseFileSaved();
-        }
-
-        private bool TryWriteFile(string savePath, out Exception ex)
-        {
-            ex = null;
-
-            try
-            {
-                using Stream fileStream = _writer.Write(_config);
-                using Stream targetFileStream = File.Create(savePath);
-
-                fileStream.CopyTo(targetFileStream);
-            }
-            catch (Exception e)
-            {
-                ex = e;
-                return false;
-            }
-
-            return true;
-        }
-
-        private void ValueNameTextBox_TextChanged(object sender, EventArgs e)
-        {
-            var textBox = sender as TextBox;
-            if (textBox == null)
-                return;
-
-            var layout = _configContent.Content as TableLayout;
-            if (layout == null)
-                return;
-
-            var row = layout.Rows.FirstOrDefault(r => r.Cells[0].Content == textBox);
-            var rowIndex = layout.Rows.IndexOf(row);
-            if (rowIndex < 0)
-                return;
-
-            var configEntry = _treeViewForm.SelectedEntry;
-            var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Entry.Name, rowIndex - 1);
-
-            settingsEntry.Name = textBox.Text.Replace(' ', '_').Replace('|', '_');
-
-            _settingsProvider.SetEntrySettings(GetCurrentGame(), configEntry.Entry.Name, rowIndex - 1, settingsEntry);
-
-            for (var i = 1; i <= rowIndex; i++)
-            {
-                var nameTextBox = layout.Rows[i].Cells[0].Content as TextBox;
-                if (nameTextBox == null || !string.IsNullOrEmpty(nameTextBox.Text))
-                    continue;
-
-                var valueName = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Entry.Name, i - 1).Name;
-                SetValueNameText(nameTextBox, valueName);
-            }
-
-            _settingsProvider.Persist();
-
-            RaiseValueSettingsChanged(GetCurrentGame(), configEntry.Entry.Name);
-        }
-
-        private void TypeComboBox_SelectedItemChanged(object sender, EventArgs e)
-        {
-            var comboBox = sender as ComboBox<ValueType>;
-            if (comboBox == null)
-                return;
-
-            var layout = _configContent.Content as TableLayout;
-            if (layout == null)
-                return;
-
-            var row = layout.Rows.FirstOrDefault(r => r.Cells[1].Content == comboBox);
-            var rowIndex = layout.Rows.IndexOf(row);
-            if (rowIndex < 0)
-                return;
-
-            var valueTextBox = row!.Cells[2].Content as TextBox;
-            if (valueTextBox == null)
-                return;
-
-            var randomBtn = row.Cells[3].Content as ImageButton;
-            if (randomBtn == null)
-                return;
-
-            var configEntry = _treeViewForm.SelectedEntry;
-            var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Entry.Name, rowIndex - 1);
-
-            ValueType newValueType = comboBox.SelectedItem.Content;
-            object? newValue = ConvertValue(configEntry.Entry.Values[rowIndex - 1].Value, configEntry.Entry.Values[rowIndex - 1].Type, newValueType);
-
-            SetEntryType(configEntry.Entry, rowIndex - 1, newValueType);
-            SetEntryValue(configEntry.Entry, rowIndex - 1, newValue);
-
-            SetValueText(valueTextBox, newValueType, newValue, settingsEntry.IsHex);
-
-            row.Cells[3] = CreateValueActionButton(configEntry.Entry.Values[rowIndex - 1]);
-        }
-
-        private void ValueTextBox_TextChanged(object sender, EventArgs e)
-        {
-            var textBox = sender as TextBox;
-            if (textBox == null)
-                return;
-
-            var layout = _configContent.Content as TableLayout;
-            if (layout == null)
-                return;
-
-            var row = layout.Rows.FirstOrDefault(r => r.Cells[2].Content == textBox);
-            var rowIndex = layout.Rows.IndexOf(row);
-            if (rowIndex < 0)
-                return;
-
-            var configEntry = _treeViewForm.SelectedEntry;
-            var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Entry.Name, rowIndex - 1);
-
-            ValueType valueType = configEntry.Entry.Values[rowIndex - 1].Type;
-            if (TryParseValue(textBox.Text, valueType, settingsEntry.IsHex, out object? parsedValue))
-                SetEntryValue(configEntry.Entry, rowIndex - 1, parsedValue!);
-        }
-
-        private void RandomButton_Clicked(object? sender, EventArgs e)
-        {
-            var randomBtn = sender as ImageButton;
-            if (randomBtn == null)
-                return;
-
-            var layout = _configContent.Content as TableLayout;
-            if (layout == null)
-                return;
-
-            var row = layout.Rows.FirstOrDefault(r => r.Cells[3].Content == randomBtn);
-            var rowIndex = layout.Rows.IndexOf(row);
-            if (rowIndex < 0)
-                return;
-
-            var valueTextBox = row.Cells[2].Content as TextBox;
-            if (valueTextBox == null)
-                return;
-
-            var checkBox = row.Cells[4].Content as CheckBox;
-            if (checkBox == null)
-                return;
-
-            var configEntry = _treeViewForm.SelectedEntry;
-            ValueType valueType = configEntry.Entry.Values[rowIndex - 1].Type;
-
-            var random = new Random();
-            object randomValue;
-            switch (valueType)
-            {
-                case ValueType.Integer:
-                    switch (_config.ValueLength)
-                    {
-                        case ValueLength.Int:
-                            randomValue = random.Next();
-                            break;
-
-                        case ValueLength.Long:
-                            randomValue = random.NextInt64();
-                            break;
-
-                        default:
-                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
-                    }
-                    break;
-
-                case ValueType.FloatingPoint:
-                    switch (_config.ValueLength)
-                    {
-                        case ValueLength.Int:
-                            randomValue = random.NextSingle();
-                            break;
-
-                        case ValueLength.Long:
-                            randomValue = random.NextDouble();
-                            break;
-
-                        default:
-                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
-                    }
-                    break;
-
-                default:
-                    throw new InvalidOperationException($"Unknown value type {valueType}.");
-            }
-
-            SetEntryValue(configEntry.Entry, rowIndex - 1, randomValue);
+        if (configEntry.Entry.Values[rowIndex - 1].Type is ValueType.Integer or ValueType.FloatingPoint)
             SetValueText(valueTextBox, configEntry.Entry.Values[rowIndex - 1], checkBox.Checked);
-        }
+    }
 
-        private void EmptyButton_Clicked(object? sender, EventArgs e)
+    private void SetValueNameText(TextBox nameTextBox, string text)
+    {
+        nameTextBox.TextChanged -= ValueNameTextBox_TextChanged;
+        nameTextBox.Text = text;
+        nameTextBox.TextChanged += ValueNameTextBox_TextChanged;
+    }
+
+    private void SetValueText(TextBox valueTextBox, T2bEntryValue value, bool isHex)
+    {
+        SetValueText(valueTextBox, value.Type, value.Value, isHex);
+    }
+
+    private void SetValueText(TextBox valueTextBox, ValueType type, object? value, bool isHex)
+    {
+        valueTextBox.TextChanged -= ValueTextBox_TextChanged;
+        valueTextBox.Text = GetValueString(value, type, isHex);
+        valueTextBox.TextChanged += ValueTextBox_TextChanged;
+    }
+
+    private void SetValueIsHex(CheckBox isHexCheckBox, bool isHex)
+    {
+        isHexCheckBox.CheckChanged -= ValueIsHexCheckbox_CheckChanged;
+        isHexCheckBox.Checked = isHex;
+        isHexCheckBox.CheckChanged += ValueIsHexCheckbox_CheckChanged;
+    }
+
+    private void SetEntryType(T2bEntry entry, int index, ValueType type)
+    {
+        entry.Values[index].Type = type;
+        RaiseFileChanged();
+    }
+
+    private void SetEntryValue(T2bEntry entry, int index, object? value)
+    {
+        entry.Values[index].Value = value;
+        RaiseFileChanged();
+    }
+
+    private bool TryParseValue(string text, ValueType type, bool isHex, out object? parsedValue)
+    {
+        parsedValue = null;
+
+        switch (type)
         {
-            var emptyBtn = sender as ImageButton;
-            if (emptyBtn == null)
-                return;
+            case ValueType.String:
+                parsedValue = text;
+                return true;
 
-            var layout = _configContent.Content as TableLayout;
-            if (layout == null)
-                return;
+            case ValueType.Integer:
+                NumberStyles styles = isHex ? NumberStyles.HexNumber : NumberStyles.AllowLeadingSign;
+                text = isHex ? text.StartsWith("0x") ? text[2..] : text : text;
 
-            var row = layout.Rows.FirstOrDefault(r => r.Cells[3].Content == emptyBtn);
-            var rowIndex = layout.Rows.IndexOf(row);
-            if (rowIndex < 0)
-                return;
+                switch (_config.ValueLength)
+                {
+                    case ValueLength.Int:
+                        if (!int.TryParse(text, styles, CultureInfo.InvariantCulture, out int iValue))
+                            return false;
 
-            var valueTextBox = row.Cells[2].Content as TextBox;
-            if (valueTextBox == null)
-                return;
+                        parsedValue = iValue;
+                        return true;
 
-            var configEntry = _treeViewForm.SelectedEntry;
+                    case ValueLength.Long:
+                        if (!long.TryParse(text, styles, CultureInfo.InvariantCulture, out long lValue))
+                            return false;
 
-            SetEntryValue(configEntry.Entry, rowIndex - 1, null);
-            SetValueText(valueTextBox, configEntry.Entry.Values[rowIndex - 1], false);
-        }
+                        parsedValue = lValue;
+                        return true;
 
-        private void ValueIsHexCheckbox_CheckChanged(object sender, EventArgs e)
-        {
-            var checkBox = sender as CheckBox;
-            if (checkBox == null)
-                return;
+                    default:
+                        throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                }
 
-            var layout = _configContent.Content as TableLayout;
-            if (layout == null)
-                return;
+            case ValueType.FloatingPoint:
+                text = isHex ? text.StartsWith("0x") ? text[2..] : text : text;
 
-            var row = layout.Rows.FirstOrDefault(r => r.Cells[4].Content == checkBox);
-            var rowIndex = layout.Rows.IndexOf(row);
-            if (rowIndex < 0)
-                return;
-
-            var configEntry = _treeViewForm.SelectedEntry;
-            var settingsEntry = _settingsProvider.GetEntrySettings(GetCurrentGame(), configEntry.Entry.Name, rowIndex - 1);
-
-            settingsEntry.IsHex = checkBox.Checked;
-
-            _settingsProvider.SetEntrySettings(GetCurrentGame(), configEntry.Entry.Name, rowIndex - 1, settingsEntry);
-
-            var valueTextBox = layout.Rows[rowIndex].Cells[2].Content as TextBox;
-
-            if (configEntry.Entry.Values[rowIndex - 1].Type is ValueType.Integer or ValueType.FloatingPoint)
-                SetValueText(valueTextBox, configEntry.Entry.Values[rowIndex - 1], checkBox.Checked);
-        }
-
-        private void SetValueNameText(TextBox nameTextBox, string text)
-        {
-            nameTextBox.TextChanged -= ValueNameTextBox_TextChanged;
-            nameTextBox.Text = text;
-            nameTextBox.TextChanged += ValueNameTextBox_TextChanged;
-        }
-
-        private void SetValueText(TextBox valueTextBox, T2bEntryValue value, bool isHex)
-        {
-            SetValueText(valueTextBox, value.Type, value.Value, isHex);
-        }
-
-        private void SetValueText(TextBox valueTextBox, ValueType type, object? value, bool isHex)
-        {
-            valueTextBox.TextChanged -= ValueTextBox_TextChanged;
-            valueTextBox.Text = GetValueString(value, type, isHex);
-            valueTextBox.TextChanged += ValueTextBox_TextChanged;
-        }
-
-        private void SetValueIsHex(CheckBox isHexCheckBox, bool isHex)
-        {
-            isHexCheckBox.CheckChanged -= ValueIsHexCheckbox_CheckChanged;
-            isHexCheckBox.Checked = isHex;
-            isHexCheckBox.CheckChanged += ValueIsHexCheckbox_CheckChanged;
-        }
-
-        private void SetEntryType(T2bEntry entry, int index, ValueType type)
-        {
-            entry.Values[index].Type = type;
-            RaiseFileChanged();
-        }
-
-        private void SetEntryValue(T2bEntry entry, int index, object? value)
-        {
-            entry.Values[index].Value = value;
-            RaiseFileChanged();
-        }
-
-        private bool TryParseValue(string text, ValueType type, bool isHex, out object? parsedValue)
-        {
-            parsedValue = null;
-
-            switch (type)
-            {
-                case ValueType.String:
-                    parsedValue = text;
-                    return true;
-
-                case ValueType.Integer:
-                    NumberStyles styles = isHex ? NumberStyles.HexNumber : NumberStyles.AllowLeadingSign;
-                    text = isHex ? text.StartsWith("0x") ? text[2..] : text : text;
-
-                    switch (_config.ValueLength)
-                    {
-                        case ValueLength.Int:
-                            if (!int.TryParse(text, styles, CultureInfo.InvariantCulture, out int iValue))
+                switch (_config.ValueLength)
+                {
+                    case ValueLength.Int:
+                        float fValue;
+                        if (isHex)
+                        {
+                            if (!int.TryParse(text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int iValue))
                                 return false;
 
-                            parsedValue = iValue;
-                            return true;
+                            fValue = BitConverter.Int32BitsToSingle(iValue);
+                        }
+                        else
+                        {
+                            if (!float.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out fValue))
+                                return false;
+                        }
 
-                        case ValueLength.Long:
-                            if (!long.TryParse(text, styles, CultureInfo.InvariantCulture, out long lValue))
+                        parsedValue = fValue;
+                        return true;
+
+                    case ValueLength.Long:
+                        double dValue;
+                        if (isHex)
+                        {
+                            if (!int.TryParse(text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int iValue))
                                 return false;
 
-                            parsedValue = lValue;
-                            return true;
+                            dValue = BitConverter.Int64BitsToDouble(iValue);
+                        }
+                        else
+                        {
+                            if (!double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out dValue))
+                                return false;
+                        }
 
-                        default:
-                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
-                    }
+                        parsedValue = dValue;
+                        return true;
 
-                case ValueType.FloatingPoint:
-                    text = isHex ? text.StartsWith("0x") ? text[2..] : text : text;
+                    default:
+                        throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                }
 
-                    switch (_config.ValueLength)
-                    {
-                        case ValueLength.Int:
-                            float fValue;
-                            if (isHex)
-                            {
-                                if (!int.TryParse(text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int iValue))
-                                    return false;
-
-                                fValue = BitConverter.Int32BitsToSingle(iValue);
-                            }
-                            else
-                            {
-                                if (!float.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out fValue))
-                                    return false;
-                            }
-
-                            parsedValue = fValue;
-                            return true;
-
-                        case ValueLength.Long:
-                            double dValue;
-                            if (isHex)
-                            {
-                                if (!int.TryParse(text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int iValue))
-                                    return false;
-
-                                dValue = BitConverter.Int64BitsToDouble(iValue);
-                            }
-                            else
-                            {
-                                if (!double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out dValue))
-                                    return false;
-                            }
-
-                            parsedValue = dValue;
-                            return true;
-
-                        default:
-                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
-                    }
-
-                default:
-                    throw new InvalidOperationException($"Unknown value type {type}.");
-            }
+            default:
+                throw new InvalidOperationException($"Unknown value type {type}.");
         }
+    }
 
-        private object? ConvertValue(object? value, ValueType sourceType, ValueType targetType)
+    private object? ConvertValue(object? value, ValueType sourceType, ValueType targetType)
+    {
+        if (sourceType == targetType)
+            return value;
+
+        switch (sourceType)
         {
-            if (sourceType == targetType)
-                return value;
+            case ValueType.String:
+                var sValue = (string?)value;
+                switch (targetType)
+                {
+                    case ValueType.Integer:
+                        switch (_config.ValueLength)
+                        {
+                            case ValueLength.Int:
+                                if (int.TryParse(sValue, out int iValue))
+                                    return iValue;
 
-            switch (sourceType)
-            {
-                case ValueType.String:
-                    var sValue = (string?)value;
-                    switch (targetType)
-                    {
-                        case ValueType.Integer:
-                            switch (_config.ValueLength)
-                            {
-                                case ValueLength.Int:
-                                    if (int.TryParse(sValue, out int iValue))
-                                        return iValue;
+                                if (float.TryParse(sValue, CultureInfo.InvariantCulture, out float fValue))
+                                    return (int)Math.Round(fValue);
 
-                                    if (float.TryParse(sValue, CultureInfo.InvariantCulture, out float fValue))
-                                        return (int)Math.Round(fValue);
+                                return GetDefaultValue(targetType);
 
-                                    return GetDefaultValue(targetType);
+                            case ValueLength.Long:
+                                if (long.TryParse(sValue, out long lValue))
+                                    return lValue;
 
-                                case ValueLength.Long:
-                                    if (long.TryParse(sValue, out long lValue))
-                                        return lValue;
+                                if (double.TryParse(sValue, CultureInfo.InvariantCulture, out double dValue))
+                                    return (long)Math.Round(dValue);
 
-                                    if (double.TryParse(sValue, CultureInfo.InvariantCulture, out double dValue))
-                                        return (long)Math.Round(dValue);
+                                return GetDefaultValue(targetType);
 
-                                    return GetDefaultValue(targetType);
+                            default:
+                                throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                        }
 
-                                default:
-                                    throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
-                            }
+                    case ValueType.FloatingPoint:
+                        switch (_config.ValueLength)
+                        {
+                            case ValueLength.Int:
+                                if (float.TryParse(sValue, CultureInfo.InvariantCulture, out float fValue))
+                                    return fValue;
 
-                        case ValueType.FloatingPoint:
-                            switch (_config.ValueLength)
-                            {
-                                case ValueLength.Int:
-                                    if (float.TryParse(sValue, CultureInfo.InvariantCulture, out float fValue))
-                                        return fValue;
+                                return GetDefaultValue(targetType);
 
-                                    return GetDefaultValue(targetType);
+                            case ValueLength.Long:
+                                if (double.TryParse(sValue, CultureInfo.InvariantCulture, out double dValue))
+                                    return dValue;
 
-                                case ValueLength.Long:
-                                    if (double.TryParse(sValue, CultureInfo.InvariantCulture, out double dValue))
-                                        return dValue;
+                                return GetDefaultValue(targetType);
 
-                                    return GetDefaultValue(targetType);
+                            default:
+                                throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                        }
 
-                                default:
-                                    throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
-                            }
+                    default:
+                        throw new InvalidOperationException($"Unknown value type {targetType}.");
+                }
 
-                        default:
-                            throw new InvalidOperationException($"Unknown value type {targetType}.");
-                    }
-
-                case ValueType.Integer:
-                    switch (targetType)
-                    {
-                        case ValueType.String:
-                            return $"{value}";
-
-                        case ValueType.FloatingPoint:
-                            switch (_config.ValueLength)
-                            {
-                                case ValueLength.Int:
-                                    return (float)(int)value!;
-
-                                case ValueLength.Long:
-                                    return (double)(long)value!;
-
-                                default:
-                                    throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
-                            }
-
-                        default:
-                            throw new InvalidOperationException($"Unknown value type {targetType}.");
-                    }
-
-                case ValueType.FloatingPoint:
-                    switch (targetType)
-                    {
-                        case ValueType.String:
-                            return ((float)value!).ToString(CultureInfo.InvariantCulture);
-
-                        case ValueType.Integer:
-                            switch (_config.ValueLength)
-                            {
-                                case ValueLength.Int:
-                                    return (int)Math.Round((float)value!);
-
-                                case ValueLength.Long:
-                                    return (long)Math.Round((double)value!);
-
-                                default:
-                                    throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
-                            }
-
-                        default:
-                            throw new InvalidOperationException($"Unknown value type {targetType}.");
-                    }
-
-                default:
-                    throw new InvalidOperationException($"Unknown value type {targetType}.");
-            }
-        }
-
-        private object GetDefaultValue(ValueType type)
-        {
-            switch (type)
-            {
-                case ValueType.String:
-                    return string.Empty;
-
-                case ValueType.Integer:
-                    switch (_config.ValueLength)
-                    {
-                        case ValueLength.Int:
-                            return 0;
-
-                        case ValueLength.Long:
-                            return (long)0;
-
-                        default:
-                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
-                    }
-
-                case ValueType.FloatingPoint:
-                    switch (_config.ValueLength)
-                    {
-                        case ValueLength.Int:
-                            return 0f;
-
-                        case ValueLength.Long:
-                            return 0d;
-
-                        default:
-                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
-                    }
-
-                default:
-                    throw new InvalidOperationException($"Unknown value type {type}.");
-            }
-        }
-
-        private string GetValueString(object? value, ValueType type, bool isHex)
-        {
-            switch (type)
-            {
-                case ValueType.String:
-                    return $"{value}";
-
-                case ValueType.Integer:
-                    if (!isHex)
+            case ValueType.Integer:
+                switch (targetType)
+                {
+                    case ValueType.String:
                         return $"{value}";
 
-                    switch (_config.ValueLength)
-                    {
-                        case ValueLength.Int:
-                            return $"0x{value:X8}";
+                    case ValueType.FloatingPoint:
+                        switch (_config.ValueLength)
+                        {
+                            case ValueLength.Int:
+                                return (float)(int)value!;
 
-                        case ValueLength.Long:
-                            return $"0x{value:X16}";
+                            case ValueLength.Long:
+                                return (double)(long)value!;
 
-                        default:
-                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
-                    }
+                            default:
+                                throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                        }
 
-                case ValueType.FloatingPoint:
-                    switch (_config.ValueLength)
-                    {
-                        case ValueLength.Int:
-                            if (!isHex)
-                                return ((float)value!).ToString(CultureInfo.InvariantCulture);
+                    default:
+                        throw new InvalidOperationException($"Unknown value type {targetType}.");
+                }
 
-                            int iValue = BitConverter.SingleToInt32Bits((float)value!);
-                            return $"0x{iValue:X8}";
+            case ValueType.FloatingPoint:
+                switch (targetType)
+                {
+                    case ValueType.String:
+                        return ((float)value!).ToString(CultureInfo.InvariantCulture);
 
-                        case ValueLength.Long:
-                            if (!isHex)
-                                return ((double)value!).ToString(CultureInfo.InvariantCulture);
+                    case ValueType.Integer:
+                        switch (_config.ValueLength)
+                        {
+                            case ValueLength.Int:
+                                return (int)Math.Round((float)value!);
 
-                            long lValue = BitConverter.DoubleToInt64Bits((double)value!);
-                            return $"0x{lValue:X16}";
+                            case ValueLength.Long:
+                                return (long)Math.Round((double)value!);
 
-                        default:
-                            throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
-                    }
+                            default:
+                                throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                        }
 
-                default:
-                    throw new InvalidOperationException($"Unknown value type {type}.");
-            }
+                    default:
+                        throw new InvalidOperationException($"Unknown value type {targetType}.");
+                }
+
+            default:
+                throw new InvalidOperationException($"Unknown value type {targetType}.");
         }
+    }
 
-        private LocalizedString GetCurrentGame()
+    private object GetDefaultValue(ValueType type)
+    {
+        switch (type)
         {
-            return _gameComboBox.SelectedItem.Content;
-        }
+            case ValueType.String:
+                return string.Empty;
 
-        private void RaiseValueSettingsChanged(LocalizedString gameName, string entryName)
-        {
-            _eventBroker.Raise(new ValueSettingsChangedMessage(this, gameName, entryName));
-        }
+            case ValueType.Integer:
+                switch (_config.ValueLength)
+                {
+                    case ValueLength.Int:
+                        return 0;
 
-        private void RaiseFileChanged()
-        {
-            _eventBroker.Raise(new FileChangedMessage(this));
-        }
+                    case ValueLength.Long:
+                        return (long)0;
 
-        private void RaiseFileSaved(Exception e = null)
-        {
-            _eventBroker.Raise(new FileSavedMessage(this, e));
-        }
+                    default:
+                        throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                }
 
-        private void RaiseGameAdded(string game)
-        {
-            _eventBroker.Raise(new GameAddedMessage(this, game));
+            case ValueType.FloatingPoint:
+                switch (_config.ValueLength)
+                {
+                    case ValueLength.Int:
+                        return 0f;
+
+                    case ValueLength.Long:
+                        return 0d;
+
+                    default:
+                        throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                }
+
+            default:
+                throw new InvalidOperationException($"Unknown value type {type}.");
         }
+    }
+
+    private string GetValueString(object? value, ValueType type, bool isHex)
+    {
+        switch (type)
+        {
+            case ValueType.String:
+                return $"{value}";
+
+            case ValueType.Integer:
+                if (!isHex)
+                    return $"{value}";
+
+                switch (_config.ValueLength)
+                {
+                    case ValueLength.Int:
+                        return $"0x{value:X8}";
+
+                    case ValueLength.Long:
+                        return $"0x{value:X16}";
+
+                    default:
+                        throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                }
+
+            case ValueType.FloatingPoint:
+                switch (_config.ValueLength)
+                {
+                    case ValueLength.Int:
+                        if (!isHex)
+                            return ((float)value!).ToString(CultureInfo.InvariantCulture);
+
+                        int iValue = BitConverter.SingleToInt32Bits((float)value!);
+                        return $"0x{iValue:X8}";
+
+                    case ValueLength.Long:
+                        if (!isHex)
+                            return ((double)value!).ToString(CultureInfo.InvariantCulture);
+
+                        long lValue = BitConverter.DoubleToInt64Bits((double)value!);
+                        return $"0x{lValue:X16}";
+
+                    default:
+                        throw new InvalidOperationException($"Unknown value length {_config.ValueLength}.");
+                }
+
+            default:
+                throw new InvalidOperationException($"Unknown value type {type}.");
+        }
+    }
+
+    private LocalizedString GetCurrentGame()
+    {
+        return _gameComboBox.SelectedItem.Content;
+    }
+
+    private void RaiseValueSettingsChanged(LocalizedString gameName, string entryName)
+    {
+        _eventBroker.Raise(new ValueSettingsChangedMessage(this, gameName, entryName));
+    }
+
+    private void RaiseFileChanged()
+    {
+        _eventBroker.Raise(new FileChangedMessage(this));
+    }
+
+    private void RaiseFileSaved(Exception e = null)
+    {
+        _eventBroker.Raise(new FileSavedMessage(this, e));
+    }
+
+    private void RaiseGameAdded(string game)
+    {
+        _eventBroker.Raise(new GameAddedMessage(this, game));
     }
 }

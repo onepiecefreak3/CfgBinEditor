@@ -1,21 +1,12 @@
 ﻿using System.Runtime.Serialization;
 
-namespace CrossCutting.Core.Contract.Configuration.DataClasses
+namespace CrossCutting.Core.Contract.Configuration.DataClasses;
+
+public class ConfigEntry(ConfigCategory category)
 {
-    public class ConfigEntry
-    {
-        [IgnoreDataMember]
-        public ConfigCategory Category { get; set; }
+    [IgnoreDataMember]
+    public ConfigCategory Category { get; set; } = category;
 
-        public string Key { get; set; }
-        public object Value { get; set; }
-
-        [IgnoreDataMember]
-        public bool Persist { get; set; }
-
-        public ConfigEntry(ConfigCategory category)
-        {
-            Category = category;
-        }
-    }
+    public string? Key { get; set; }
+    public object? Value { get; set; }
 }

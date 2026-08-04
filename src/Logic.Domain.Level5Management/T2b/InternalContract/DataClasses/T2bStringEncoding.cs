@@ -1,10 +1,9 @@
-﻿namespace Logic.Domain.Level5Management.T2b.InternalContract.DataClasses
+﻿namespace Logic.Domain.Level5Management.T2b.InternalContract.DataClasses;
+
+internal enum T2bStringEncoding : short
 {
-    internal enum T2bStringEncoding : short
-    {
-        Sjis,
-        Utf8,
-        Utf8_2 = 256,
-        Utf8_3 = 257
-    }
+    Sjis,
+    Utf8,
+    Utf8_2 = 256,
+    Utf8_3 = 257
 }

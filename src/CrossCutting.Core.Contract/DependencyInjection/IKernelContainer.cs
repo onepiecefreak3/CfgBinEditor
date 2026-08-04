@@ -1,11 +1,6 @@
-﻿using CrossCutting.Core.Contract.Aspects;
-using CrossCutting.Core.Contract.DependencyInjection.Exceptions;
+﻿namespace CrossCutting.Core.Contract.DependencyInjection;
 
-namespace CrossCutting.Core.Contract.DependencyInjection
+public interface IKernelContainer
 {
-    [MapException(typeof(DependencyInjectionException))]
-    public interface IKernelContainer
-    {
-        ICoCoKernel Kernel { get; }
-    }
+    ICoCoKernel Kernel { get; }
 }

@@ -1,9 +1,8 @@
-﻿namespace CfgBinEditor.InternalContract.DataClasses
+﻿namespace CfgBinEditor.InternalContract.DataClasses;
+
+public enum SearchComparisonType
 {
-    public enum SearchComparisonType
-    {
-        Hex,
-        Dec,
-        Tags
-    }
+    Hex,
+    Dec,
+    Tags
 }

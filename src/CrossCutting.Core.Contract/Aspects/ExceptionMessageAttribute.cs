@@ -1,15 +1,9 @@
 ﻿using System;
 
-namespace CrossCutting.Core.Contract.Aspects
-{
-    [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Method | AttributeTargets.Assembly, Inherited = true)]
-    public class ExceptionMessageAttribute : Attribute
-    {
-        public string Message { get; }
+namespace CrossCutting.Core.Contract.Aspects;
 
-        public ExceptionMessageAttribute(string message)
-        {
-            Message = message;
-        }
-    }
+[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Method | AttributeTargets.Assembly, Inherited = true)]
+public class ExceptionMessageAttribute(string message) : Attribute
+{
+    public string Message { get; } = message;
 }

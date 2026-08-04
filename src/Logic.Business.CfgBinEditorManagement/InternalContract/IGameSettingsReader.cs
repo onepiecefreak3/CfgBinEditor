@@ -1,11 +1,6 @@
-using CrossCutting.Core.Contract.Aspects;
-using Logic.Business.CfgBinEditorManagement.InternalContract.Exceptions;
+namespace Logic.Business.CfgBinEditorManagement.InternalContract;
 
-namespace Logic.Business.CfgBinEditorManagement.InternalContract
+public interface IGameSettingsReader<TEntry>
 {
-    [MapException(typeof(GameSettingsReaderException))]
-    public interface IGameSettingsReader<TEntry>
-    {
-        IDictionary<string, IDictionary<string, IList<TEntry>>> Read();
-    }
+    IDictionary<string, IDictionary<string, IList<TEntry>>> Read();
 }

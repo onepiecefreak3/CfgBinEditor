@@ -1,65 +1,56 @@
 ﻿using CrossCutting.Core.Contract.Configuration;
 using CrossCutting.Core.Contract.Configuration.DataClasses;
-using CrossCutting.Core.Contract.Configuration.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Globalization;
 
-namespace CrossCutting.Core.Configuration
+namespace CrossCutting.Core.Configuration;
+
+public sealed class Configurator : IConfigurator
 {
-    public sealed class Configurator : IConfigurator
+    private readonly IList<ConfigCategory> _categories;
+
+    public Configurator(IEnumerable<IConfigurationRepository> repositories)
     {
-        #region Fields
+        _categories = repositories.SelectMany(x => x.Load()).ToArray();
+    }
 
-        private readonly IList<ConfigCategory> _categories;
+    public bool Contains(string category, string key)
+    {
+        if (string.IsNullOrWhiteSpace(category))
+            throw new ArgumentNullException(nameof(category));
 
-        #endregion
+        if (string.IsNullOrWhiteSpace(key))
+            throw new ArgumentNullException(nameof(key));
 
-        public Configurator(IEnumerable<IConfigurationRepository> repositories)
-        {
-            _categories = repositories.SelectMany(x => x.Load()).ToArray();
-        }
+        return _categories.Any(c => c.Name == category && c.Entries.Any(e => e.Key == key));
+    }
 
-        public bool Contains(string category, string key)
-        {
-            if (string.IsNullOrWhiteSpace(category))
-                throw new ArgumentNullException(nameof(category));
+    public T? Get<T>(string category, string key, T? defaultValue = default!)
+    {
+        if (string.IsNullOrWhiteSpace(category))
+            throw new ArgumentNullException(nameof(category));
 
-            if (string.IsNullOrWhiteSpace(key))
-                throw new ArgumentNullException(nameof(key));
+        if (string.IsNullOrWhiteSpace(key))
+            throw new ArgumentNullException(nameof(key));
 
-            bool exists = _categories.Any(c => c.Name == category && c.Entries.Any(e => e.Key == key));
-            return exists;
-        }
+        ConfigCategory? configCategory = _categories.SingleOrDefault(c => c.Name == category);
+        if (configCategory is null)
+            return defaultValue;
 
-        public T Get<T>(string category, string key)
-        {
-            if (!Contains(category, key))
-                throw new KeyOrCategoryNotFoundException(category, key);
+        ConfigEntry? entry = configCategory.Entries.SingleOrDefault(e => e.Key == key);
+        if (entry is null)
+            return defaultValue;
 
-            T value = Get<T>(category, key, default(T));
-            return value;
-        }
+        if (entry.Value is null)
+            return defaultValue;
 
-        public T Get<T>(string category, string key, T defaultValue)
-        {
-            if (string.IsNullOrWhiteSpace(category))
-                throw new ArgumentNullException(nameof(category));
+        if (entry.Value is T typed)
+            return typed;
 
-            if (string.IsNullOrWhiteSpace(key))
-                throw new ArgumentNullException(nameof(key));
+        Type targetType = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
+        if (entry.Value is IConvertible)
+            return (T)Convert.ChangeType(entry.Value, targetType, CultureInfo.InvariantCulture);
 
-            ConfigCategory configCategory = _categories.SingleOrDefault(c => c.Name == category);
-            if (configCategory == null)
-                return defaultValue;
-
-            ConfigEntry entry = configCategory.Entries.SingleOrDefault(e => e.Key == key);
-            if (entry == null)
-            {
-                return defaultValue;
-            }
-
-            return (T)entry.Value;
-        }
+        throw new InvalidCastException(
+            $"Cannot convert configuration value of type '{entry.Value.GetType().FullName}' to '{typeof(T).FullName}'.");
     }
 }

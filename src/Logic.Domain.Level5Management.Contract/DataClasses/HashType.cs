@@ -1,8 +1,7 @@
-﻿namespace Logic.Domain.Level5Management.Contract.DataClasses
+﻿namespace Logic.Domain.Level5Management.Contract.DataClasses;
+
+public enum HashType
 {
-    public enum HashType
-    {
-        Crc32Standard,
-        Crc32Jam
-    }
+    Crc32Standard,
+    Crc32Jam
 }

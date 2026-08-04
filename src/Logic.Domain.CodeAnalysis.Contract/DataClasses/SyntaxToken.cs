@@ -1,125 +1,124 @@
 ﻿using System.Diagnostics;
 using System.Text;
 
-namespace Logic.Domain.CodeAnalysis.Contract.DataClasses
+namespace Logic.Domain.CodeAnalysis.Contract.DataClasses;
+
+[DebuggerDisplay("[{FullSpan.Position}..{FullSpan.EndPosition}) {Text}")]
+public struct SyntaxToken
 {
-    [DebuggerDisplay("[{FullSpan.Position}..{FullSpan.EndPosition}) {Text}")]
-    public struct SyntaxToken
+    private static readonly StringBuilder _sb = new();
+
+    private int _textPosition;
+
+    public SyntaxNode? Parent { get; internal set; }
+
+    public int RawKind { get; }
+    public string Text { get; }
+
+    public SyntaxTokenTrivia? LeadingTrivia { get; private set; }
+    public SyntaxTokenTrivia? TrailingTrivia { get; private set; }
+
+    public SyntaxLocation Location { get; private set; }
+    public SyntaxLocation FullLocation { get; private set; }
+
+    public SyntaxSpan Span => new(_textPosition, _textPosition + Text.Length);
+    public SyntaxSpan FullSpan => new(LeadingTrivia?.Span.Position ?? _textPosition, TrailingTrivia?.Span.EndPosition ?? _textPosition + Text.Length);
+
+    public SyntaxToken(string text, int rawKind, SyntaxTokenTrivia? leadingTrivia = null, SyntaxTokenTrivia? trailingTrivia = null)
     {
-        private static readonly StringBuilder _sb = new();
+        RawKind = rawKind;
+        Text = text;
 
-        private int _textPosition;
+        LeadingTrivia = leadingTrivia;
+        TrailingTrivia = trailingTrivia;
+    }
 
-        public SyntaxNode? Parent { get; internal set; }
+    public SyntaxToken WithLeadingTrivia(string? trivia)
+    {
+        LeadingTrivia = trivia == null ? null : new SyntaxTokenTrivia(trivia);
 
-        public int RawKind { get; }
-        public string Text { get; }
+        return this;
+    }
 
-        public SyntaxTokenTrivia? LeadingTrivia { get; private set; }
-        public SyntaxTokenTrivia? TrailingTrivia { get; private set; }
+    public SyntaxToken WithTrailingTrivia(string? trivia)
+    {
+        TrailingTrivia = trivia == null ? null : new SyntaxTokenTrivia(trivia);
 
-        public SyntaxLocation Location { get; private set; }
-        public SyntaxLocation FullLocation { get; private set; }
+        return this;
+    }
 
-        public SyntaxSpan Span => new(_textPosition, _textPosition + Text.Length);
-        public SyntaxSpan FullSpan => new(LeadingTrivia?.Span.Position ?? _textPosition, TrailingTrivia?.Span.EndPosition ?? _textPosition + Text.Length);
+    public SyntaxToken WithNoTrivia()
+    {
+        LeadingTrivia = null;
+        TrailingTrivia = null;
 
-        public SyntaxToken(string text, int rawKind, SyntaxTokenTrivia? leadingTrivia = null, SyntaxTokenTrivia? trailingTrivia = null)
+        return this;
+    }
+
+    public override string ToString()
+    {
+        _sb.Clear();
+
+        if (LeadingTrivia.HasValue)
+            _sb.Append(LeadingTrivia.Value.ToString());
+
+        _sb.Append(Text);
+
+        if (TrailingTrivia.HasValue)
+            _sb.Append(TrailingTrivia.Value.ToString());
+
+        return _sb.ToString();
+    }
+
+    internal int UpdatePosition(int fullPosition, ref int line, ref int column)
+    {
+        FullLocation = new(line, column);
+
+        if (LeadingTrivia.HasValue)
         {
-            RawKind = rawKind;
-            Text = text;
+            LeadingTrivia = new SyntaxTokenTrivia(LeadingTrivia.Value.Text, fullPosition, line, column);
+            fullPosition += LeadingTrivia.Value.Text.Length;
 
-            LeadingTrivia = leadingTrivia;
-            TrailingTrivia = trailingTrivia;
+            AdvanceLineColumn(LeadingTrivia.Value.Text, ref line, ref column);
         }
 
-        public SyntaxToken WithLeadingTrivia(string? trivia)
-        {
-            LeadingTrivia = trivia == null ? null : new SyntaxTokenTrivia(trivia);
+        Location = new(line, column);
 
-            return this;
+        _textPosition = fullPosition;
+        AdvanceLineColumn(Text, ref line, ref column);
+
+        if (TrailingTrivia.HasValue)
+        {
+            TrailingTrivia = new SyntaxTokenTrivia(TrailingTrivia.Value.Text, fullPosition, line, column);
+            fullPosition += TrailingTrivia.Value.Text.Length;
+
+            AdvanceLineColumn(TrailingTrivia.Value.Text, ref line, ref column);
         }
 
-        public SyntaxToken WithTrailingTrivia(string? trivia)
+        return fullPosition;
+    }
+
+    private void AdvanceLineColumn(string? text, ref int line, ref int column)
+    {
+        if (string.IsNullOrEmpty(text))
+            return;
+
+        foreach (char character in text)
         {
-            TrailingTrivia = trivia == null ? null : new SyntaxTokenTrivia(trivia);
-
-            return this;
-        }
-
-        public SyntaxToken WithNoTrivia()
-        {
-            LeadingTrivia = null;
-            TrailingTrivia = null;
-
-            return this;
-        }
-
-        public override string ToString()
-        {
-            _sb.Clear();
-
-            if (LeadingTrivia.HasValue)
-                _sb.Append(LeadingTrivia.Value.ToString());
-
-            _sb.Append(Text);
-
-            if (TrailingTrivia.HasValue)
-                _sb.Append(TrailingTrivia.Value.ToString());
-
-            return _sb.ToString();
-        }
-
-        internal int UpdatePosition(int fullPosition, ref int line, ref int column)
-        {
-            FullLocation = new(line, column);
-
-            if (LeadingTrivia.HasValue)
+            switch (character)
             {
-                LeadingTrivia = new SyntaxTokenTrivia(LeadingTrivia.Value.Text, fullPosition, line, column);
-                fullPosition += LeadingTrivia.Value.Text.Length;
+                case '\n':
+                    line++;
+                    column = 1;
+                    break;
 
-                AdvanceLineColumn(LeadingTrivia.Value.Text, ref line, ref column);
-            }
+                case '\t':
+                    column += 4;
+                    break;
 
-            Location = new(line, column);
-
-            _textPosition = fullPosition;
-            AdvanceLineColumn(Text, ref line, ref column);
-
-            if (TrailingTrivia.HasValue)
-            {
-                TrailingTrivia = new SyntaxTokenTrivia(TrailingTrivia.Value.Text, fullPosition, line, column);
-                fullPosition += TrailingTrivia.Value.Text.Length;
-
-                AdvanceLineColumn(TrailingTrivia.Value.Text, ref line, ref column);
-            }
-
-            return fullPosition;
-        }
-
-        private void AdvanceLineColumn(string? text, ref int line, ref int column)
-        {
-            if (string.IsNullOrEmpty(text))
-                return;
-
-            foreach (char character in text)
-            {
-                switch (character)
-                {
-                    case '\n':
-                        line++;
-                        column = 1;
-                        break;
-
-                    case '\t':
-                        column += 4;
-                        break;
-
-                    default:
-                        column++;
-                        break;
-                }
+                default:
+                    column++;
+                    break;
             }
         }
     }

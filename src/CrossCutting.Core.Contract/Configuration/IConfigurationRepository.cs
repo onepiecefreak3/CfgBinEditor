@@ -1,13 +1,9 @@
-﻿using CrossCutting.Core.Contract.Aspects;
+﻿using System.Collections.Generic;
 using CrossCutting.Core.Contract.Configuration.DataClasses;
-using CrossCutting.Core.Contract.Configuration.Exceptions;
-using System.Collections.Generic;
 
-namespace CrossCutting.Core.Contract.Configuration
+namespace CrossCutting.Core.Contract.Configuration;
+
+public interface IConfigurationRepository
 {
-    [MapException(typeof(ConfigurationException))]
-    public interface IConfigurationRepository
-    {
-        IEnumerable<ConfigCategory> Load();
-    }
+    IEnumerable<ConfigCategory> Load();
 }

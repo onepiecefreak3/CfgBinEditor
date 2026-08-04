@@ -1,13 +1,8 @@
-﻿using CrossCutting.Core.Contract.Aspects;
-using Logic.Domain.CodeAnalysis.Contract.Exceptions;
+﻿namespace Logic.Domain.CodeAnalysis.Contract;
 
-namespace Logic.Domain.CodeAnalysis.Contract
+public interface ILexer<out TToken> where TToken : struct
 {
-    [MapException(typeof(LexerException))]
-    public interface ILexer<out TToken> where TToken : struct
-    {
-        bool IsEndOfInput { get; }
+    bool IsEndOfInput { get; }
 
-        TToken Read();
-    }
+    TToken Read();
 }

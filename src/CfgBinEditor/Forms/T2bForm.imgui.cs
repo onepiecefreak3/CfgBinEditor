@@ -12,72 +12,71 @@ using Logic.Domain.Level5Management.Contract.DataClasses;
 using System.Numerics;
 using Size = ImGui.Forms.Models.Size;
 
-namespace CfgBinEditor.Forms
+namespace CfgBinEditor.Forms;
+
+public partial class T2bForm
 {
-    public partial class T2bForm
+    private StackLayout _contentLayout;
+
+    private T2bTreeViewForm _treeViewForm;
+    private StackLayout _gameLayout;
+    private StackLayout _valuesLayout;
+
+    private ComboBox<LocalizedString> _gameComboBox;
+    private Button _gameAddButton;
+
+    private Button _valueAddButton;
+
+    private Panel _configContent;
+
+    private void InitializeComponent(T2b file, IPluginManager pluginManager, IFormFactory formFactory, IValueSettingsProvider settingsProvider)
     {
-        private StackLayout _contentLayout;
+        _contentLayout = new StackLayout { Alignment = Alignment.Horizontal, ItemSpacing = 5 };
 
-        private T2bTreeViewForm _treeViewForm;
-        private StackLayout _gameLayout;
-        private StackLayout _valuesLayout;
+        _gameLayout = new StackLayout { Alignment = Alignment.Horizontal, ItemSpacing = 5, Size = Size.WidthAlign };
+        _valuesLayout = new StackLayout { Alignment = Alignment.Vertical, ItemSpacing = 5 };
 
-        private ComboBox<LocalizedString> _gameComboBox;
-        private Button _gameAddButton;
+        var fontPreview = new FontPreviewComponent(pluginManager) { Size = Size.Parent };
 
-        private Button _valueAddButton;
+        _treeViewForm = formFactory.CreateT2bTreeViewForm(file);
 
-        private Panel _configContent;
+        _gameComboBox = new ComboBox<LocalizedString>();
+        _gameAddButton = new Button { Text = LocalizationResources.GameAddButtonCaption };
 
-        private void InitializeComponent(T2b file, IPluginManager pluginManager, IFormFactory formFactory, IValueSettingsProvider settingsProvider)
-        {
-            _contentLayout = new StackLayout { Alignment = Alignment.Horizontal, ItemSpacing = 5 };
+        _valueAddButton = new Button { Text = LocalizationResources.CfgBinEntryAddValueCaption, Padding = new Vector2(15, 2), Enabled = false };
 
-            _gameLayout = new StackLayout { Alignment = Alignment.Horizontal, ItemSpacing = 5, Size = Size.WidthAlign };
-            _valuesLayout = new StackLayout { Alignment = Alignment.Vertical, ItemSpacing = 5 };
+        _configContent = new Panel { Size = Size.Parent };
 
-            var fontPreview = new FontPreviewComponent(pluginManager) { Size = Size.Parent };
+        _gameLayout.Items.Add(_gameComboBox);
+        _gameLayout.Items.Add(_gameAddButton);
+        _gameLayout.Items.Add(new StackItem(_valueAddButton) { HorizontalAlignment = HorizontalAlignment.Right, Size = Size.WidthAlign });
 
-            _treeViewForm = formFactory.CreateT2bTreeViewForm(file);
+        _valuesLayout.Items.Add(_gameLayout);
+        _valuesLayout.Items.Add(_configContent);
+        _valuesLayout.Items.Add(new Expander(fontPreview) { WidthIndent = 0, Caption = LocalizationResources.TextPreviewCaption, Size = Size.Parent });
 
-            _gameComboBox = new ComboBox<LocalizedString>();
-            _gameAddButton = new Button { Text = LocalizationResources.GameAddButtonCaption };
+        _contentLayout.Items.Add(new StackItem(_treeViewForm) { Size = new Size(SizeValue.Relative(.4f), SizeValue.Parent) });
+        _contentLayout.Items.Add(_valuesLayout);
 
-            _valueAddButton = new Button { Text = LocalizationResources.CfgBinEntryAddValueCaption, Padding = new Vector2(15, 2), Enabled = false };
+        InitializeGames(settingsProvider);
+    }
 
-            _configContent = new Panel { Size = Size.Parent };
+    public override Size GetSize()
+    {
+        return Size.Parent;
+    }
 
-            _gameLayout.Items.Add(_gameComboBox);
-            _gameLayout.Items.Add(_gameAddButton);
-            _gameLayout.Items.Add(new StackItem(_valueAddButton) { HorizontalAlignment = HorizontalAlignment.Right, Size = Size.WidthAlign });
+    protected override void UpdateInternal(Rectangle contentRect)
+    {
+        _contentLayout.Update(contentRect);
+    }
 
-            _valuesLayout.Items.Add(_gameLayout);
-            _valuesLayout.Items.Add(_configContent);
-            _valuesLayout.Items.Add(new Expander(fontPreview) { WidthIndent = 0, Caption = LocalizationResources.TextPreviewCaption, Size = Size.Parent });
+    private void InitializeGames(IValueSettingsProvider settingsProvider)
+    {
+        _gameComboBox.Items.Add(LocalizationResources.GameNoneCaption);
+        _gameComboBox.SelectedItem = _gameComboBox.Items[0];
 
-            _contentLayout.Items.Add(new StackItem(_treeViewForm) { Size = new Size(SizeValue.Relative(.4f), SizeValue.Parent) });
-            _contentLayout.Items.Add(_valuesLayout);
-
-            InitializeGames(settingsProvider);
-        }
-
-        public override Size GetSize()
-        {
-            return Size.Parent;
-        }
-
-        protected override void UpdateInternal(Rectangle contentRect)
-        {
-            _contentLayout.Update(contentRect);
-        }
-
-        private void InitializeGames(IValueSettingsProvider settingsProvider)
-        {
-            _gameComboBox.Items.Add(LocalizationResources.GameNoneCaption);
-            _gameComboBox.SelectedItem = _gameComboBox.Items[0];
-
-            foreach (string game in settingsProvider.GetGames())
-                _gameComboBox.Items.Add(new DropDownItem<LocalizedString>(game));
-        }
+        foreach (string game in settingsProvider.GetGames())
+            _gameComboBox.Items.Add(new DropDownItem<LocalizedString>(game));
     }
 }

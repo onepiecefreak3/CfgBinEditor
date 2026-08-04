@@ -8,41 +8,40 @@ using ImGui.Forms.Support;
 using Konnect.Contract.Management.Plugin;
 using Logic.Domain.Level5Management.Contract.DataClasses;
 
-namespace CfgBinEditor.Forms
+namespace CfgBinEditor.Forms;
+
+public partial class RdbnForm
 {
-    public partial class RdbnForm
+    private RdbnTreeViewForm _treeViewForm;
+
+    private StackLayout _contentLayout;
+    private Panel _contentPanel;
+
+    private void InitializeComponent(Rdbn config, IFormFactory formFactory, IPluginManager pluginManager)
     {
-        private RdbnTreeViewForm _treeViewForm;
+        var fontPreview = new FontPreviewComponent(pluginManager) { Size = Size.Parent };
 
-        private StackLayout _contentLayout;
-        private Panel _contentPanel;
+        var valueLayout = new StackLayout { Alignment = Alignment.Vertical, ItemSpacing = 5 };
 
-        private void InitializeComponent(Rdbn config, IFormFactory formFactory, IPluginManager pluginManager)
-        {
-            var fontPreview = new FontPreviewComponent(pluginManager) { Size = Size.Parent };
+        _contentLayout = new StackLayout { Alignment = Alignment.Horizontal, ItemSpacing = 5 };
+        _contentPanel = new Panel();
 
-            var valueLayout = new StackLayout { Alignment = Alignment.Vertical, ItemSpacing = 5 };
+        _treeViewForm = formFactory.CreateRdbnTreeViewForm(config);
 
-            _contentLayout = new StackLayout { Alignment = Alignment.Horizontal, ItemSpacing = 5 };
-            _contentPanel = new Panel();
+        valueLayout.Items.Add(_contentPanel);
+        valueLayout.Items.Add(new Expander(fontPreview) { WidthIndent = 0, Caption = LocalizationResources.TextPreviewCaption, Size = Size.Parent });
 
-            _treeViewForm = formFactory.CreateRdbnTreeViewForm(config);
+        _contentLayout.Items.Add(new StackItem(_treeViewForm) { Size = new Size(SizeValue.Relative(.4f), SizeValue.Parent) });
+        _contentLayout.Items.Add(valueLayout);
+    }
 
-            valueLayout.Items.Add(_contentPanel);
-            valueLayout.Items.Add(new Expander(fontPreview) { WidthIndent = 0, Caption = LocalizationResources.TextPreviewCaption, Size = Size.Parent });
+    public override Size GetSize()
+    {
+        return Size.Parent;
+    }
 
-            _contentLayout.Items.Add(new StackItem(_treeViewForm) { Size = new Size(SizeValue.Relative(.4f), SizeValue.Parent) });
-            _contentLayout.Items.Add(valueLayout);
-        }
-
-        public override Size GetSize()
-        {
-            return Size.Parent;
-        }
-
-        protected override void UpdateInternal(Rectangle contentRect)
-        {
-            _contentLayout.Update(contentRect);
-        }
+    protected override void UpdateInternal(Rectangle contentRect)
+    {
+        _contentLayout.Update(contentRect);
     }
 }

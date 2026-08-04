@@ -1,68 +1,84 @@
-﻿using CrossCutting.Core.Contract.Configuration;
+﻿using System.Diagnostics.CodeAnalysis;
+using CrossCutting.Core.Contract.Configuration;
 using CrossCutting.Core.Contract.Configuration.DataClasses;
 
-namespace CrossCutting.Core.Configuration.CommandLine
+namespace CrossCutting.Core.Configuration.CommandLine;
+
+public class CommandLineConfigurationRepository : IConfigurationRepository
 {
-    public class CommandLineConfigurationRepository : IConfigurationRepository
+    public IEnumerable<ConfigCategory> Load()
     {
-        public IEnumerable<ConfigCategory> Load()
-        {
-            var args = Environment.GetCommandLineArgs().Skip(1).ToArray();
-            yield return CollectOptions(args);
-        }
+        var args = Environment.GetCommandLineArgs().Skip(1).ToArray();
+        yield return CollectOptions(args);
+    }
 
-        private ConfigCategory CollectOptions(string[] args)
-        {
-            var category = new ConfigCategory { Name = "CommandLine" };
+    private ConfigCategory CollectOptions(string[] args)
+    {
+        var category = new ConfigCategory { Name = "CommandLine" };
+        var positionals = new List<string>();
 
-            for (var i = 0; i < args.Length; i++)
+        for (var i = 0; i < args.Length; i++)
+        {
+            if (!IsOption(args[i]))
             {
-                // Assert parsing the next option
-                AssertIsOption(args[i]);
-                string option = args[i];
-
-                // Collect its arguments
-                IList<string> arguments = CollectArguments(args, i + 1, out int readValues);
-                i += readValues;
-
-                string name = GetOptionName(option);
-                if (readValues <= 0)
-                    category.AddEntry(name, true);
-                else if (readValues == 1)
-                    category.AddEntry(name, arguments[0]);
-                else
-                    category.AddEntry(name, arguments);
+                positionals.Add(args[i]);
+                continue;
             }
 
-            return category;
+            string name = GetOptionName(args[i]);
+            if (TryTakeSingleArgument(args, i + 1, out string? argument))
+            {
+                category.AddEntry(name, argument);
+                i++;
+            }
+            else
+            {
+                category.AddEntry(name, true);
+            }
         }
 
-        private IList<string> CollectArguments(string[] args, int start, out int readValues)
+        AssignTrailingFile(category, positionals);
+        return category;
+    }
+
+    private static void AssignTrailingFile(ConfigCategory category, List<string> positionals)
+    {
+        if (positionals.Count == 0)
+            return;
+
+        if (positionals.Count > 1)
+            throw new ArgumentException($"Unexpected arguments: {string.Join(", ", positionals)}");
+
+        if (HasFileEntry(category))
+            throw new ArgumentException($"Unexpected argument '{positionals[0]}': file was already specified with -f/--file.");
+
+        category.AddEntry("f", positionals[0]);
+    }
+
+    private static bool HasFileEntry(ConfigCategory category)
+    {
+        return category.Entries.Any(e => e.Key is "f" or "file");
+    }
+
+    private static bool TryTakeSingleArgument(string[] args, int index, [NotNullWhen(true)] out string? argument)
+    {
+        if (index >= args.Length || IsOption(args[index]))
         {
-            var result = new List<string>();
-
-            var index = start;
-            while (index < args.Length && !IsOptionValue(args[index]))
-                result.Add(args[index++]);
-
-            readValues = index - start;
-            return result;
+            argument = null;
+            return false;
         }
 
-        private bool IsOptionValue(string arg)
-        {
-            return arg.StartsWith("--") || arg.StartsWith('-');
-        }
+        argument = args[index];
+        return true;
+    }
 
-        private void AssertIsOption(string arg)
-        {
-            if (!IsOptionValue(arg))
-                throw new ArgumentException($"{arg} is not an option.");
-        }
+    private static bool IsOption(string arg)
+    {
+        return arg.StartsWith("--") || arg.StartsWith('-');
+    }
 
-        private string GetOptionName(string optionArg)
-        {
-            return optionArg.TrimStart('-');
-        }
+    private static string GetOptionName(string optionArg)
+    {
+        return optionArg.TrimStart('-');
     }
 }

@@ -6,123 +6,122 @@ using ImGui.Forms.Controls.Tree;
 using ImGui.Forms.Localization;
 using Logic.Domain.Level5Management.Contract.DataClasses;
 
-namespace CfgBinEditor.Forms
+namespace CfgBinEditor.Forms;
+
+public partial class RdbnTreeViewForm
 {
-    public partial class RdbnTreeViewForm
+    protected override LocalizedString GetRootButtonCaption()
     {
-        protected override LocalizedString GetRootButtonCaption()
+        return LocalizationResources.RdbnListAddCaption;
+    }
+
+    protected override void PopulateFullTreeViewInternal(Rdbn config, TreeView<object> treeView)
+    {
+        foreach (RdbnListEntry root in config.Lists)
         {
-            return LocalizationResources.RdbnListAddCaption;
+            TreeNode<object> rootNode = CreateListNode(config, root, ColorResources.TextDefault);
+            treeView.Nodes.Add(rootNode);
+        }
+    }
+
+    private TreeNode<object> CreateListNode(Rdbn config, RdbnListEntry entry, ThemedColor nodeColor)
+    {
+        var rootNode = new TreeNode<object> { Text = entry.Name, Data = entry, IsExpanded = true, TextColor = nodeColor };
+
+        RdbnTypeDeclaration type = config.Types[entry.TypeIndex];
+
+        for (var i = 0; i < entry.Values.Length; i++)
+        {
+            TreeNode<object> typeNode = CreateValueNode(type, entry.Values[i], i + 1, nodeColor);
+            rootNode.Nodes.Add(typeNode);
         }
 
-        protected override void PopulateFullTreeViewInternal(Rdbn config, TreeView<object> treeView)
+        return rootNode;
+    }
+
+    private TreeNode<object> CreateValueNode(RdbnTypeDeclaration type, object[][] values, int index, ThemedColor nodeColor)
+    {
+        return new TreeNode<object> { Text = GetNodeName(type, index), Data = (type, values), TextColor = nodeColor };
+    }
+
+    private string GetNodeName(RdbnTypeDeclaration type, int index)
+    {
+        return type.Name + $"_{index}";
+    }
+
+    protected override bool IsEntrySearched(object entry, string searchText)
+    {
+        switch (entry)
         {
-            foreach (RdbnListEntry root in config.Lists)
+            case (RdbnTypeDeclaration type, object[][] values):
+                return IsListEntrySearched(type, values, searchText);
+        }
+
+        return false;
+    }
+
+    private bool IsListEntrySearched(RdbnTypeDeclaration type, object[][] values, string searchText)
+    {
+        for (var i = 0; i < type.Fields.Length; i++)
+        {
+            RdbnFieldDeclaration field = type.Fields[i];
+
+            for (var j = 0; j < field.Count; j++)
             {
-                TreeNode<object> rootNode = CreateListNode(config, root, ColorResources.TextDefault);
-                treeView.Nodes.Add(rootNode);
+                if (IsFieldSearched(values[i][j], field.FieldType, searchText))
+                    return true;
             }
         }
 
-        private TreeNode<object> CreateListNode(Rdbn config, RdbnListEntry entry, ThemedColor nodeColor)
+        return false;
+    }
+
+    private bool IsFieldSearched(object value, FieldType fieldType, string searchText)
+    {
+        switch (fieldType)
         {
-            var rootNode = new TreeNode<object> { Text = entry.Name, Data = entry, IsExpanded = true, TextColor = nodeColor };
+            case FieldType.Bool:
+                if (searchText.Equals("false", StringComparison.OrdinalIgnoreCase))
+                    return !(bool)value;
 
-            RdbnTypeDeclaration type = config.Types[entry.TypeIndex];
+                if (searchText.Equals("true", StringComparison.OrdinalIgnoreCase))
+                    return (bool)value;
 
-            for (var i = 0; i < entry.Values.Length; i++)
-            {
-                TreeNode<object> typeNode = CreateValueNode(type, entry.Values[i], i + 1, nodeColor);
-                rootNode.Nodes.Add(typeNode);
-            }
+                break;
 
-            return rootNode;
-        }
-
-        private TreeNode<object> CreateValueNode(RdbnTypeDeclaration type, object[][] values, int index, ThemedColor nodeColor)
-        {
-            return new TreeNode<object> { Text = GetNodeName(type, index), Data = (type, values), TextColor = nodeColor };
-        }
-
-        private string GetNodeName(RdbnTypeDeclaration type, int index)
-        {
-            return type.Name + $"_{index}";
-        }
-
-        protected override bool IsEntrySearched(object entry, string searchText)
-        {
-            switch (entry)
-            {
-                case (RdbnTypeDeclaration type, object[][] values):
-                    return IsListEntrySearched(type, values, searchText);
-            }
-
-            return false;
-        }
-
-        private bool IsListEntrySearched(RdbnTypeDeclaration type, object[][] values, string searchText)
-        {
-            for (var i = 0; i < type.Fields.Length; i++)
-            {
-                RdbnFieldDeclaration field = type.Fields[i];
-
-                for (var j = 0; j < field.Count; j++)
+            case FieldType.Position2D:
+            case FieldType.RateMatrix:
+            case FieldType.Position:
+            case FieldType.StatusRate:
+                var floatValues = (float[])value;
+                foreach (float floatValue in floatValues)
                 {
-                    if (IsFieldSearched(values[i][j], field.FieldType, searchText))
+                    string valueText1 = RdbnValueComponent.GetValueText(floatValue, FieldType.Float);
+                    if (valueText1.Contains(searchText, StringComparison.OrdinalIgnoreCase))
                         return true;
                 }
-            }
 
-            return false;
-        }
+                break;
 
-        private bool IsFieldSearched(object value, FieldType fieldType, string searchText)
-        {
-            switch (fieldType)
-            {
-                case FieldType.Bool:
-                    if (searchText.Equals("false", StringComparison.OrdinalIgnoreCase))
-                        return !(bool)value;
-
-                    if (searchText.Equals("true", StringComparison.OrdinalIgnoreCase))
-                        return (bool)value;
-
-                    break;
-
-                case FieldType.Position2D:
-                case FieldType.RateMatrix:
-                case FieldType.Position:
-                case FieldType.StatusRate:
-                    var floatValues = (float[])value;
-                    foreach (float floatValue in floatValues)
-                    {
-                        string valueText1 = RdbnValueComponent.GetValueText(floatValue, FieldType.Float);
-                        if (valueText1.Contains(searchText, StringComparison.OrdinalIgnoreCase))
-                            return true;
-                    }
-
-                    break;
-
-                case FieldType.DataTuple:
-                    var shortValues = (short[])value;
-                    foreach (short shortValue in shortValues)
-                    {
-                        string valueText1 = RdbnValueComponent.GetValueText(shortValue, FieldType.Short);
-                        if (valueText1.Contains(searchText, StringComparison.OrdinalIgnoreCase))
-                            return true;
-                    }
-
-                    break;
-
-                default:
-                    string valueText3 = RdbnValueComponent.GetValueText(value, fieldType);
-                    if (valueText3.Contains(searchText, StringComparison.OrdinalIgnoreCase))
+            case FieldType.DataTuple:
+                var shortValues = (short[])value;
+                foreach (short shortValue in shortValues)
+                {
+                    string valueText1 = RdbnValueComponent.GetValueText(shortValue, FieldType.Short);
+                    if (valueText1.Contains(searchText, StringComparison.OrdinalIgnoreCase))
                         return true;
+                }
 
-                    break;
-            }
+                break;
 
-            return false;
+            default:
+                string valueText3 = RdbnValueComponent.GetValueText(value, fieldType);
+                if (valueText3.Contains(searchText, StringComparison.OrdinalIgnoreCase))
+                    return true;
+
+                break;
         }
+
+        return false;
     }
 }

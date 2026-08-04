@@ -1,8 +1,7 @@
-﻿namespace CrossCutting.Core.Contract.Settings
+﻿namespace CrossCutting.Core.Contract.Settings;
+
+public interface ISettingsProvider
 {
-    public interface ISettingsProvider
-    {
-        T Get<T>(string name, T defaultValue);
-        void Set<T>(string name, T? value);
-    }
+    T Get<T>(string name, T defaultValue);
+    void Set<T>(string name, T? value);
 }

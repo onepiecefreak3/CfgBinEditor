@@ -1,34 +1,24 @@
 ﻿using System.Collections.Generic;
 
-namespace CrossCutting.Core.Contract.Configuration.DataClasses
+namespace CrossCutting.Core.Contract.Configuration.DataClasses;
+
+public class ConfigCategory
 {
-    public class ConfigCategory
+    private readonly List<ConfigEntry> _entries = [];
+
+    public required string Name { get; set; }
+    public IReadOnlyList<ConfigEntry> Entries => _entries;
+
+    public ConfigEntry AddEntry(string key, object? value)
     {
-        public string Name { get; set; }
-        public List<ConfigEntry> Entries { get; }
-
-        public ConfigCategory()
+        ConfigEntry result = new(this)
         {
-            Entries = new List<ConfigEntry>();
-        }
+            Key = key,
+            Value = value
+        };
 
-        public ConfigEntry AddEntry(string key, object value)
-        {
-            return AddEntry(key, value, false);
-        }
+        _entries.Add(result);
 
-        public ConfigEntry AddEntry(string key, object value, bool persist)
-        {
-            ConfigEntry result = new ConfigEntry(this)
-            {
-                Key = key,
-                Value = value,
-                Persist = persist
-            };
-
-            Entries.Add(result);
-
-            return result;
-        }
+        return result;
     }
 }

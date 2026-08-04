@@ -1,20 +1,12 @@
 ﻿using System;
 
-namespace CrossCutting.Core.Contract.DependencyInjection
+namespace CrossCutting.Core.Contract.DependencyInjection;
+
+public class ResolveRequestEventArgs(Type service, Type target, IRequestContext context)
 {
-    public class ResolveRequestEventArgs
-    {
-        public Type Service { get; }
+    public Type Service { get; } = service;
 
-        public Type Target { get; }
+    public Type Target { get; } = target;
 
-        public IRequestContext RequestContext { get; }
-
-        public ResolveRequestEventArgs(Type service, Type target, IRequestContext context)
-        {
-            Service = service;
-            RequestContext = context;
-            Target = target;
-        }
-    }
+    public IRequestContext RequestContext { get; } = context;
 }

@@ -1,9 +1,8 @@
-﻿namespace Logic.Domain.Level5Management.Contract.DataClasses
+﻿namespace Logic.Domain.Level5Management.Contract.DataClasses;
+
+public enum ValueType : byte
 {
-    public enum ValueType : byte
-    {
-        String,
-        Integer,
-        FloatingPoint
-    }
+    String,
+    Integer,
+    FloatingPoint
 }

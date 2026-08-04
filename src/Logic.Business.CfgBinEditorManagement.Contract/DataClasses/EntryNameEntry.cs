@@ -1,8 +1,7 @@
-namespace Logic.Business.CfgBinEditorManagement.Contract.DataClasses
+namespace Logic.Business.CfgBinEditorManagement.Contract.DataClasses;
+
+public struct EntryNameEntry
 {
-    public struct EntryNameEntry
-    {
-        public long Id { get; set; }
-        public string Name { get; set; }
-    }
+    public long Id { get; set; }
+    public string Name { get; set; }
 }

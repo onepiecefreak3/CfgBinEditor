@@ -9,56 +9,48 @@ using CrossCutting.Core.Contract.DependencyInjection;
 using CrossCutting.Core.Contract.DependencyInjection.DataClasses;
 using CrossCutting.Core.Contract.EventBrokerage;
 using CrossCutting.Core.Contract.Logging;
-using CrossCutting.Core.Contract.Serialization;
 using CrossCutting.Core.Contract.Settings;
-using CrossCutting.Core.DI.AutofacAdapter;
+using CrossCutting.Core.DI.MsDependencyInjectionAdapter;
 using CrossCutting.Core.EventBrokerage;
-using CrossCutting.Core.Logging.NLogAdapter;
-using CrossCutting.Core.Serialization.JsonAdapter;
+using CrossCutting.Core.Logging.SerilogAdapter;
 using CrossCutting.Core.Settings;
 using Logic.Business.CfgBinEditorManagement;
 using Logic.Domain.CodeAnalysis;
 using Logic.Domain.Level5Management;
 
-namespace Mappings.CfgBinEditor
+namespace Mappings.CfgBinEditor;
+
+public class KernelInitializer : IKernelInitializer
 {
-    public class KernelInitializer : IKernelInitializer
+    private IKernelContainer? _kernelContainer;
+
+    public IKernelContainer CreateKernelContainer()
     {
-        private IKernelContainer _kernelContainer;
+        return _kernelContainer ??= new KernelContainer(); ;
+    }
 
-        public IKernelContainer CreateKernelContainer()
-        {
-            if (_kernelContainer == null)
-            {
-                _kernelContainer = new KernelContainer();
-            }
-            return _kernelContainer;
-        }
+    public void Initialize()
+    {
+        RegisterCoreComponents(_kernelContainer!.Kernel);
+        ActivateComponents(_kernelContainer.Kernel);
+    }
 
-        public void Initialize()
-        {
-            RegisterCoreComponents(_kernelContainer.Kernel);
-            ActivateComponents(_kernelContainer.Kernel);
-        }
+    private void RegisterCoreComponents(ICoCoKernel kernel)
+    {
+        kernel.Register<IBootstrapper, Bootstrapper>(ActivationScope.Unique);
+        kernel.Register<IEventBroker, EventBroker>(ActivationScope.Unique);
+        kernel.Register<IConfigurationRepository, FileConfigurationRepository>();
+        kernel.Register<IConfigurationRepository, CommandLineConfigurationRepository>();
+        kernel.Register<IConfigurator, Configurator>(ActivationScope.Unique);
+        kernel.Register<IConfigObjectProvider, ConfigObjectProvider>(ActivationScope.Unique);
+        kernel.Register<ILogger, Logger>(ActivationScope.Unique);
+        kernel.Register<ISettingsProvider, SettingsProvider>(ActivationScope.Unique);
+    }
 
-        private void RegisterCoreComponents(ICoCoKernel kernel)
-        {
-            kernel.Register<IBootstrapper, Bootstrapper>(ActivationScope.Unique);
-            kernel.Register<IEventBroker, EventBroker>(ActivationScope.Unique);
-            kernel.Register<IConfigurationRepository, FileConfigurationRepository>();
-            kernel.Register<IConfigurationRepository, CommandLineConfigurationRepository>();
-            kernel.Register<IConfigurator, Configurator>(ActivationScope.Unique);
-            kernel.Register<IConfigObjectProvider, ConfigObjectProvider>(ActivationScope.Unique);
-            kernel.Register<ILogger, Logger>(ActivationScope.Unique);
-            kernel.Register<ISerializer, JsonSerializer>();
-            kernel.Register<ISettingsProvider, SettingsProvider>(ActivationScope.Unique);
-        }
-
-        private void ActivateComponents(ICoCoKernel kernel)
-        {
-            kernel.RegisterComponent<Level5Activator>();
-            kernel.RegisterComponent<CodeAnalysisActivator>();
-            kernel.RegisterComponent<CfgBinEditorManagementActivator>();
-        }
+    private void ActivateComponents(ICoCoKernel kernel)
+    {
+        kernel.RegisterComponent<Level5Activator>();
+        kernel.RegisterComponent<CodeAnalysisActivator>();
+        kernel.RegisterComponent<CfgBinEditorManagementActivator>();
     }
 }

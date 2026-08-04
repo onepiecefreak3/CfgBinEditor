@@ -1,10 +1,9 @@
-﻿namespace Logic.Domain.Level5Management.Rdbn.InternalContract
+﻿namespace Logic.Domain.Level5Management.Rdbn.InternalContract;
+
+internal struct RdbnTypeEntry
 {
-    internal struct RdbnTypeEntry
-    {
-        public uint nameHash;
-        public uint unk1;
-        public short fieldIndex;
-        public short fieldCount;
-    }
+    public uint nameHash;
+    public uint unk1;
+    public short fieldIndex;
+    public short fieldCount;
 }

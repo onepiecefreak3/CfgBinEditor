@@ -7,45 +7,44 @@ using Logic.Domain.Level5Management.Contract;
 using Logic.Domain.Level5Management.Cryptography;
 using Logic.Domain.Level5Management.Cryptography.InternalContract;
 
-namespace Logic.Domain.Level5Management
+namespace Logic.Domain.Level5Management;
+
+public class Level5Activator : IComponentActivator
 {
-    public class Level5Activator : IComponentActivator
+    public void Activating()
     {
-        public void Activating()
-        {
-        }
+    }
 
-        public void Activated()
-        {
-        }
+    public void Activated()
+    {
+    }
 
-        public void Deactivating()
-        {
-        }
+    public void Deactivating()
+    {
+    }
 
-        public void Deactivated()
-        {
-        }
+    public void Deactivated()
+    {
+    }
 
-        public void Register(ICoCoKernel kernel)
-        {
-            kernel.Register<IT2bReader, T2bReader>(ActivationScope.Unique);
-            kernel.Register<IT2bWriter, T2bWriter>(ActivationScope.Unique);
+    public void Register(ICoCoKernel kernel)
+    {
+        kernel.Register<IT2bReader, T2bReader>(ActivationScope.Unique);
+        kernel.Register<IT2bWriter, T2bWriter>(ActivationScope.Unique);
 
-            kernel.Register<IRdbnReader, RdbnReader>(ActivationScope.Unique);
-            kernel.Register<IRdbnWriter, RdbnWriter>(ActivationScope.Unique);
+        kernel.Register<IRdbnReader, RdbnReader>(ActivationScope.Unique);
+        kernel.Register<IRdbnWriter, RdbnWriter>(ActivationScope.Unique);
 
-            kernel.Register<IChecksumFactory, ChecksumFactory>(ActivationScope.Unique);
+        kernel.Register<IChecksumFactory, ChecksumFactory>(ActivationScope.Unique);
 
-            kernel.RegisterConfiguration<Level5Configuration>();
-        }
+        kernel.RegisterConfiguration<Level5Configuration>();
+    }
 
-        public void AddMessageSubscriptions(IEventBroker broker)
-        {
-        }
+    public void AddMessageSubscriptions(IEventBroker broker)
+    {
+    }
 
-        public void Configure(IConfigurator configurator)
-        {
-        }
+    public void Configure(IConfigurator configurator)
+    {
     }
 }

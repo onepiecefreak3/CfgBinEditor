@@ -1,12 +1,8 @@
-﻿using CrossCutting.Core.Contract.Aspects;
-using Logic.Domain.CodeAnalysis.Contract.Tiniifan.DataClasses;
-using Logic.Domain.CodeAnalysis.Contract.Tiniifan.Exceptions;
+﻿using Logic.Domain.CodeAnalysis.Contract.Tiniifan.DataClasses;
 
-namespace Logic.Domain.CodeAnalysis.Contract.Tiniifan
+namespace Logic.Domain.CodeAnalysis.Contract.Tiniifan;
+
+public interface IGameSettingsParser
 {
-    [MapException(typeof(GameSettingsParserException))]
-    public interface IGameSettingsParser
-    {
-        ConfigUnitSyntax Parse(string text);
-    }
+    ConfigUnitSyntax Parse(string text);
 }

@@ -1,26 +1,25 @@
-﻿namespace Logic.Domain.Level5Management.Contract.DataClasses
+﻿namespace Logic.Domain.Level5Management.Contract.DataClasses;
+
+public enum FieldType
 {
-    public enum FieldType
-    {
-        AbilityData = 0,
-        EnhanceData = 1,
-        StatusRate = 2,
-        Bool = 3,
-        Byte = 4,
-        Short = 5,
-        Int = 6,
+    AbilityData = 0,
+    EnhanceData = 1,
+    StatusRate = 2,
+    Bool = 3,
+    Byte = 4,
+    Short = 5,
+    Int = 6,
 
-        ActType = 9,
-        Flag = 10,
+    ActType = 9,
+    Flag = 10,
 
-        Float = 13,
+    Float = 13,
 
-        Hash = 15,
+    Hash = 15,
 
-        Position2D = 17,
-        RateMatrix = 18,
-        Position = 19,
-        String = 20,
-        DataTuple = 21
-    }
+    Position2D = 17,
+    RateMatrix = 18,
+    Position = 19,
+    String = 20,
+    DataTuple = 21
 }

@@ -13,158 +13,157 @@ using ImGui.Forms.Models;
 using ImGui.Forms.Models.IO;
 using Microsoft.VisualBasic.FileIO;
 
-namespace CfgBinEditor.Forms
+namespace CfgBinEditor.Forms;
+
+public partial class MainForm
 {
-    public partial class MainForm
+    private MainMenuBar _mainMenuBar;
+    private StackLayout _contentLayout;
+
+    private StackLayout _operationBarLayout;
+    private TabControl _tabControl;
+    private Label _statusLabel;
+
+    private MenuBarMenu _fileMenuItem;
+    private MenuBarMenu _settingsMenuItem;
+    private MenuBarButton _infoMenuButton;
+
+    private MenuBarButton _fileOpenMenuItem;
+    private MenuBarRadio _settingsLanguageMenuItem;
+    private MenuBarRadio _settingsThemeMenuItem;
+
+    private ImageButton _saveBtn;
+    private ImageButton _saveAllBtn;
+
+    private IDictionary<MenuBarCheckBox, string> _localeItems;
+    private IDictionary<MenuBarCheckBox, Theme> _themeItems;
+
+    private void InitializeComponent(ILocalizer localizer, ISettingsProvider settingsProvider)
     {
-        private MainMenuBar _mainMenuBar;
-        private StackLayout _contentLayout;
+        _mainMenuBar = new MainMenuBar();
+        _contentLayout = new StackLayout { Alignment = Alignment.Vertical, ItemSpacing = 5 };
 
-        private StackLayout _operationBarLayout;
-        private TabControl _tabControl;
-        private Label _statusLabel;
+        _operationBarLayout = new StackLayout { Size = ImGui.Forms.Models.Size.Content, Alignment = Alignment.Horizontal, ItemSpacing = 3 };
 
-        private MenuBarMenu _fileMenuItem;
-        private MenuBarMenu _settingsMenuItem;
-        private MenuBarButton _infoMenuButton;
+        _tabControl = new TabControl();
+        _statusLabel = new Label();
 
-        private MenuBarButton _fileOpenMenuItem;
-        private MenuBarRadio _settingsLanguageMenuItem;
-        private MenuBarRadio _settingsThemeMenuItem;
+        _fileMenuItem = new MenuBarMenu { Text = LocalizationResources.MenuFileCaption };
+        _settingsMenuItem = new MenuBarMenu { Text = LocalizationResources.MenuSettingsCaption };
+        _infoMenuButton = new MenuBarButton { Text = LocalizationResources.MenuInfoCaption };
 
-        private ImageButton _saveBtn;
-        private ImageButton _saveAllBtn;
+        _fileOpenMenuItem = new MenuBarButton { Text = LocalizationResources.MenuFileOpenCaption, KeyAction = new KeyCommand(ImGuiKey.ModCtrl, ImGuiKey.O) };
+        _settingsLanguageMenuItem = new MenuBarRadio { Text = LocalizationResources.MenuSettingsLanguagesCaption };
+        _settingsThemeMenuItem = new MenuBarRadio { Text = LocalizationResources.MenuSettingsThemesCaption };
 
-        private IDictionary<MenuBarCheckBox, string> _localeItems;
-        private IDictionary<MenuBarCheckBox, Theme> _themeItems;
-
-        private void InitializeComponent(ILocalizer localizer, ISettingsProvider settingsProvider)
+        _saveBtn = new ImageButton
         {
-            _mainMenuBar = new MainMenuBar();
-            _contentLayout = new StackLayout { Alignment = Alignment.Vertical, ItemSpacing = 5 };
+            Image = ImageResources.Save,
+            ImageSize = new Vector2(16, 16),
+            Padding = new Vector2(3, 3),
+            KeyAction = new KeyCommand(ImGuiKey.ModCtrl, ImGuiKey.S),
+            Tooltip = LocalizationResources.FileSaveTooltipSingleCaption(() => _tabControl.SelectedPage?.Title ?? string.Empty),
+            Enabled = false
+        };
+        _saveAllBtn = new ImageButton
+        {
+            Image = ImageResources.SaveAll,
+            ImageSize = new Vector2(16, 16),
+            Padding = new Vector2(3, 3),
+            KeyAction = new KeyCommand(ImGuiKey.ModCtrl | ImGuiKey.ModShift, ImGuiKey.S),
+            Tooltip = LocalizationResources.FileSaveTooltipAllCaption,
+            Enabled = false
+        };
 
-            _operationBarLayout = new StackLayout { Size = ImGui.Forms.Models.Size.Content, Alignment = Alignment.Horizontal, ItemSpacing = 3 };
+        _fileMenuItem.Items.Add(_fileOpenMenuItem);
+        _settingsMenuItem.Items.Add(_settingsLanguageMenuItem);
+        _settingsMenuItem.Items.Add(_settingsThemeMenuItem);
 
-            _tabControl = new TabControl();
-            _statusLabel = new Label();
+        _mainMenuBar.Items.Add(_fileMenuItem);
+        _mainMenuBar.Items.Add(_settingsMenuItem);
+        _mainMenuBar.Items.Add(_infoMenuButton);
 
-            _fileMenuItem = new MenuBarMenu { Text = LocalizationResources.MenuFileCaption };
-            _settingsMenuItem = new MenuBarMenu { Text = LocalizationResources.MenuSettingsCaption };
-            _infoMenuButton = new MenuBarButton { Text = LocalizationResources.MenuInfoCaption };
+        _operationBarLayout.Items.Add(_saveBtn);
+        _operationBarLayout.Items.Add(_saveAllBtn);
 
-            _fileOpenMenuItem = new MenuBarButton { Text = LocalizationResources.MenuFileOpenCaption, KeyAction = new KeyCommand(ImGuiKey.ModCtrl, ImGuiKey.O) };
-            _settingsLanguageMenuItem = new MenuBarRadio { Text = LocalizationResources.MenuSettingsLanguagesCaption };
-            _settingsThemeMenuItem = new MenuBarRadio { Text = LocalizationResources.MenuSettingsThemesCaption };
+        _contentLayout.Items.Add(_operationBarLayout);
+        _contentLayout.Items.Add(_tabControl);
+        _contentLayout.Items.Add(_statusLabel);
 
-            _saveBtn = new ImageButton
+        _localeItems = new Dictionary<MenuBarCheckBox, string>();
+        _themeItems = new Dictionary<MenuBarCheckBox, Theme>();
+
+        InitializeLanguages(localizer);
+        InitializeThemes(settingsProvider);
+
+        Size = new Vector2(1100, 700);
+        Title = LocalizationResources.ApplicationTitle;
+        Icon = ImageResources.Icon;
+
+        Content = _contentLayout;
+        MenuBar = _mainMenuBar;
+    }
+
+    private void InitializeLanguages(ILocalizer localizer)
+    {
+        foreach (string locale in localizer.GetLocales())
+        {
+            var localeItem = new MenuBarCheckBox
             {
-                Image = ImageResources.Save,
-                ImageSize = new Vector2(16, 16),
-                Padding = new Vector2(3, 3),
-                KeyAction = new KeyCommand(ImGuiKey.ModCtrl, ImGuiKey.S),
-                Tooltip = LocalizationResources.FileSaveTooltipSingleCaption(() => _tabControl.SelectedPage?.Title ?? string.Empty),
-                Enabled = false
+                Text = localizer.GetLanguageName(locale),
+                Checked = localizer.CurrentLocale == locale
             };
-            _saveAllBtn = new ImageButton
+
+            _settingsLanguageMenuItem.CheckItems.Add(localeItem);
+            _localeItems[localeItem] = locale;
+        }
+    }
+
+    private void InitializeThemes(ISettingsProvider settingsProvider)
+    {
+        Theme themeSetting = GetThemeSetting(settingsProvider);
+        Style.ChangeTheme(themeSetting);
+
+        foreach (Theme theme in Enum.GetValues(typeof(Theme)))
+        {
+            var themeItem = new MenuBarCheckBox
             {
-                Image = ImageResources.SaveAll,
-                ImageSize = new Vector2(16, 16),
-                Padding = new Vector2(3, 3),
-                KeyAction = new KeyCommand(ImGuiKey.ModCtrl | ImGuiKey.ModShift, ImGuiKey.S),
-                Tooltip = LocalizationResources.FileSaveTooltipAllCaption,
-                Enabled = false
+                Text = LocalizationResources.MenuSettingsThemeCaption(theme),
+                Checked = themeSetting == theme
             };
 
-            _fileMenuItem.Items.Add(_fileOpenMenuItem);
-            _settingsMenuItem.Items.Add(_settingsLanguageMenuItem);
-            _settingsMenuItem.Items.Add(_settingsThemeMenuItem);
-
-            _mainMenuBar.Items.Add(_fileMenuItem);
-            _mainMenuBar.Items.Add(_settingsMenuItem);
-            _mainMenuBar.Items.Add(_infoMenuButton);
-
-            _operationBarLayout.Items.Add(_saveBtn);
-            _operationBarLayout.Items.Add(_saveAllBtn);
-
-            _contentLayout.Items.Add(_operationBarLayout);
-            _contentLayout.Items.Add(_tabControl);
-            _contentLayout.Items.Add(_statusLabel);
-
-            _localeItems = new Dictionary<MenuBarCheckBox, string>();
-            _themeItems = new Dictionary<MenuBarCheckBox, Theme>();
-
-            InitializeLanguages(localizer);
-            InitializeThemes(settingsProvider);
-
-            Size = new Vector2(1100, 700);
-            Title = LocalizationResources.ApplicationTitle;
-            Icon = ImageResources.Icon;
-
-            Content = _contentLayout;
-            MenuBar = _mainMenuBar;
+            _settingsThemeMenuItem.CheckItems.Add(themeItem);
+            _themeItems[themeItem] = theme;
         }
+    }
 
-        private void InitializeLanguages(ILocalizer localizer)
-        {
-            foreach (string locale in localizer.GetLocales())
-            {
-                var localeItem = new MenuBarCheckBox
-                {
-                    Text = localizer.GetLanguageName(locale),
-                    Checked = localizer.CurrentLocale == locale
-                };
+    private Theme GetThemeSetting(ISettingsProvider settingsProvider)
+    {
+        return settingsProvider.Get("CfgBinEditor.Settings.Theme", Style.Theme);
+    }
 
-                _settingsLanguageMenuItem.CheckItems.Add(localeItem);
-                _localeItems[localeItem] = locale;
-            }
-        }
+    private string GetLoadDirectory(ISettingsProvider settingsProvider)
+    {
+        return settingsProvider.Get("CfgBinEditor.Settings.LoadDirectory", SpecialDirectories.Desktop);
+    }
 
-        private void InitializeThemes(ISettingsProvider settingsProvider)
-        {
-            Theme themeSetting = GetThemeSetting(settingsProvider);
-            Style.ChangeTheme(themeSetting);
+    private string GetSaveDirectory(ISettingsProvider settingsProvider)
+    {
+        return settingsProvider.Get("CfgBinEditor.Settings.SaveDirectory", SpecialDirectories.Desktop);
+    }
 
-            foreach (Theme theme in Enum.GetValues(typeof(Theme)))
-            {
-                var themeItem = new MenuBarCheckBox
-                {
-                    Text = LocalizationResources.MenuSettingsThemeCaption(theme),
-                    Checked = themeSetting == theme
-                };
+    private void SetThemeSetting(Theme theme, ISettingsProvider settingsProvider)
+    {
+        settingsProvider.Set("CfgBinEditor.Settings.Theme", theme);
+    }
 
-                _settingsThemeMenuItem.CheckItems.Add(themeItem);
-                _themeItems[themeItem] = theme;
-            }
-        }
+    private void SetLoadDirectory(string path, ISettingsProvider settingsProvider)
+    {
+        settingsProvider.Set("CfgBinEditor.Settings.LoadDirectory", path);
+    }
 
-        private Theme GetThemeSetting(ISettingsProvider settingsProvider)
-        {
-            return settingsProvider.Get("CfgBinEditor.Settings.Theme", Style.Theme);
-        }
-
-        private string GetLoadDirectory(ISettingsProvider settingsProvider)
-        {
-            return settingsProvider.Get("CfgBinEditor.Settings.LoadDirectory", SpecialDirectories.Desktop);
-        }
-
-        private string GetSaveDirectory(ISettingsProvider settingsProvider)
-        {
-            return settingsProvider.Get("CfgBinEditor.Settings.SaveDirectory", SpecialDirectories.Desktop);
-        }
-
-        private void SetThemeSetting(Theme theme, ISettingsProvider settingsProvider)
-        {
-            settingsProvider.Set("CfgBinEditor.Settings.Theme", theme);
-        }
-
-        private void SetLoadDirectory(string path, ISettingsProvider settingsProvider)
-        {
-            settingsProvider.Set("CfgBinEditor.Settings.LoadDirectory", path);
-        }
-
-        private void SetSaveDirectory(string path, ISettingsProvider settingsProvider)
-        {
-            settingsProvider.Set("CfgBinEditor.Settings.SaveDirectory", path);
-        }
+    private void SetSaveDirectory(string path, ISettingsProvider settingsProvider)
+    {
+        settingsProvider.Set("CfgBinEditor.Settings.SaveDirectory", path);
     }
 }

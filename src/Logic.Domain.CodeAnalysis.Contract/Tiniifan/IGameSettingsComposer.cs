@@ -1,12 +1,8 @@
-﻿using CrossCutting.Core.Contract.Aspects;
-using Logic.Domain.CodeAnalysis.Contract.Tiniifan.DataClasses;
-using Logic.Domain.CodeAnalysis.Contract.Tiniifan.Exceptions;
+﻿using Logic.Domain.CodeAnalysis.Contract.Tiniifan.DataClasses;
 
-namespace Logic.Domain.CodeAnalysis.Contract.Tiniifan
+namespace Logic.Domain.CodeAnalysis.Contract.Tiniifan;
+
+public interface IGameSettingsComposer
 {
-    [MapException(typeof(GameSettingsComposerException))]
-    public interface IGameSettingsComposer
-    {
-        string ComposeConfigUnit(ConfigUnitSyntax configUnit);
-    }
+    string ComposeConfigUnit(ConfigUnitSyntax configUnit);
 }

@@ -1,14 +1,10 @@
-﻿using CrossCutting.Core.Contract.Aspects;
-using Kryptography.Checksum;
-using Logic.Domain.Level5Management.Cryptography.InternalContract.Exceptions;
+﻿using Kryptography.Checksum;
 
-namespace Logic.Domain.Level5Management.Cryptography.InternalContract
+namespace Logic.Domain.Level5Management.Cryptography.InternalContract;
+
+public interface IChecksumFactory
 {
-    [MapException(typeof(ChecksumFactoryException))]
-    public interface IChecksumFactory
-    {
-        Checksum<uint> CreateCrc32();
-        Checksum<uint> CreateCrc32Jam();
-        Checksum<ushort> CreateCrc16();
-    }
+    Checksum<uint> CreateCrc32();
+    Checksum<uint> CreateCrc32Jam();
+    Checksum<ushort> CreateCrc16();
 }

@@ -3,64 +3,63 @@ using System.Text;
 using Logic.Domain.CodeAnalysis.Contract.Tiniifan.DataClasses;
 using Logic.Domain.CodeAnalysis.Contract.DataClasses;
 
-namespace Logic.Domain.CodeAnalysis.Tiniifan
+namespace Logic.Domain.CodeAnalysis.Tiniifan;
+
+internal class GameSettingsComposer : IGameSettingsComposer
 {
-    internal class GameSettingsComposer : IGameSettingsComposer
+    public string ComposeConfigUnit(ConfigUnitSyntax configUnit)
     {
-        public string ComposeConfigUnit(ConfigUnitSyntax configUnit)
-        {
-            var sb = new StringBuilder();
+        var sb = new StringBuilder();
 
-            foreach (var gameConfig in configUnit.GameConfigs)
-                ComposeGameConfig(gameConfig, sb);
+        foreach (var gameConfig in configUnit.GameConfigs)
+            ComposeGameConfig(gameConfig, sb);
 
-            return sb.ToString();
-        }
+        return sb.ToString();
+    }
 
-        private void ComposeGameConfig(GameConfigSyntax gameConfig, StringBuilder sb)
-        {
-            ComposeSyntaxTokens(gameConfig.Name, sb);
-            ComposeSyntaxToken(gameConfig.BracketOpen, sb);
+    private void ComposeGameConfig(GameConfigSyntax gameConfig, StringBuilder sb)
+    {
+        ComposeSyntaxTokens(gameConfig.Name, sb);
+        ComposeSyntaxToken(gameConfig.BracketOpen, sb);
 
-            foreach (var entryConfig in gameConfig.EntryConfigs)
-                ComposeEntryConfig(entryConfig, sb);
+        foreach (var entryConfig in gameConfig.EntryConfigs)
+            ComposeEntryConfig(entryConfig, sb);
 
-            ComposeSyntaxToken(gameConfig.BracketClose, sb);
-        }
+        ComposeSyntaxToken(gameConfig.BracketClose, sb);
+    }
 
-        private void ComposeEntryConfig(EntryConfigSyntax entryConfig, StringBuilder sb)
-        {
-            ComposeSyntaxTokens(entryConfig.Name, sb);
-            ComposeSyntaxToken(entryConfig.ParenOpen, sb);
+    private void ComposeEntryConfig(EntryConfigSyntax entryConfig, StringBuilder sb)
+    {
+        ComposeSyntaxTokens(entryConfig.Name, sb);
+        ComposeSyntaxToken(entryConfig.ParenOpen, sb);
 
-            foreach (var setting in entryConfig.Settings)
-                ComposeEntryConfigSetting(setting, sb);
+        foreach (var setting in entryConfig.Settings)
+            ComposeEntryConfigSetting(setting, sb);
 
-            ComposeSyntaxToken(entryConfig.ParenClose, sb);
-        }
+        ComposeSyntaxToken(entryConfig.ParenClose, sb);
+    }
 
-        private void ComposeEntryConfigSetting(EntryConfigSettingSyntax entryConfigSetting, StringBuilder sb)
-        {
-            ComposeSyntaxTokens(entryConfigSetting.Value1, sb);
-            ComposeSyntaxToken(entryConfigSetting.Pipe, sb);
-            ComposeSyntaxTokens(entryConfigSetting.Value2, sb);
-        }
+    private void ComposeEntryConfigSetting(EntryConfigSettingSyntax entryConfigSetting, StringBuilder sb)
+    {
+        ComposeSyntaxTokens(entryConfigSetting.Value1, sb);
+        ComposeSyntaxToken(entryConfigSetting.Pipe, sb);
+        ComposeSyntaxTokens(entryConfigSetting.Value2, sb);
+    }
 
-        private void ComposeSyntaxTokens(SyntaxToken[] tokens, StringBuilder sb)
-        {
-            foreach (SyntaxToken token in tokens)
-                ComposeSyntaxToken(token, sb);
-        }
+    private void ComposeSyntaxTokens(SyntaxToken[] tokens, StringBuilder sb)
+    {
+        foreach (SyntaxToken token in tokens)
+            ComposeSyntaxToken(token, sb);
+    }
 
-        private void ComposeSyntaxToken(SyntaxToken token, StringBuilder sb)
-        {
-            if (token.LeadingTrivia.HasValue)
-                sb.Append(token.LeadingTrivia.Value.Text);
+    private void ComposeSyntaxToken(SyntaxToken token, StringBuilder sb)
+    {
+        if (token.LeadingTrivia.HasValue)
+            sb.Append(token.LeadingTrivia.Value.Text);
 
-            sb.Append(token.Text);
+        sb.Append(token.Text);
 
-            if (token.TrailingTrivia.HasValue)
-                sb.Append(token.TrailingTrivia.Value.Text);
-        }
+        if (token.TrailingTrivia.HasValue)
+            sb.Append(token.TrailingTrivia.Value.Text);
     }
 }

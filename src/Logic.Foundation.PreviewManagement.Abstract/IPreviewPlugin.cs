@@ -4,12 +4,11 @@ using Konnect.Contract.Plugin;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace Logic.Foundation.PreviewManagement.Abstract
-{
-	public interface IPreviewPlugin : IPlugin
-	{
-		ICharacterDeserializer? Deserializer { get; }
+namespace Logic.Foundation.PreviewManagement.Abstract;
 
-		Task<Image<Rgba32>?> RenderPreview(IList<CharacterData> characters);
-	}
+public interface IPreviewPlugin : IPlugin
+{
+    ICharacterDeserializer? Deserializer { get; }
+
+    Task<Image<Rgba32>?> RenderPreview(IList<CharacterData> characters);
 }

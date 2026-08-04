@@ -1,20 +1,16 @@
-﻿using CrossCutting.Core.Contract.Aspects;
-using Logic.Business.CfgBinEditorManagement.Contract.DataClasses;
-using Logic.Business.CfgBinEditorManagement.Contract.Exceptions;
+﻿using Logic.Business.CfgBinEditorManagement.Contract.DataClasses;
 
-namespace Logic.Business.CfgBinEditorManagement.Contract
+namespace Logic.Business.CfgBinEditorManagement.Contract;
+
+public interface IValueSettingsProvider
 {
-    [MapException(typeof(ValueSettingsProviderException))]
-    public interface IValueSettingsProvider
-    {
-        bool TryGetError(out Exception? error);
+    bool TryGetError(out Exception? error);
 
-        string[] GetGames();
-        void AddGame(string game);
+    string[] GetGames();
+    void AddGame(string game);
 
-        ValueSettingEntry GetEntrySettings(string game, string entryName, int index);
-        void SetEntrySettings(string game, string entryName, int index, ValueSettingEntry entry);
+    ValueSettingEntry GetEntrySettings(string game, string entryName, int index);
+    void SetEntrySettings(string game, string entryName, int index, ValueSettingEntry entry);
 
-        void Persist();
-    }
+    void Persist();
 }

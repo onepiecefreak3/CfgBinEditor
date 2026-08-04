@@ -1,12 +1,11 @@
 ﻿using CrossCutting.Core.Contract.Configuration.DataClasses;
 
-namespace Logic.Business.CfgBinEditorManagement
+namespace Logic.Business.CfgBinEditorManagement;
+
+[ConfigurationCategory("CfgBinEditor")]
+public class CfgBinValueSettingsManagementConfiguration
 {
-    public class CfgBinValueSettingsManagementConfiguration
-    {
-        [ConfigMap("CfgBinEditor", "ValueSettingsPath")]
-        public virtual string ValueSettingsPath { get; set; }
-        [ConfigMap("CfgBinEditor", "EntryNamesPath")]
-        public virtual string EntryNamesPath { get; set; }
-    }
+    public string? ValueSettingsPath { get; set; }
+
+    public string? EntryNamesPath { get; set; }
 }

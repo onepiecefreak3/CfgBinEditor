@@ -1,22 +1,21 @@
 ﻿using System.Diagnostics;
 
-namespace Logic.Domain.Level5Management.Contract.DataClasses
+namespace Logic.Domain.Level5Management.Contract.DataClasses;
+
+[DebuggerDisplay("Type {Name}")]
+public class RdbnTypeDeclaration
 {
-    [DebuggerDisplay("Type {Name}")]
-    public class RdbnTypeDeclaration
+    public required string Name { get; set; }
+    public uint UnkHash { get; set; }
+    public required RdbnFieldDeclaration[] Fields { get; set; }
+
+    public override int GetHashCode()
     {
-        public string Name { get; set; }
-        public uint UnkHash { get; set; }
-        public RdbnFieldDeclaration[] Fields { get; set; }
+        int nameHash = Name.GetHashCode();
 
-        public override int GetHashCode()
-        {
-            int nameHash = Name.GetHashCode();
+        foreach (RdbnFieldDeclaration field in Fields)
+            nameHash = HashCode.Combine(nameHash, field.Name);
 
-            foreach (RdbnFieldDeclaration field in Fields)
-                nameHash = HashCode.Combine(nameHash, field.Name);
-
-            return nameHash;
-        }
+        return nameHash;
     }
 }

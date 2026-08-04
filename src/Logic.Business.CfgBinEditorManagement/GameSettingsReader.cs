@@ -4,80 +4,79 @@ using Logic.Domain.CodeAnalysis.Contract.DataClasses;
 using Logic.Domain.CodeAnalysis.Contract.Tiniifan;
 using Logic.Domain.CodeAnalysis.Contract.Tiniifan.DataClasses;
 
-namespace Logic.Business.CfgBinEditorManagement
+namespace Logic.Business.CfgBinEditorManagement;
+
+internal abstract class GameSettingsReader<TEntry> : IGameSettingsReader<TEntry>
 {
-    internal abstract class GameSettingsReader<TEntry> : IGameSettingsReader<TEntry>
+    private readonly string _path;
+    private readonly IGameSettingsParser _parser;
+
+    public GameSettingsReader(string path, IGameSettingsParser parser)
     {
-        private readonly string _path;
-        private readonly IGameSettingsParser _parser;
+        _path = path;
+        _parser = parser;
+    }
 
-        public GameSettingsReader(string path, IGameSettingsParser parser)
+    public IDictionary<string, IDictionary<string, IList<TEntry>>> Read()
+    {
+        ConfigUnitSyntax configUnit = ParseSettings(_path);
+        return ProcessSettings(configUnit);
+    }
+
+    private IDictionary<string, IDictionary<string, IList<TEntry>>> ProcessSettings(ConfigUnitSyntax configUnit)
+    {
+        var result = new Dictionary<string, IDictionary<string, IList<TEntry>>>();
+
+        foreach (GameConfigSyntax gameConfig in configUnit!.GameConfigs)
         {
-            _path = path;
-            _parser = parser;
-        }
+            string name;
 
-        public IDictionary<string, IDictionary<string, IList<TEntry>>> Read()
-        {
-            ConfigUnitSyntax configUnit = ParseSettings(_path);
-            return ProcessSettings(configUnit);
-        }
-
-        private IDictionary<string, IDictionary<string, IList<TEntry>>> ProcessSettings(ConfigUnitSyntax configUnit)
-        {
-            var result = new Dictionary<string, IDictionary<string, IList<TEntry>>>();
-
-            foreach (GameConfigSyntax gameConfig in configUnit!.GameConfigs)
+            var entries = new Dictionary<string, IList<TEntry>>();
+            foreach (EntryConfigSyntax entryConfig in gameConfig.EntryConfigs)
             {
-                string name;
-
-                var entries = new Dictionary<string, IList<TEntry>>();
-                foreach (EntryConfigSyntax entryConfig in gameConfig.EntryConfigs)
+                var configs = new List<TEntry>();
+                foreach (EntryConfigSettingSyntax settings in entryConfig.Settings)
                 {
-                    var configs = new List<TEntry>();
-                    foreach (EntryConfigSettingSyntax settings in entryConfig.Settings)
-                    {
-                        configs.Add(CreateEntry(settings));
-                    }
-
-                    name = GetCompositeText(entryConfig.Name);
-                    entries[name] = configs;
+                    configs.Add(CreateEntry(settings));
                 }
 
-                name = GetCompositeText(gameConfig.Name);
-                result[name] = entries;
+                name = GetCompositeText(entryConfig.Name);
+                entries[name] = configs;
             }
 
-            return result;
+            name = GetCompositeText(gameConfig.Name);
+            result[name] = entries;
         }
 
-        protected abstract TEntry CreateEntry(EntryConfigSettingSyntax settings);
+        return result;
+    }
 
-        protected string GetCompositeText(SyntaxToken[] tokens)
+    protected abstract TEntry CreateEntry(EntryConfigSettingSyntax settings);
+
+    protected string GetCompositeText(SyntaxToken[] tokens)
+    {
+        var result = new StringBuilder();
+
+        for (var i = 0; i < tokens.Length; i++)
         {
-            var result = new StringBuilder();
+            if (i != 0)
+                result.Append(tokens[i].LeadingTrivia?.Text ?? string.Empty);
 
-            for (var i = 0; i < tokens.Length; i++)
-            {
-                if (i != 0)
-                    result.Append(tokens[i].LeadingTrivia?.Text ?? string.Empty);
+            result.Append(tokens[i].Text);
 
-                result.Append(tokens[i].Text);
-
-                if (i + 1 < tokens.Length)
-                    result.Append(tokens[i].TrailingTrivia?.Text ?? string.Empty);
-            }
-
-            return result.ToString();
+            if (i + 1 < tokens.Length)
+                result.Append(tokens[i].TrailingTrivia?.Text ?? string.Empty);
         }
 
-        private ConfigUnitSyntax ParseSettings(string settingsPath)
-        {
-            string baseDir = Path.GetDirectoryName(Environment.ProcessPath)!;
-            settingsPath = Path.Combine(baseDir, settingsPath);
+        return result.ToString();
+    }
 
-            string settingsText = File.ReadAllText(settingsPath);
-            return _parser.Parse(settingsText);
-        }
+    private ConfigUnitSyntax ParseSettings(string settingsPath)
+    {
+        string baseDir = Path.GetDirectoryName(Environment.ProcessPath)!;
+        settingsPath = Path.Combine(baseDir, settingsPath);
+
+        string settingsText = File.ReadAllText(settingsPath);
+        return _parser.Parse(settingsText);
     }
 }

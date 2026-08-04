@@ -1,6 +1,5 @@
-﻿namespace Logic.Domain.Level5Management
+﻿namespace Logic.Domain.Level5Management;
+
+public class Level5Configuration
 {
-    public class Level5Configuration
-    {
-    }
 }

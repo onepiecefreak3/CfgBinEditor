@@ -1,9 +1,8 @@
 ﻿using Logic.Domain.Level5Management.Contract.DataClasses;
 
-namespace Logic.Domain.Level5Management.Contract
+namespace Logic.Domain.Level5Management.Contract;
+
+public interface IRdbnWriter
 {
-    public interface IRdbnWriter
-    {
-        Stream Write(Rdbn config);
-    }
+    Stream Write(Rdbn config);
 }

@@ -1,8 +1,7 @@
-﻿namespace Logic.Domain.Level5Management.T2b.InternalContract.DataClasses
+﻿namespace Logic.Domain.Level5Management.T2b.InternalContract.DataClasses;
+
+internal struct T2bChecksumEntry
 {
-    internal struct T2bChecksumEntry
-    {
-        public uint crc32;
-        public uint stringOffset;
-    }
+    public uint crc32;
+    public uint stringOffset;
 }
