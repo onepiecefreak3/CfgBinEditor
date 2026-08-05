@@ -2,6 +2,7 @@
 using Komponent.IO;
 using Logic.Domain.Level5Management.Contract;
 using Logic.Domain.Level5Management.Contract.DataClasses;
+using Logic.Domain.Level5Management.Rdbn;
 using Logic.Domain.Level5Management.Rdbn.InternalContract;
 
 namespace Logic.Domain.Level5Management;
@@ -249,12 +250,17 @@ internal class RdbnReader : IRdbnReader
 
                 int typeValueOffset = rootValueOffset + j * rootEntry.valueSize;
 
+                var fieldValueOffset = 0;
                 for (var h = 0; h < typeEntry.fieldCount; h++)
                 {
                     RdbnFieldEntry fieldEntry = fieldEntries[typeEntry.fieldIndex + h];
                     listValues[j][h] = new object[fieldEntry.valueCount];
 
-                    br.BaseStream.Position = typeValueOffset + fieldEntry.valueOffset;
+                    int fieldValueSize = fieldEntry.valueSize;
+                    if ((FieldTypeCategory)fieldEntry.typeCategory != FieldTypeCategory.Special && (fieldEntry.valueSize & (fieldEntry.valueSize - 1)) == 0)
+                        fieldValueOffset = (fieldValueOffset + (fieldEntry.valueSize - 1)) & ~(fieldEntry.valueSize - 1);
+
+                    br.BaseStream.Position = typeValueOffset + fieldValueOffset;
 
                     for (var k = 0; k < listValues[j][h].Length; k++)
                     {
@@ -353,6 +359,8 @@ internal class RdbnReader : IRdbnReader
                                 throw new InvalidOperationException($"Invalid field type {fieldEntry.type}.");
                         }
                     }
+
+                    fieldValueOffset += fieldEntry.valueCount * fieldValueSize;
                 }
             }
 
