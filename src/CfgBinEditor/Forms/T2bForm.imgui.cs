@@ -1,4 +1,5 @@
-﻿using CfgBinEditor.Components;
+﻿using System.Linq;
+using CfgBinEditor.Components;
 using CfgBinEditor.InternalContract;
 using CfgBinEditor.resources;
 using ImGui.Forms.Controls;
@@ -22,6 +23,7 @@ public partial class T2bForm
     private StackLayout _gameLayout;
     private StackLayout _valuesLayout;
 
+    private ComboBox<StringEncoding> _encodingComboBox;
     private ComboBox<LocalizedString> _gameComboBox;
     private Button _gameAddButton;
 
@@ -40,6 +42,8 @@ public partial class T2bForm
 
         _treeViewForm = formFactory.CreateT2bTreeViewForm(file);
 
+        _encodingComboBox = new ComboBox<StringEncoding>();
+
         _gameComboBox = new ComboBox<LocalizedString>();
         _gameAddButton = new Button { Text = LocalizationResources.GameAddButtonCaption };
 
@@ -47,6 +51,7 @@ public partial class T2bForm
 
         _configContent = new Panel { Size = Size.Parent };
 
+        _gameLayout.Items.Add(_encodingComboBox);
         _gameLayout.Items.Add(_gameComboBox);
         _gameLayout.Items.Add(_gameAddButton);
         _gameLayout.Items.Add(new StackItem(_valueAddButton) { HorizontalAlignment = HorizontalAlignment.Right, Size = Size.WidthAlign });
@@ -58,6 +63,7 @@ public partial class T2bForm
         _contentLayout.Items.Add(new StackItem(_treeViewForm) { Size = new Size(SizeValue.Relative(.4f), SizeValue.Parent) });
         _contentLayout.Items.Add(_valuesLayout);
 
+        InitializeEncodings(file);
         InitializeGames(settingsProvider);
     }
 
@@ -69,6 +75,14 @@ public partial class T2bForm
     protected override void UpdateInternal(Rectangle contentRect)
     {
         _contentLayout.Update(contentRect);
+    }
+
+    private void InitializeEncodings(T2b config)
+    {
+        _encodingComboBox.Items.Add(new DropDownItem<StringEncoding>(StringEncoding.Sjis, LocalizationResources.EncodingSjis));
+        _encodingComboBox.Items.Add(new DropDownItem<StringEncoding>(StringEncoding.Utf8, LocalizationResources.EncodingUtf8));
+
+        _encodingComboBox.SelectedItem = _encodingComboBox.Items.FirstOrDefault(x => x.Content == config.Encoding);
     }
 
     private void InitializeGames(IValueSettingsProvider settingsProvider)

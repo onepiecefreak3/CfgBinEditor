@@ -45,6 +45,9 @@ internal class LocalizationResources
     public static LocalizedString TextPreviewPlaceholder => LocalizedString.FromId("Text.Preview.Placeholder");
     public static LocalizedString TextPreviewExportPng => LocalizedString.FromId("Text.Preview.Export.Png");
 
+    public static LocalizedString EncodingSjis => LocalizedString.FromId("Encoding.Sjis");
+    public static LocalizedString EncodingUtf8 => LocalizedString.FromId("Encoding.Utf8");
+
     public static LocalizedString GameNoneCaption => LocalizedString.FromId("Game.None.Caption");
     public static LocalizedString GameAddButtonCaption => LocalizedString.FromId("Game.Add.Button.Caption");
     public static LocalizedString GameAddDialogCaption => LocalizedString.FromId("Game.Add.Dialog.Caption");

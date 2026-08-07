@@ -45,6 +45,10 @@
   // "Text.Preview.Placeholder": "Preview", // TODO
   // "Text.Preview.Export.Png": "Export PNG...", // TODO
 
+  // Encodings
+  "Encoding.Sjis": "SJIS",
+  "Encoding.Utf8": "UTF-8",
+
   // Game settings
   "Game.None.Caption": "Ninguno",
   "Game.Add.Button.Caption": "+",

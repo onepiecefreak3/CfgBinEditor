@@ -83,7 +83,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Imgui.Forms" Version="2.3.10" />
+    <PackageReference Include="Imgui.Forms" Version="2.3.11" />
     <PackageReference Include="Konnect" Version="2.1.107" />
   </ItemGroup>
 </Project>

@@ -42,6 +42,7 @@ public partial class T2bForm : Component
         _writer = writer;
         _settingsProvider = settingsProvider;
 
+        _encodingComboBox.SelectedItemChanged += (s, e) => _config.Encoding = _encodingComboBox.SelectedItem?.Content ?? StringEncoding.Sjis;
         _gameComboBox.SelectedItemChanged += (s, e) => ChangeGame(_gameComboBox.SelectedItem.Content);
         _gameAddButton.Clicked += (s, e) => AddNewGame();
 
