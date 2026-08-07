@@ -42,7 +42,7 @@ public partial class T2bForm : Component
         _writer = writer;
         _settingsProvider = settingsProvider;
 
-        _encodingComboBox.SelectedItemChanged += (s, e) => _config.Encoding = _encodingComboBox.SelectedItem?.Content ?? StringEncoding.Sjis;
+        _encodingComboBox.SelectedItemChanged += (s, e) => ChangeEncoding(_encodingComboBox.SelectedItem?.Content);
         _gameComboBox.SelectedItemChanged += (s, e) => ChangeGame(_gameComboBox.SelectedItem.Content);
         _gameAddButton.Clicked += (s, e) => AddNewGame();
 
@@ -205,6 +205,13 @@ public partial class T2bForm : Component
             default:
                 throw new InvalidOperationException($"Unknown value type {entryValue.Type}.");
         }
+    }
+
+    private void ChangeEncoding(StringEncoding? encoding)
+    {
+        _config.Encoding = encoding ?? StringEncoding.Sjis;
+
+        RaiseFileChanged();
     }
 
     private void ChangeGame(LocalizedString gameName)
