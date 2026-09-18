@@ -1,4 +1,5 @@
-﻿using CfgBinEditor.InternalContract.DataClasses;
+﻿using CfgBinEditor.Converter;
+using CfgBinEditor.InternalContract.DataClasses;
 using CfgBinEditor.Messages;
 using CfgBinEditor.resources;
 using CrossCutting.Core.Contract.EventBrokerage;
@@ -467,5 +468,10 @@ public partial class T2bTreeViewForm : BaseTreeViewForm<T2b, T2bNode>
 public record T2bNode(T2bEntry Entry, T2bEntry? EndEntry);
 
 [JsonSerializable(typeof(T2bEntry[]))]
-[JsonSourceGenerationOptions(PropertyNameCaseInsensitive = true, ReadCommentHandling = JsonCommentHandling.Skip, AllowTrailingCommas = true)]
+[JsonSourceGenerationOptions(
+    PropertyNameCaseInsensitive = true,
+    ReadCommentHandling = JsonCommentHandling.Skip,
+    AllowTrailingCommas = true,
+    GenerationMode = JsonSourceGenerationMode.Metadata,
+    Converters = [typeof(T2bEntryValueJsonConverter)])]
 internal partial class T2bEntriesJsonContext : JsonSerializerContext;
