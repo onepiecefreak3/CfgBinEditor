@@ -2,7 +2,7 @@
 <Project>
   <PropertyGroup>
     <_PreviewPluginAbiGeneratorsDir>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))</_PreviewPluginAbiGeneratorsDir>
-    <_PreviewPluginAbiGeneratorsDll>$(_PreviewPluginAbiGeneratorsDir)bin\$(Configuration)\netstandard2.0\Logic.Foundation.PreviewManagement.Generators.dll</_PreviewPluginAbiGeneratorsDll>
+    <_PreviewPluginAbiGeneratorsDll>$(_PreviewPluginAbiGeneratorsDir)bin/$(Configuration)/netstandard2.0/Logic.Foundation.PreviewManagement.Generators.dll</_PreviewPluginAbiGeneratorsDll>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -10,14 +10,14 @@
     <ProjectReference Include="$(_PreviewPluginAbiGeneratorsDir)Logic.Foundation.PreviewManagement.Generators.csproj"
                       ReferenceOutputAssembly="false"
                       PrivateAssets="all"
-                      Properties="RuntimeIdentifier=" />
+                      Properties="RuntimeIdentifier=;PublishAot=false" />
   </ItemGroup>
 
   <Target Name="BuildPreviewPluginAbiGenerator"
           BeforeTargets="CoreCompile">
     <MSBuild Projects="$(_PreviewPluginAbiGeneratorsDir)Logic.Foundation.PreviewManagement.Generators.csproj"
              Targets="Build"
-             Properties="Configuration=$(Configuration);RuntimeIdentifier=;TargetRuntimeIdentifier=" />
+             Properties="Configuration=$(Configuration);RuntimeIdentifier=;TargetRuntimeIdentifier=;PublishAot=false" />
     <ItemGroup>
       <Analyzer Include="$(_PreviewPluginAbiGeneratorsDll)" />
     </ItemGroup>
