@@ -130,6 +130,11 @@ jobs:
           find "$PUBLISH_DIR" -type f -name '*.pdb' -delete
           find "$PUBLISH_DIR" -type d -name '*.dSYM' -exec rm -rf {} + 2>/dev/null || true
           rm -f "$PUBLISH_DIR/MyIDs.txt" "$PUBLISH_DIR/MyTags.txt"
+          # upload-artifact omits directories that contain no files.
+          for folder in time_travelers yokai_watch; do
+            mkdir -p "$PUBLISH_DIR/plugins/$folder"
+            touch "$PUBLISH_DIR/plugins/$folder/.gitkeep"
+          done
           if [[ "${{ runner.os }}" != "Windows" ]]; then
             chmod +x "$PUBLISH_DIR/CfgBinEditor"
           fi
