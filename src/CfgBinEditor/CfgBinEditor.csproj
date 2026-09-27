@@ -5,7 +5,7 @@
     <AssemblyName>CfgBinEditor</AssemblyName>
     <RootNamespace>CfgBinEditor</RootNamespace>
     <Nullable>enable</Nullable>
-    <ApplicationIcon>Resources\Images\logo.ico</ApplicationIcon>
+    <ApplicationIcon>resources\images\logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="resources\fonts\roboto.ttf" />
