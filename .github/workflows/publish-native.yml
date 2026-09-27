@@ -124,11 +124,12 @@ jobs:
               -exec cp -a {} "$PUBLISH_DIR/plugins/" \;
           done
 
-      - name: Prune plugin symbols and mark Unix binary executable
+      - name: Prune symbols and mark Unix binary executable
         shell: bash
         run: |
-          find "$PUBLISH_DIR/plugins" -type f \( -name '*.pdb' -o -name '*.dbg' \) -delete
+          find "$PUBLISH_DIR" -type f -name '*.pdb' -delete
           find "$PUBLISH_DIR" -type d -name '*.dSYM' -exec rm -rf {} + 2>/dev/null || true
+          rm -f "$PUBLISH_DIR/MyIDs.txt" "$PUBLISH_DIR/MyTags.txt"
           if [[ "${{ runner.os }}" != "Windows" ]]; then
             chmod +x "$PUBLISH_DIR/CfgBinEditor"
           fi
