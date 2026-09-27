@@ -1,4 +1,4 @@
-name: Publish Native 2
+name: Publish Native
 
 on:
   workflow_dispatch:
