@@ -93,7 +93,7 @@ namespace plugin_time_travelers.Subtitle
                 return null;
 
             string resourcePath = Path.Combine(resourceDirectory, "nrm_main.xf");
-            if (!File.Exists(resourceDirectory))
+            if (!File.Exists(resourcePath))
                 return null;
 
             return _font = FontParser.Parse(File.OpenRead(resourcePath));

@@ -11,14 +11,6 @@
 
   <Import Project="..\..\src\Logic.Foundation.PreviewManagement.Generators\PreviewPluginAbi.props" />
 
-  <PropertyGroup>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\..\src\CfgBinEditor\bin\Debug\net8.0\plugins</OutputPath>
-  </PropertyGroup>
-
   <ItemGroup>
     <None Remove="Resources\narration.png" />
   </ItemGroup>
@@ -27,12 +19,6 @@
     <EmbeddedResource Include="Resources\narration.png">
       <LogicalName>narration.png</LogicalName>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-      <_Parameter1>Logic.Foundation.PreviewManagement.Tests</_Parameter1>
-    </AssemblyAttribute>
   </ItemGroup>
 
   <ItemGroup>
