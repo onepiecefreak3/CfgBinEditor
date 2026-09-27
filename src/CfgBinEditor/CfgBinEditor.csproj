@@ -31,6 +31,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CrossCutting.Core.Configuration\CrossCutting.Core.Configuration.csproj" />
     <ProjectReference Include="..\Logic.Foundation.PreviewManagement.Abstract\Logic.Foundation.PreviewManagement.Abstract.csproj" />
+    <ProjectReference Include="..\Logic.Foundation.PreviewManagement\Logic.Foundation.PreviewManagement.csproj" />
     <ProjectReference Include="..\CrossCutting.Core.Contract\CrossCutting.Core.Contract.csproj" />
     <ProjectReference Include="..\Logic.Business.CfgBinEditorManagement.Contract\Logic.Business.CfgBinEditorManagement.Contract.csproj" />
     <ProjectReference Include="..\Mappings.CfgBinEditor\Mappings.CfgBinEditor.csproj" />

@@ -13,7 +13,6 @@ using ImGui.Forms.Modals;
 using ImGui.Forms.Modals.IO;
 using ImGui.Forms.Modals.IO.Windows;
 using ImGui.Forms.Models;
-using Konnect.Management.Plugin;
 using Logic.Business.CfgBinEditorManagement.Contract;
 using Logic.Domain.Level5Management.Contract;
 using Logic.Domain.Level5Management.Contract.DataClasses;
@@ -22,14 +21,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Konnect.Management.Plugin.Loaders;
-using Logic.Foundation.PreviewManagement.Abstract;
+using Konnect.Contract.Management.Plugin;
+using Logic.Foundation.PreviewManagement;
 
 namespace CfgBinEditor.Forms;
 
 public partial class MainForm : Form
 {
-    private readonly PluginManager _pluginManager;
+    private readonly IPluginManager _pluginManager;
     private readonly IEventBroker _events;
     private readonly ILocalizer _localizer;
     private readonly IFormFactory _formFactory;
@@ -47,7 +46,7 @@ public partial class MainForm : Form
     {
         InitializeComponent(localizer, settingsProvider);
 
-        _pluginManager = new PluginManager(new PluginLoader<IPreviewPlugin>("plugins"));
+        _pluginManager = PreviewPluginHost.Create("plugins");
 
         _events = eventBroker;
         _localizer = localizer;

@@ -5,24 +5,24 @@
     <_CoCoConfigurationGeneratorsDll>$(_CoCoConfigurationGeneratorsDir)bin\$(Configuration)\netstandard2.0\CrossCutting.Core.Configuration.Generators.dll</_CoCoConfigurationGeneratorsDll>
   </PropertyGroup>
 
+  <!--
+    Publish passes RuntimeIdentifier globally. The generator targets netstandard2.0 and must
+    stay on the non-RID output path that this file loads as an analyzer.
+  -->
   <ItemGroup>
     <ProjectReference Include="$(_CoCoConfigurationGeneratorsDir)CrossCutting.Core.Configuration.Generators.csproj"
                       ReferenceOutputAssembly="false"
-                      PrivateAssets="all" />
-    <Analyzer Include="$(_CoCoConfigurationGeneratorsDll)"
-              Condition="Exists('$(_CoCoConfigurationGeneratorsDll)')" />
+                      PrivateAssets="all"
+                      Properties="RuntimeIdentifier=;PublishAot=false" />
   </ItemGroup>
 
-  <!-- Ensure the generator assembly exists before CoreCompile when building from a clean tree. -->
   <Target Name="BuildCoCoConfigurationGenerators"
-          BeforeTargets="ResolvePackageDependenciesForBuild;BeforeCompile;CoreCompile"
-          Condition="!Exists('$(_CoCoConfigurationGeneratorsDll)')">
+          BeforeTargets="ResolvePackageDependenciesForBuild;BeforeCompile;CoreCompile">
     <MSBuild Projects="$(_CoCoConfigurationGeneratorsDir)CrossCutting.Core.Configuration.Generators.csproj"
              Targets="Build"
-             Properties="Configuration=$(Configuration)" />
-    <ItemGroup Condition="Exists('$(_CoCoConfigurationGeneratorsDll)')">
-      <Analyzer Include="$(_CoCoConfigurationGeneratorsDll)"
-                Condition="'%(Identity)' != '$(_CoCoConfigurationGeneratorsDll)'" />
+             Properties="Configuration=$(Configuration);RuntimeIdentifier=;TargetRuntimeIdentifier=;PublishAot=false" />
+    <ItemGroup>
+      <Analyzer Include="$(_CoCoConfigurationGeneratorsDll)" />
     </ItemGroup>
   </Target>
 </Project>
