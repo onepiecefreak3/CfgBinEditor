@@ -1,0 +1,152 @@
+name: Publish Native
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - aot
+
+permissions:
+  contents: read
+  packages: read
+
+concurrency:
+  group: publish-native-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CONFIGURATION: Release
+  PROJECT: src/CfgBinEditor/CfgBinEditor.csproj
+  ARTIFACT_PREFIX: CfgBinEditor
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  publish:
+    name: Native ${{ matrix.rid }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            rid: win-x64
+            platform: Windows
+          - os: ubuntu-latest
+            rid: linux-x64
+            platform: Linux
+          # macos-latest is Apple Silicon. osx-arm64 is the native 64-bit Mac RID.
+          - os: macos-latest
+            rid: osx-arm64
+            platform: Mac
+
+    env:
+      PUBLISH_DIR: ${{ github.workspace }}/dist/${{ matrix.rid }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0
+
+      # GitHub Packages auth. --store-password-in-clear-text is required on Linux/macOS
+      # (NuGet password encryption is Windows-only and fails restore otherwise).
+      - name: Setup NuGet sources
+        run: >
+          dotnet nuget update source Kuriimu2 --username "${{ github.actor }}" --password "${{ secrets.PERSONAL_ACCESS_TOKEN }}" --store-password-in-clear-text
+
+      # Native AOT on Linux needs a C toolchain + zlib headers for the final native link.
+      - name: Install Linux AOT prerequisites
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends clang zlib1g-dev
+
+      - name: Publish CfgBinEditor
+        shell: bash
+        run: |
+          dotnet publish "$PROJECT" \
+            -c "$CONFIGURATION" \
+            -r "${{ matrix.rid }}" \
+            --self-contained \
+            -o "$PUBLISH_DIR" \
+            -p:PublishAot=true \
+            -p:OptimizationPreference=Speed \
+            -p:IlcOptimizationPreference=Speed \
+            -p:StripSymbols=false \
+            -p:StackTraceSupport=true \
+            -p:DebuggerSupport=false \
+            -p:EventSourceSupport=false \
+            -p:HttpActivityPropagationSupport=false \
+            -p:MetadataUpdaterSupport=false \
+            -p:IlcFoldIdenticalMethodBodies=true \
+            -p:MetricsSupport=false \
+            -p:BuiltInComInteropSupport=false
+
+      - name: Publish plugins
+        shell: bash
+        run: |
+          plugins=(
+            plugins/plugin_time_travelers/plugin_time_travelers.csproj
+            plugins/plugin_yokai_watch/plugin_yokai_watch.csproj
+          )
+          mkdir -p "$PUBLISH_DIR/plugins"
+          for plugin in "${plugins[@]}"; do
+            name="$(basename "$plugin" .csproj)"
+            staging="${RUNNER_TEMP}/plugins/${name}"
+            rm -rf "$staging"
+            dotnet publish "$plugin" \
+              -c "$CONFIGURATION" \
+              -r "${{ matrix.rid }}" \
+              --self-contained \
+              -o "$staging" \
+              -p:PublishAot=true \
+              -p:OptimizationPreference=Speed \
+              -p:IlcOptimizationPreference=Speed \
+              -p:StripSymbols=true \
+              -p:StackTraceSupport=false \
+              -p:DebuggerSupport=false \
+              -p:UseSystemResourceKeys=true \
+              -p:EventSourceSupport=false \
+              -p:HttpActivityPropagationSupport=false \
+              -p:MetadataUpdaterSupport=false \
+              -p:IlcFoldIdenticalMethodBodies=true \
+              -p:MetricsSupport=false
+            find "$staging" -type f \
+              ! -name '*.pdb' \
+              ! -name '*.dbg' \
+              ! -name '*.deps.json' \
+              ! -name '*.xml' \
+              -exec cp -a {} "$PUBLISH_DIR/plugins/" \;
+          done
+
+      - name: Prune symbols and mark Unix binary executable
+        shell: bash
+        run: |
+          find "$PUBLISH_DIR" -type f -name '*.pdb' -delete
+          find "$PUBLISH_DIR" -type d -name '*.dSYM' -exec rm -rf {} + 2>/dev/null || true
+          rm -f "$PUBLISH_DIR/MyIDs.txt" "$PUBLISH_DIR/MyTags.txt"
+          # upload-artifact omits directories that contain no files.
+          for folder in time_travelers yokai_watch; do
+            mkdir -p "$PUBLISH_DIR/plugins/$folder"
+            touch "$PUBLISH_DIR/plugins/$folder/.gitkeep"
+          done
+          if [[ "${{ runner.os }}" != "Windows" ]]; then
+            chmod +x "$PUBLISH_DIR/CfgBinEditor"
+          fi
+          echo "### ${{ matrix.platform }} (${{ matrix.rid }})" >> "$GITHUB_STEP_SUMMARY"
+          ls -lah "$PUBLISH_DIR" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          ls -lah "$PUBLISH_DIR/plugins" | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ env.ARTIFACT_PREFIX }}-${{ matrix.rid }}
+          path: ${{ env.PUBLISH_DIR }}
+          if-no-files-found: error
+          retention-days: 30

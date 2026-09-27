@@ -1,0 +1,25 @@
+<!-- Import from preview plugin projects that should export the NativeAOT C ABI. -->
+<Project>
+  <PropertyGroup>
+    <_PreviewPluginAbiGeneratorsDir>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))</_PreviewPluginAbiGeneratorsDir>
+    <_PreviewPluginAbiGeneratorsDll>$(_PreviewPluginAbiGeneratorsDir)bin/$(Configuration)/netstandard2.0/Logic.Foundation.PreviewManagement.Generators.dll</_PreviewPluginAbiGeneratorsDll>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(_PreviewPluginAbiGeneratorsDir)Logic.Foundation.PreviewManagement.Generators.csproj"
+                      ReferenceOutputAssembly="false"
+                      PrivateAssets="all"
+                      Properties="RuntimeIdentifier=;PublishAot=false" />
+  </ItemGroup>
+
+  <Target Name="BuildPreviewPluginAbiGenerator"
+          BeforeTargets="CoreCompile">
+    <MSBuild Projects="$(_PreviewPluginAbiGeneratorsDir)Logic.Foundation.PreviewManagement.Generators.csproj"
+             Targets="Build"
+             Properties="Configuration=$(Configuration);RuntimeIdentifier=;TargetRuntimeIdentifier=;PublishAot=false" />
+    <ItemGroup>
+      <Analyzer Include="$(_PreviewPluginAbiGeneratorsDll)" />
+    </ItemGroup>
+  </Target>
+</Project>

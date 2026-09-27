@@ -1,4 +1,5 @@
-﻿using CfgBinEditor;
+﻿using System.Reflection;
+using CfgBinEditor;
 using CfgBinEditor.Forms;
 using CfgBinEditor.InternalContract;
 using CrossCutting.Core.Contract.DependencyInjection;
@@ -17,10 +18,11 @@ eventBroker.Raise(new InitializeApplicationMessage());
 var localizer = kernel.Get<ILocalizer>();
 var app = new Application(localizer);
 
-FontFactory.RegisterFromResource("Roboto", "roboto.ttf");
-FontFactory.RegisterFromResource("NotoJp", "notojp.ttf");
-FontFactory.RegisterFromResource("NotoKr", "notokr.ttf");
-FontFactory.RegisterFromResource("NotoZh", "notozhtc.ttf");
+Assembly assembly = Assembly.GetExecutingAssembly();
+FontFactory.RegisterFromResource("Roboto", assembly, "roboto.ttf");
+FontFactory.RegisterFromResource("NotoJp", assembly, "notojp.ttf");
+FontFactory.RegisterFromResource("NotoKr", assembly, "notokr.ttf");
+FontFactory.RegisterFromResource("NotoZh", assembly, "notozhtc.ttf");
 
 var formFactory = kernel.Get<IFormFactory>();
 

@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Logic.Foundation.PreviewManagement</RootNamespace>
+    <AssemblyName>Logic.Foundation.PreviewManagement</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Logic.Foundation.PreviewManagement.Abstract\Logic.Foundation.PreviewManagement.Abstract.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Konnect" Version="2.1.101" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>Logic.Foundation.PreviewManagement.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+</Project>
